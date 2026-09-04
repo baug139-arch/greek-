@@ -24,7 +24,8 @@ import {
   Clock,
   Check,
   RotateCcw,
-  Bell
+  Bell,
+  Archive
 } from 'lucide-react';
 import { 
   Student, 
@@ -72,6 +73,7 @@ interface StudentHubProps {
   onStartFreeMorphology?: (pos: 'all' | 'noun' | 'verb' | 'adjective' | 'mistakes') => void;
   onOpenErasmianGuide: () => void;
   onUpdateMnemonic?: (wordId: string, mnemonic: string) => void;
+  onAcknowledgeHomework?: (assignmentId: string) => void;
 }
 
 export const StudentHub: React.FC<StudentHubProps> = ({
@@ -87,9 +89,11 @@ export const StudentHub: React.FC<StudentHubProps> = ({
   onStartFreeMorphology,
   onOpenErasmianGuide,
   onUpdateMnemonic,
+  onAcknowledgeHomework,
 }) => {
   const [activeTab, setActiveTab] = useState<'reading_john' | 'frequency' | 'thematic' | 'my_dictionary'>('reading_john');
   const [selectedExamToReview, setSelectedExamToReview] = useState<HomeworkAssignment | null>(null);
+  const [showArchive, setShowArchive] = useState<boolean>(false);
   
   // Active Training Mode & Direction Selected by Student
   const [selectedTrainingMode, setSelectedTrainingMode] = useState<TrainingMode>('all');
@@ -159,6 +163,11 @@ export const StudentHub: React.FC<StudentHubProps> = ({
     { level: 5, title: 'Дидаскалос (Διδάσκαλος / Наставник)', icon: '👑' },
   ];
   const rankInfo = levelRanks[Math.min(currentLevel - 1, levelRanks.length - 1)];
+
+  // Active vs Reviewed Homework assignments
+  const allHomeworks = currentStudent.assignedHomework || [];
+  const activeHomeworks = allHomeworks.filter((hw) => !hw.studentReviewed);
+  const reviewedHomeworks = allHomeworks.filter((hw) => !!hw.studentReviewed);
 
   // Calculate Overall Multi-Aspect Progress (3 Aspects: Reading, Writing, Listening)
   const studentMasteryEntries = Object.values(currentStudent.wordMastery || {});
@@ -346,24 +355,25 @@ export const StudentHub: React.FC<StudentHubProps> = ({
       </div>
 
       {/* Assigned Homeworks / Exams from Teacher (Only for authenticated students) */}
-      {!isGuest && currentStudent.assignedHomework && currentStudent.assignedHomework.length > 0 && (
-        <div className="border-2 border-[#1A1A1A] p-5 bg-white shadow-xs space-y-3">
-          <div className="flex items-center justify-between border-b border-[#E5E1DA] pb-2">
-            <div className="flex items-center space-x-2">
-              <span className="p-1.5 bg-[#FAF8F5] border border-[#E5E1DA] text-[#1A1A1A] rounded">
-                <Calendar className="w-4 h-4" />
+      {!isGuest && allHomeworks.length > 0 && (
+        activeHomeworks.length > 0 ? (
+          <div className="border-2 border-[#1A1A1A] p-5 bg-white shadow-xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E5E1DA] pb-2">
+              <div className="flex items-center space-x-2">
+                <span className="p-1.5 bg-[#FAF8F5] border border-[#E5E1DA] text-[#1A1A1A] rounded">
+                  <Calendar className="w-4 h-4" />
+                </span>
+                <h3 className="text-sm font-sans uppercase tracking-wider font-bold text-[#1A1A1A]">
+                  Задания и контрольные от преподавателя ({activeHomeworks.length})
+                </h3>
+              </div>
+              <span className="text-xs font-sans text-[#8C7D6B]">
+                Magister System
               </span>
-              <h3 className="text-sm font-sans uppercase tracking-wider font-bold text-[#1A1A1A]">
-                Задания и контрольные от преподавателя ({currentStudent.assignedHomework.length})
-              </h3>
             </div>
-            <span className="text-xs font-sans text-[#8C7D6B]">
-              Magister System
-            </span>
-          </div>
 
-          <div className="grid grid-cols-1 gap-3">
-            {currentStudent.assignedHomework.map((hw) => {
+            <div className="grid grid-cols-1 gap-3">
+              {activeHomeworks.map((hw) => {
               const isExam = hw.assignmentType === 'exam';
               const isComposition = hw.assignmentType === 'greek_composition';
               const isMorphology = hw.assignmentType === 'morphology';
@@ -589,7 +599,12 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     ) : isGraded ? (
                       <button
                         type="button"
-                        onClick={() => setSelectedExamToReview(hw)}
+                        onClick={() => {
+                          setSelectedExamToReview(hw);
+                          if (onAcknowledgeHomework) {
+                            onAcknowledgeHomework(hw.id);
+                          }
+                        }}
                         className="px-4 py-2 bg-[#2D4A32] text-white hover:bg-[#1E3322] text-xs font-sans uppercase font-bold tracking-wider rounded cursor-pointer flex items-center gap-1.5 shadow-xs"
                       >
                         <Award className="w-3.5 h-3.5" />
@@ -651,10 +666,22 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                         <span>Начать разбор ({hw.morphologyConfig?.wordCount || 10} форм)</span>
                       </button>
                     ) : hw.completed ? (
-                      <span className="px-3 py-1.5 bg-[#C5D9C8] text-[#2D4A32] rounded text-xs font-sans font-bold flex items-center gap-1.5">
-                        <Check className="w-3.5 h-3.5 stroke-[3]" />
-                        <span>Выполнено {requiredRounds > 1 ? `(${requiredRounds}/${requiredRounds} кр.)` : ''}</span>
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="px-3 py-1.5 bg-[#C5D9C8] text-[#2D4A32] rounded text-xs font-sans font-bold flex items-center gap-1.5">
+                          <Check className="w-3.5 h-3.5 stroke-[3]" />
+                          <span>Выполнено {requiredRounds > 1 ? `(${requiredRounds}/${requiredRounds} кр.)` : ''}</span>
+                        </span>
+                        {onAcknowledgeHomework && (
+                          <button
+                            type="button"
+                            onClick={() => onAcknowledgeHomework(hw.id)}
+                            className="px-2.5 py-1.5 bg-white border border-[#C5D9C8] hover:border-[#2D4A32] text-[#2D4A32] rounded text-xs font-sans font-bold cursor-pointer transition-colors"
+                            title="Скрыть выполненное задание с главного экрана в архив"
+                          >
+                            В архив
+                          </button>
+                        )}
+                      </div>
                     ) : isCoolingDown ? (
                       <button
                         type="button"
@@ -703,8 +730,111 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               );
             })}
           </div>
+
+          {/* Collapsible Archive inside active section if there are reviewed homeworks */}
+          {reviewedHomeworks.length > 0 && (
+            <div className="pt-3 border-t border-[#E5E1DA]">
+              <button
+                type="button"
+                onClick={() => setShowArchive((prev) => !prev)}
+                className="text-xs font-sans font-semibold text-[#8C7D6B] hover:text-[#1A1A1A] flex items-center gap-1.5 cursor-pointer py-1 transition-colors"
+              >
+                <Archive className="w-3.5 h-3.5" />
+                <span>{showArchive ? 'Скрыть архив проверенных работ' : `Архив проверенных заданий (${reviewedHomeworks.length})`}</span>
+              </button>
+              {showArchive && (
+                <div className="mt-2 space-y-2">
+                  {reviewedHomeworks.map((hw) => (
+                    <div
+                      key={hw.id}
+                      className="p-3 bg-[#FAF8F5] border border-[#E5E1DA] rounded flex items-center justify-between gap-3 text-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-serif font-bold text-[#1A1A1A]">{hw.title}</span>
+                          {hw.teacherGrade !== undefined && (
+                            <span className="px-2 py-0.5 bg-[#F4F9F5] text-[#2D4A32] font-bold rounded border border-[#C5D9C8]">
+                              Оценка: {hw.teacherGrade}%
+                            </span>
+                          )}
+                        </div>
+                        {hw.gradedDate && (
+                          <span className="text-[11px] text-[#8C7D6B] block">
+                            Проверено: {hw.gradedDate}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedExamToReview(hw)}
+                        className="px-3 py-1 bg-white border border-[#E5E1DA] hover:border-[#1A1A1A] text-[#1A1A1A] rounded font-sans text-xs cursor-pointer transition-colors shrink-0"
+                      >
+                        Посмотреть
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      )}
+      ) : (
+        /* All homeworks have been reviewed / completed */
+        <div className="border border-[#E5E1DA] p-4 bg-[#FAF8F5] rounded-lg shadow-2xs space-y-3">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-[#2D4A32]" />
+              <span className="text-xs font-sans text-[#2D4A32] font-bold">
+                Все задания и контрольные от преподавателя выполнены и проверены
+              </span>
+            </div>
+            {reviewedHomeworks.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowArchive((prev) => !prev)}
+                className="text-xs font-sans text-[#8C7D6B] hover:text-[#1A1A1A] flex items-center gap-1.5 cursor-pointer transition-colors"
+              >
+                <Archive className="w-3.5 h-3.5" />
+                <span>{showArchive ? 'Скрыть архив' : `Архив проверенных заданий (${reviewedHomeworks.length})`}</span>
+              </button>
+            )}
+          </div>
+          {showArchive && reviewedHomeworks.length > 0 && (
+            <div className="mt-2 space-y-2 pt-2 border-t border-[#E5E1DA]">
+              {reviewedHomeworks.map((hw) => (
+                <div
+                  key={hw.id}
+                  className="p-3 bg-white border border-[#E5E1DA] rounded flex items-center justify-between gap-3 text-xs"
+                >
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-serif font-bold text-[#1A1A1A]">{hw.title}</span>
+                      {hw.teacherGrade !== undefined && (
+                        <span className="px-2 py-0.5 bg-[#F4F9F5] text-[#2D4A32] font-bold rounded border border-[#C5D9C8]">
+                          Оценка: {hw.teacherGrade}%
+                        </span>
+                      )}
+                    </div>
+                    {hw.gradedDate && (
+                      <span className="text-[11px] text-[#8C7D6B] block">
+                        Проверено: {hw.gradedDate}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedExamToReview(hw)}
+                    className="px-3 py-1 bg-[#FAF8F5] border border-[#E5E1DA] hover:border-[#1A1A1A] text-[#1A1A1A] rounded font-sans text-xs cursor-pointer transition-colors shrink-0"
+                  >
+                    Посмотреть
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )
+    )}
 
       {/* Free Practice / Gym */}
       <div className="bg-white border-2 border-[#E5E1DA] p-6 shadow-xs relative overflow-hidden">
@@ -1951,6 +2081,11 @@ export const StudentHub: React.FC<StudentHubProps> = ({
         <ExamReviewModal
           assignment={selectedExamToReview}
           onClose={() => setSelectedExamToReview(null)}
+          onAcknowledge={() => {
+            if (onAcknowledgeHomework) {
+              onAcknowledgeHomework(selectedExamToReview.id);
+            }
+          }}
         />
       )}
     </div>

@@ -219,6 +219,8 @@ export interface HomeworkAssignment {
   completedRounds?: number; // how many full passes finished (0, 1, 2)
   lastRoundCompletedTime?: number; // timestamp in ms when the previous round was completed
   completedChunkIndicesForCurrentRound?: number[]; // chunk indices finished in active round e.g. [0, 1]
+  studentReviewed?: boolean; // marked true when student views/acknowledges graded result
+  studentReviewedDate?: string;
 }
 
 export interface StudentMistake {

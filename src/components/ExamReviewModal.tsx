@@ -8,7 +8,8 @@ import {
   MessageSquare, 
   Award,
   Calendar,
-  BookOpen
+  BookOpen,
+  Check
 } from 'lucide-react';
 import { HomeworkAssignment } from '../types';
 import { speakErasmian } from '../utils/audio';
@@ -17,12 +18,20 @@ import { MorphologyComparisonView } from './MorphologyComparisonView';
 interface ExamReviewModalProps {
   assignment: HomeworkAssignment;
   onClose: () => void;
+  onAcknowledge?: () => void;
 }
 
 export const ExamReviewModal: React.FC<ExamReviewModalProps> = ({
   assignment,
   onClose,
+  onAcknowledge,
 }) => {
+  const handleClose = () => {
+    if (onAcknowledge) {
+      onAcknowledge();
+    }
+    onClose();
+  };
   const isComposition = assignment.assignmentType === 'greek_composition';
   const isManualMorphology = assignment.assignmentType === 'manual_morphology';
   const answers = assignment.examAnswers || [];
@@ -82,7 +91,7 @@ export const ExamReviewModal: React.FC<ExamReviewModalProps> = ({
 
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="p-2 text-[#8C7D6B] hover:text-[#1A1A1A] border border-[#E5E1DA] rounded hover:border-[#1A1A1A] cursor-pointer"
               title="Закрыть"
             >
@@ -354,13 +363,17 @@ export const ExamReviewModal: React.FC<ExamReviewModalProps> = ({
         </div>
 
         {/* Footer */}
-        <footer className="p-4 bg-white border-t border-[#E5E1DA] flex justify-end">
+        <footer className="p-4 bg-white border-t border-[#E5E1DA] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="text-xs text-[#8C7D6B] font-sans text-center sm:text-left">
+            После ознакомления задание перейдет в архив выполненных работ
+          </span>
           <button
             type="button"
-            onClick={onClose}
-            className="px-6 py-2 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] rounded text-xs font-sans uppercase font-bold tracking-wider cursor-pointer"
+            onClick={handleClose}
+            className="w-full sm:w-auto px-6 py-2.5 bg-[#2D4A32] text-white hover:bg-[#1E3322] rounded text-xs font-sans uppercase font-bold tracking-wider cursor-pointer flex items-center justify-center gap-2 shadow-xs transition-colors"
           >
-            Понятно
+            <Check className="w-4 h-4 stroke-[2.5]" />
+            <span>Ознакомлен(а) • Убрать с главного экрана</span>
           </button>
         </footer>
 

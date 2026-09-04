@@ -1281,6 +1281,32 @@ export default function App() {
     );
   };
 
+  // Acknowledge reviewed homework/exam (removes from active main screen, moves to archive)
+  const handleAcknowledgeHomework = (assignmentId: string) => {
+    setStudents((prev) =>
+      prev.map((s) => {
+        if (s.id === currentStudentId) {
+          const updated: Student = {
+            ...s,
+            assignedHomework: (s.assignedHomework || []).map((hw) => {
+              if (hw.id === assignmentId) {
+                return {
+                  ...hw,
+                  studentReviewed: true,
+                  studentReviewedDate: new Date().toISOString(),
+                };
+              }
+              return hw;
+            }),
+          };
+          saveStudentToCloud(updated);
+          return updated;
+        }
+        return s;
+      })
+    );
+  };
+
   const activeMorphologyWords = useMemo(() => {
     if (!activeMorphologySession && !activeFreeMorphology) return [];
     
@@ -2172,6 +2198,7 @@ export default function App() {
               }}
               onOpenErasmianGuide={() => setIsErasmianModalOpen(true)}
               onUpdateMnemonic={handleUpdateStudentMnemonic}
+              onAcknowledgeHomework={handleAcknowledgeHomework}
             />
           )}
         </div>
