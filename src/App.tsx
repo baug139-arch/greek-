@@ -1346,6 +1346,18 @@ export default function App() {
         return s;
       })
     );
+    // Also persist name/alias/avatar in the UserProfile (users collection) so it survives re-login
+    if (currentUserProfile) {
+      const updatedUserProfile = {
+        ...currentUserProfile,
+        displayName: updatedProfile.name,
+        greekAlias: updatedProfile.greekAlias,
+        avatar: updatedProfile.avatar,
+      };
+      setCurrentUserProfile(updatedUserProfile);
+      localStorage.setItem('koine_user_profile', JSON.stringify(updatedUserProfile));
+      saveUserProfileToCloud(updatedUserProfile);
+    }
   };
 
   // Update Custom Mnemonic
