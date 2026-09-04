@@ -47,6 +47,7 @@ import { StudentProfileModal } from './components/StudentProfileModal';
 import { AddStudentModal } from './components/AddStudentModal';
 import { AuthModal } from './components/AuthModal';
 import { InstallAppModal } from './components/InstallAppModal';
+import { WelcomeOnboardingModal } from './components/WelcomeOnboardingModal';
 import { updateWordSRS } from './utils/srsEngine';
 import { getWordsForCourse, getWordsForAssignment } from './utils/courseUtils';
 import { auth, onAuthStateChanged, signInWithGoogle, logOut, checkRedirectResult } from './firebase';
@@ -76,6 +77,18 @@ export default function App() {
   });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
+  
+  // First-time user welcome / name entry modal state
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(() => {
+    const onboarded = localStorage.getItem('koine_user_onboarded');
+    if (onboarded === 'true') return false;
+    const savedProfile = localStorage.getItem('koine_user_profile');
+    if (savedProfile) return false;
+    const savedActiveId = localStorage.getItem('koine_active_student_id');
+    if (savedActiveId && savedActiveId !== 'guest_user') return false;
+    return true;
+  });
+
   const [isCloudSyncing, setIsCloudSyncing] = useState(false);
   const [isOnline, setIsOnline] = useState<boolean>(() => isNetworkOnline());
   const isInitialLoad = useRef(true);
@@ -166,7 +179,7 @@ export default function App() {
       // Filter out teacher account, mock/demo student accounts, and deduplicate
       const cleaned = rawList.filter((s) => {
         if (!s || !s.id) return false;
-        if (s.id.startsWith('student_')) return false; // remove demo student_1..10
+        if (s.id.startsWith('student_') && s.id.length < 15) return false; // remove demo student_1..10
         if (s.email && s.email.includes('@seminary.org')) return false; // remove demo emails
         if (s.email && s.email.toLowerCase() === 'baug139@gmail.com') return false;
         return true;
@@ -195,7 +208,7 @@ export default function App() {
   // Current Active Student (selected in teacher view or logged in student)
   const [currentStudentId, setCurrentStudentId] = useState<string>(() => {
     const saved = localStorage.getItem('koine_active_student_id');
-    return (saved && !saved.startsWith('student_')) ? saved : '';
+    return (saved && (!saved.startsWith('student_') || saved.length >= 15)) ? saved : '';
   });
 
   // Navigation & Role State
@@ -597,13 +610,13 @@ export default function App() {
     currentUserProfile.role === 'student' && 
     currentUserProfile.email?.toLowerCase() !== 'baug139@gmail.com'
   );
-  const isGuest = !currentUserProfile;
+  const isGuest = !currentUserProfile && (!currentStudentId || currentStudentId === 'guest_user' || !students.some((s) => s.id === currentStudentId));
 
   // Guest student default object for clean isolated guest session
   const guestStudentPlaceholder: Student = {
     id: 'guest_user',
     name: 'Гость',
-    greekAlias: 'Φιломаθής',
+    greekAlias: 'Φιλομαθής',
     avatar: '📖',
     email: '',
     xp: 0,
@@ -658,7 +671,55 @@ export default function App() {
             avatar: currentUserProfile?.avatar || '👨‍🎓',
             email: currentUserProfile?.email || '',
           })
-        : guestStudentPlaceholder);
+        : (students.find((s) => s.id === currentStudentId) || guestStudentPlaceholder));
+
+  // Handler for first-time user registration
+  const handleRegisterNewUser = (name: string, greekAlias: string, avatar: string) => {
+    const newStudentId = `stu_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const newStudentDoc: Student = {
+      id: newStudentId,
+      name: name.trim(),
+      greekAlias: greekAlias?.trim() || 'Μαθητής',
+      avatar: avatar || '👨‍🎓',
+      email: '',
+      xp: 0,
+      streakDays: 1,
+      lastActive: new Date().toISOString().split('T')[0],
+      accuracyRate: 0,
+      masteredWordsCount: 0,
+      completedLessons: [],
+      assignedHomework: [],
+      wordMastery: {},
+      recentMistakes: [],
+      sessionAttempts: [],
+      settings: {
+        preferredLearningMode: 'frequency',
+        audioSpeed: 0.82,
+        voiceEngine: 'latin_phonetic',
+        dailyWordGoal: 10,
+        batchSize: 8,
+        showTransliteration: true,
+        showPhoneticIpa: true,
+        greekFontSize: 'normal',
+        soundEffectsEnabled: true,
+        autoPlayAudio: true,
+      },
+    };
+
+    localStorage.setItem('koine_user_onboarded', 'true');
+    localStorage.setItem('koine_active_student_id', newStudentId);
+
+    setStudents((prev) => [newStudentDoc, ...prev.filter((s) => s.id !== newStudentId)]);
+    setCurrentStudentId(newStudentId);
+    setCurrentRole('student');
+    saveStudentToCloud(newStudentDoc);
+    setIsWelcomeModalOpen(false);
+  };
+
+  const handleContinueAsGuest = () => {
+    localStorage.setItem('koine_user_onboarded', 'true');
+    setIsWelcomeModalOpen(false);
+  };
 
   // Start a new Duolingo practice session
   const handleStartPractice = (
@@ -1989,6 +2050,8 @@ export default function App() {
                   ? 'Локально (квота)'
                   : currentUserProfile
                   ? 'Облако'
+                  : currentStudent && currentStudent.id !== 'guest_user'
+                  ? 'Синхронизировано'
                   : 'Гость (Локально)'}
               </span>
             </button>
@@ -2018,6 +2081,21 @@ export default function App() {
                   isTeacher ? 'bg-[#2D4A32] text-white' : 'bg-[#E5E1DA] text-[#4A443D]'
                 }`}>
                   {isTeacher ? 'Преподаватель' : 'Студент'}
+                </span>
+              </button>
+            ) : currentStudent && currentStudent.id !== 'guest_user' ? (
+              <button
+                type="button"
+                onClick={() => setIsProfileModalOpen(true)}
+                className="px-2 sm:px-3 py-1.5 bg-[#FAF8F5] border border-[#E5E1DA] hover:border-[#1A1A1A] text-xs font-sans text-[#1A1A1A] flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-colors rounded shadow-2xs"
+                title="Настройки профиля студента"
+              >
+                <span>{currentStudent.avatar}</span>
+                <span className="font-serif font-bold truncate max-w-[80px] sm:max-w-[120px]">
+                  {currentStudent.name}
+                </span>
+                <span className="text-[9px] uppercase font-bold px-1.5 py-0.5 rounded font-sans hidden sm:inline-block bg-[#E5E1DA] text-[#4A443D]">
+                  Студент
                 </span>
               </button>
             ) : (
@@ -2300,6 +2378,17 @@ export default function App() {
       <InstallAppModal
         isOpen={isInstallModalOpen}
         onClose={() => setIsInstallModalOpen(false)}
+      />
+
+      {/* Welcome / Name Entry Modal for First-time Users */}
+      <WelcomeOnboardingModal
+        isOpen={isWelcomeModalOpen}
+        onRegister={handleRegisterNewUser}
+        onOpenGoogleAuth={() => {
+          setIsWelcomeModalOpen(false);
+          setIsAuthModalOpen(true);
+        }}
+        onContinueAsGuest={handleContinueAsGuest}
       />
     </div>
   );
