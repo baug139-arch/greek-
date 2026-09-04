@@ -410,6 +410,120 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
     setIsAssignModalOpen(false);
   };
 
+  const handlePrintWorksheet = () => {
+    let printWords: any[] = [];
+    if (assignmentType === 'exam') {
+      const selectedMods = selectedCourseIds.map((cid) => {
+        const isList = customLists.find((l) => l.id === cid);
+        if (isList) return { id: isList.id, title: isList.title, mode: 'custom_list' as const, targetId: isList.id };
+        const isFreq = FREQUENCY_TIERS.find((t) => t.id === cid);
+        if (isFreq) return { id: isFreq.id, title: isFreq.titleRu, mode: 'frequency' as const, targetId: isFreq.id };
+        const isThematic = THEMATIC_GROUPS.find((g) => g.id === cid);
+        if (isThematic) return { id: isThematic.id, title: isThematic.nameRu, mode: 'thematic' as const, targetId: isThematic.id };
+        const isChapter = JOHN_CHAPTERS.find((c) => c.id === cid);
+        return { id: isChapter?.id || cid, title: isChapter?.titleRu || cid, mode: 'contextual_reader' as const, targetId: cid };
+      });
+      const combinedWords = getWordsForSelectedModules(selectedMods, customLists);
+      // Randomly select for exam
+      const shuffled = [...combinedWords].sort(() => 0.5 - Math.random());
+      printWords = shuffled.slice(0, examWordCount);
+    } else if (assignmentType === 'manual_morphology') {
+      printWords = manualMorphologyItems.filter((w) => w.greekWord.trim().length > 0);
+    }
+
+    if (printWords.length === 0) {
+      alert('Нет слов для вывода на печать.');
+      return;
+    }
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Пожалуйста, разрешите всплывающие окна в браузере для печати.');
+      return;
+    }
+
+    let finalTitle = assignTitle.trim() || (assignmentType === 'exam' ? 'Контрольная работа' : 'Морфологический разбор');
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Бланк: ${finalTitle}</title>
+        <style>
+          body { font-family: 'Times New Roman', serif; padding: 20px; color: #000; font-size: 14px; }
+          h1, h2 { text-align: center; font-family: sans-serif; font-size: 1.5em; }
+          .header-info { display: flex; justify-content: space-between; margin-bottom: 25px; font-family: sans-serif; font-size: 1.1em; }
+          .line { border-bottom: 1px solid #000; display: inline-block; width: 300px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #000; padding: 12px; text-align: left; }
+          th { background-color: #f9f9f9; font-family: sans-serif; }
+          .page-break { page-break-before: always; }
+          .greek-text { font-size: 1.4em; }
+          .hint { font-size: 0.85em; color: #555; font-family: sans-serif; margin-top: 4px; display: block; }
+        </style>
+      </head>
+      <body>
+        <!-- STUDENT PAGE -->
+        <h1>${finalTitle}</h1>
+        <div class="header-info">
+          <div>Имя студента: <span class="line"></span></div>
+          <div>Дата: <span class="line" style="width: 150px;"></span></div>
+        </div>
+        
+        <table>
+          <thead>
+            ${assignmentType === 'exam' 
+              ? `<tr><th style="width: 40px;">#</th><th style="width: 45%;">Слово (Греческий)</th><th>Перевод на русский</th></tr>`
+              : `<tr><th style="width: 40px;">#</th><th style="width: 35%;">Слово в тексте</th><th>Морфологический разбор</th></tr>`
+            }
+          </thead>
+          <tbody>
+            ${printWords.map((w, i) => {
+              if (assignmentType === 'exam') {
+                 return `<tr><td>\${i+1}</td><td class="greek-text">\${w.greek}</td><td></td></tr>`;
+              } else {
+                 const ctx = w.contextPhrase ? `<span class="hint">Контекст: <i>\${w.contextPhrase}</i></span>` : '';
+                 const ref = w.verseRef ? `<span class="hint">Ссылка: <b>\${w.verseRef}</b></span>` : '';
+                 return `<tr><td>\${i+1}</td><td><span class="greek-text">\${w.greekWord}</span>\${ctx}\${ref}</td><td><div style="min-height: 40px;"></div></td></tr>`;
+              }
+            }).join('')}
+          </tbody>
+        </table>
+
+        <div class="page-break"></div>
+
+        <!-- TEACHER KEY PAGE -->
+        <h2>Ключи для преподавателя: ${finalTitle}</h2>
+        <table>
+          <thead>
+            ${assignmentType === 'exam' 
+              ? `<tr><th style="width: 40px;">#</th><th style="width: 45%;">Слово (Греческий)</th><th>Правильный перевод</th></tr>`
+              : `<tr><th style="width: 40px;">#</th><th style="width: 35%;">Слово в тексте</th><th>Заметки для проверки</th></tr>`
+            }
+          </thead>
+          <tbody>
+            ${printWords.map((w, i) => {
+              if (assignmentType === 'exam') {
+                 return `<tr><td>\${i+1}</td><td class="greek-text">\${w.greek}</td><td>\${w.translationRu || ''}</td></tr>`;
+              } else {
+                 const ctx = w.contextPhrase ? `<span class="hint"><i>\${w.contextPhrase}</i></span>` : '';
+                 const notes = w.teacherReferenceNotes || '—';
+                 return `<tr><td>\${i+1}</td><td><span class="greek-text">\${w.greekWord}</span>\${ctx}</td><td>\${notes}</td></tr>`;
+              }
+            }).join('')}
+          </tbody>
+        </table>
+        
+        <script>
+          window.onload = function() { window.print(); };
+        </script>
+      </body>
+      </html>
+    `;
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   const handleCreateCustomListSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newListName.trim() || selectedWordIds.length === 0) return;
@@ -2255,21 +2369,35 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               </div>
 
               {/* Submit */}
-              <div className="pt-4 border-t border-[#E5E1DA] flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAssignModalOpen(false)}
-                  className="px-4 py-2 border border-[#E5E1DA] bg-white hover:border-[#1A1A1A] rounded cursor-pointer"
-                >
-                  Отмена
-                </button>
-                <button
-                  type="submit"
-                  disabled={assignTargetMode === 'selected' && selectedStudentIds.length === 0}
-                  className="px-6 py-2 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] uppercase tracking-wider font-bold rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {assignmentType === 'exam' ? 'Назначить контрольную' : 'Назначить задание'}
-                </button>
+              <div className="pt-4 border-t border-[#E5E1DA] flex justify-between space-x-2">
+                <div>
+                  {(assignmentType === 'exam' || assignmentType === 'manual_morphology') && (
+                    <button
+                      type="button"
+                      onClick={handlePrintWorksheet}
+                      className="px-4 py-2 border border-[#E5E1DA] bg-white text-[#2C3E50] hover:bg-[#FAF8F5] font-semibold rounded cursor-pointer flex items-center space-x-2 transition-colors"
+                      title="Распечатать бумажный бланк задания с ответами для преподавателя"
+                    >
+                      <span>🖨️ Распечатать бланк (PDF)</span>
+                    </button>
+                  )}
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsAssignModalOpen(false)}
+                    className="px-4 py-2 border border-[#E5E1DA] bg-white hover:border-[#1A1A1A] rounded cursor-pointer"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={assignTargetMode === 'selected' && selectedStudentIds.length === 0}
+                    className="px-6 py-2 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] uppercase tracking-wider font-bold rounded cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {assignmentType === 'exam' ? 'Назначить контрольную' : 'Назначить задание'}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
