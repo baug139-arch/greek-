@@ -605,12 +605,13 @@ export default function App() {
       currentUserProfile.email?.toLowerCase() === 'baug139@gmail.com'
     )
   );
-  const isStudent = Boolean(
-    currentUserProfile && 
-    currentUserProfile.role === 'student' && 
-    currentUserProfile.email?.toLowerCase() !== 'baug139@gmail.com'
-  );
   const isGuest = !currentUserProfile && (!currentStudentId || currentStudentId === 'guest_user' || !students.some((s) => s.id === currentStudentId));
+  const isStudent = Boolean(
+    (currentUserProfile && 
+     currentUserProfile.role === 'student' && 
+     currentUserProfile.email?.toLowerCase() !== 'baug139@gmail.com') ||
+    (!isTeacher && !isGuest)
+  );
 
   // Guest student default object for clean isolated guest session
   const guestStudentPlaceholder: Student = {
