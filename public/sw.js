@@ -1,5 +1,5 @@
-// Service Worker for Koine Greek PWA - v2
-const CACHE_NAME = 'koine-greek-v2';
+// Service Worker for Koine Greek PWA - v3 (Cache Busting)
+const CACHE_NAME = 'koine-greek-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -9,7 +9,7 @@ const STATIC_ASSETS = [
   '/icon-512.png'
 ];
 
-// Install Event - cache core shell
+// Install Event - cache core shell & skip waiting immediately
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
