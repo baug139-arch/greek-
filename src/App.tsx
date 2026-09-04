@@ -1238,6 +1238,7 @@ export default function App() {
     targetStudentIds: string[] | string | 'all'
   ) => {
     const timestamp = Date.now();
+    let studentsToSave: Student[] = [];
     
     setStudents((prev) => {
       const updated = prev.map((st) => {
@@ -1260,7 +1261,7 @@ export default function App() {
             ...st,
             assignedHomework: cleanHomework,
           };
-          saveStudentToCloud(updatedStudent);
+          studentsToSave.push(updatedStudent);
           return updatedStudent;
         }
         return st;
@@ -1268,6 +1269,10 @@ export default function App() {
 
       return updated;
     });
+
+    if (studentsToSave.length > 0) {
+      saveAllStudentsToCloud(studentsToSave).catch(e => console.error(e));
+    }
   };
 
   // Delete assignment from a student

@@ -7,7 +7,8 @@ import {
   getDocs, 
   onSnapshot,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  writeBatch
 } from '../firebase';
 import { HomeworkAssignment, Student, TeacherCustomList, UserProfile } from '../types';
 
@@ -201,15 +202,33 @@ export async function deleteStudentFromCloud(studentId: string): Promise<void> {
   }
 }
 
-// Save all students list to cloud (debounced, avoids loops)
+// Save all students list to cloud in chunks using batches to prevent race conditions and quota hits
 export async function saveAllStudentsToCloud(students: Student[]): Promise<void> {
   if (!students || students.length === 0 || !db || isQuotaExhausted()) return;
 
   try {
-    for (const student of students) {
+    // Cache locally immediately for all
+    students.forEach((student) => {
       if (student && student.id) {
-        await saveStudentToCloud(student);
+        try {
+          localStorage.setItem(`koine_student_cache_${student.id}`, JSON.stringify(sanitizeForFirestore(student)));
+        } catch {}
       }
+    });
+
+    const chunkSize = 400; // Firebase limit is 500 ops per batch
+    for (let i = 0; i < students.length; i += chunkSize) {
+      const chunk = students.slice(i, i + chunkSize);
+      const batch = writeBatch(db);
+      
+      chunk.forEach((student) => {
+        if (student && student.id) {
+          const studentRef = doc(db, 'students', student.id);
+          batch.set(studentRef, sanitizeForFirestore(student), { merge: true });
+        }
+      });
+      
+      await batch.commit();
     }
   } catch (error) {
     handleFirestoreError(error, 'saveAllStudentsToCloud');
