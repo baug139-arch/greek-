@@ -142,10 +142,6 @@ export const ExamRunner: React.FC<ExamRunnerProps> = ({
                 ⏳ Ожидает проверки
               </span>
             </div>
-            <div className="flex justify-between text-[#1A1A1A]">
-              <span className="text-[#8C7D6B]">Награда за выполнение:</span>
-              <span className="font-bold text-[#2D4A32]">+{assignment.xpReward} XP</span>
-            </div>
           </div>
 
           <button

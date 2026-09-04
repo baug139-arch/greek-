@@ -181,9 +181,6 @@ export const GreekCompositionRunner: React.FC<GreekCompositionRunnerProps> = ({
               <span className="text-[10px] uppercase font-bold text-[#8C7D6B] tracking-wider">
                 Задание от преподавателя:
               </span>
-              <span className="text-xs text-[#2D4A32] font-bold">
-                Награда: +{assignment.xpReward} XP
-              </span>
             </div>
             
             <p className="text-base sm:text-xl font-serif text-[#1A1A1A] font-semibold leading-relaxed">

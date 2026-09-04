@@ -1697,23 +1697,10 @@ export default function App() {
                   </div>
                 </div>
               </div>
-              <div className="pt-2 border-t border-[#F0EBE1] flex items-center justify-between text-[11px] font-sans">
-                <span className="text-[#8C7D6B]">Статус:</span>
-                <span className="px-2 py-0.5 rounded bg-[#FAF8F5] border border-[#E5E1DA] font-bold text-[#2C3E50]">
-                  🌱 Мафит (Ученик)
-                </span>
-              </div>
             </div>
 
-            {/* Student Stats 2x2 Grid */}
-            <div className="grid grid-cols-2 gap-2 mb-4 font-sans">
-              <div className="p-2.5 bg-white border border-[#E5E1DA] rounded text-center">
-                <span className="text-[10px] uppercase font-bold text-[#8C7D6B] block">Опыт (XP)</span>
-                <span className="text-sm font-serif font-bold text-[#1A1A1A] flex items-center justify-center gap-1">
-                  <Sparkles className="w-3 h-3 text-[#D4A373]" />
-                  {currentStudent.xp}
-                </span>
-              </div>
+            {/* Student Stats 3-Item Grid */}
+            <div className="grid grid-cols-3 gap-2 mb-4 font-sans">
               <div className="p-2.5 bg-white border border-[#E5E1DA] rounded text-center">
                 <span className="text-[10px] uppercase font-bold text-[#8C7D6B] block">Стрик</span>
                 <span className="text-sm font-serif font-bold text-[#1A1A1A] flex items-center justify-center gap-1">
@@ -1728,7 +1715,7 @@ export default function App() {
                 </span>
               </div>
               <div className="p-2.5 bg-white border border-[#E5E1DA] rounded text-center">
-                <span className="text-[10px] uppercase font-bold text-[#8C7D6B] block">Выучено слов</span>
+                <span className="text-[10px] uppercase font-bold text-[#8C7D6B] block">Выучено</span>
                 <span className="text-sm font-serif font-bold text-[#2C3E50]">
                   {currentStudent.masteredWordsCount || 0}
                 </span>
@@ -1857,7 +1844,7 @@ export default function App() {
               </div>
 
               <p className="text-[11px] font-sans text-[#6B655C] leading-relaxed">
-                Вы можете тренировать любые слова и главы. Чтобы <strong className="text-[#1A1A1A]">накапливать опыт (XP)</strong>, отслеживать стрик и получать задания — войдите в аккаунт.
+                Вы можете тренировать любые слова и главы. Чтобы <strong className="text-[#1A1A1A]">сохранять прогресс</strong>, отслеживать стрик и получать задания — войдите в аккаунт.
               </p>
 
               <button

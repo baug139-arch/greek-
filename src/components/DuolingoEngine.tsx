@@ -1287,15 +1287,11 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             {stageSubtitle}
           </p>
 
-          {/* Score & XP Metrics */}
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 mb-4 sm:mb-5 text-left">
-            <div className="border border-[#E5E1DA] p-2.5 sm:p-3.5 bg-white rounded-xs shadow-2xs">
-              <span className="text-[10px] font-sans uppercase text-[#8C7D6B] font-bold block">Точность ответов</span>
-              <span className="text-xl sm:text-2xl font-serif text-[#1A1A1A] font-bold">{scorePercent}%</span>
-            </div>
-            <div className="border border-[#E5E1DA] p-2.5 sm:p-3.5 bg-white rounded-xs shadow-2xs">
-              <span className="text-[10px] font-sans uppercase text-[#8C7D6B] font-bold block">Получено опыта</span>
-              <span className="text-xl sm:text-2xl font-serif text-[#2D4A32] font-bold">+{xpEarned + (hearts > 0 ? 15 : 5)} XP</span>
+          {/* Score Metric */}
+          <div className="mb-4 sm:mb-5 text-left">
+            <div className="border border-[#E5E1DA] p-3 sm:p-4 bg-white rounded-xs shadow-2xs flex items-center justify-between">
+              <span className="text-xs font-sans uppercase text-[#8C7D6B] font-bold block">Точность ответов</span>
+              <span className="text-2xl sm:text-3xl font-serif text-[#1A1A1A] font-bold">{scorePercent}%</span>
             </div>
           </div>
 
@@ -1460,14 +1456,10 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             Результаты тренировки записаны в ваш профиль и зафиксированы в интервальной системе повторения.
           </p>
 
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3 mb-4 sm:mb-5 text-left">
-            <div className="border border-[#E5E1DA] p-2.5 sm:p-3.5 bg-white rounded-xs shadow-2xs">
-              <span className="text-[10px] font-sans uppercase text-[#8C7D6B] font-bold block">Точность</span>
-              <span className="text-xl sm:text-2xl font-serif text-[#1A1A1A] font-bold">{finalScore}%</span>
-            </div>
-            <div className="border border-[#E5E1DA] p-2.5 sm:p-3.5 bg-white rounded-xs shadow-2xs">
-              <span className="text-[10px] font-sans uppercase text-[#8C7D6B] font-bold block">Опыт</span>
-              <span className="text-xl sm:text-2xl font-serif text-[#2D4A32] font-bold">+{xpEarned + (hearts > 0 ? 15 : 5)} XP</span>
+          <div className="mb-4 sm:mb-5 text-left">
+            <div className="border border-[#E5E1DA] p-3 sm:p-4 bg-white rounded-xs shadow-2xs flex items-center justify-between">
+              <span className="text-xs font-sans uppercase text-[#8C7D6B] font-bold block">Точность</span>
+              <span className="text-2xl sm:text-3xl font-serif text-[#1A1A1A] font-bold">{finalScore}%</span>
             </div>
           </div>
 
@@ -1478,7 +1470,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
               <span>Интервальный контроль (Ebbinghaus Spaced Repetition)</span>
             </div>
             <p className="text-[11px] font-sans text-[#3A4A3E] leading-relaxed">
-              1-й этап завершен. Для перехода на следующий уровень памяти вернитесь в кабинет — через 45 минут откроется 2-й этап закрепления для повторения материала.
+              1-й этап завершен. Для перехода на следующий этап памяти вернитесь в кабинет — через 45 минут откроется 2-й этап закрепления для повторения материала.
             </p>
           </div>
 
@@ -1600,12 +1592,6 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
               <span>Режим</span>
             </button>
 
-            {/* XP Counter */}
-            <div className="flex items-center px-1.5 sm:px-2 py-0.5 bg-[#EBF3ED] border border-[#A2C7A8] rounded shrink-0">
-              <span className="text-[10px] sm:text-xs text-[#2D4A32] font-bold">
-                +{xpEarned} XP
-              </span>
-            </div>
           </div>
 
           {/* Bottom Row: Stage Selector (when mode is 'all'), Mode & Direction Selectors */}
@@ -1735,7 +1721,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                       {flashcardAnswer === 'know' ? (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EAF2EC] border border-[#2D4A32]/30 text-[#2D4A32] font-sans text-xs font-bold rounded-xs shadow-2xs">
                           <Check className="w-3.5 h-3.5" />
-                          <span>Знаю (+5 XP)</span>
+                          <span>Знаю</span>
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#FAF0F0] border border-[#9E3B3B]/30 text-[#9E3B3B] font-sans text-xs font-bold rounded-xs shadow-2xs">
@@ -2490,7 +2476,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                       <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 shrink-0" />
                       <div>
                         <span className="font-bold text-xs uppercase tracking-wider block font-sans">
-                          Знаю! (+5 XP)
+                          Знаю!
                         </span>
                         {currentEx.word && (
                           <span className="text-xs text-[#6B655C] italic font-serif">
@@ -2537,7 +2523,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                     <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 shrink-0" />
                     <div>
                       <span className="font-bold text-xs uppercase tracking-wider block font-sans flex items-center gap-2">
-                        Верно! (+10 XP)
+                        Верно!
                         {typoWarning && (
                           <span className="px-1.5 py-0.2 bg-[#FEF3C7] text-[#D97706] rounded text-[9px] font-bold">
                             {typoWarning}
@@ -2619,7 +2605,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                     type="button"
                     onClick={handleFlashcardKnow}
                     className="flex-1 sm:flex-initial px-5 sm:px-8 py-2.5 sm:py-3 bg-[#2D4A32] text-white hover:bg-[#1E3322] font-sans uppercase tracking-wider text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs rounded-xs font-bold active:scale-[0.98]"
-                    title="Знаю это слово (+5 XP, горячая клавиша 2, Enter или →)"
+                    title="Знаю это слово (горячая клавиша 2, Enter или →)"
                   >
                     <Check className="w-4 h-4 shrink-0" />
                     <span>Знаю</span>

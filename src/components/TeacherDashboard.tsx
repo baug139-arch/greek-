@@ -708,10 +708,10 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                         <div className="flex items-center space-x-4 sm:space-x-6 w-full lg:w-auto justify-between lg:justify-end flex-wrap gap-y-2">
                           <div className="text-right">
                             <span className="text-[10px] font-sans uppercase text-[#8C7D6B] block font-bold">
-                              Слов / Опыт
+                              Слов в базе
                             </span>
                             <span className="text-xs font-sans text-[#1A1A1A] font-semibold">
-                              {student.masteredWordsCount} слов • {student.xp} XP
+                              {student.masteredWordsCount} слов
                             </span>
                           </div>
 
@@ -2227,8 +2227,8 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                 </div>
               )}
 
-              {/* 7. Deadline & XP */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* 7. Deadline */}
+              <div className="space-y-1 max-w-sm">
                 <div className="space-y-1">
                   <div className="flex justify-between items-center">
                     <label className="block text-[#8C7D6B] uppercase tracking-wider font-bold text-[10px]">
@@ -2251,18 +2251,6 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
                       className="w-full p-2 border border-[#E5E1DA] bg-white text-[#1A1A1A] rounded"
                     />
                   )}
-                </div>
-
-                <div>
-                  <label className="block text-[#8C7D6B] uppercase tracking-wider mb-1 font-bold text-[10px]">
-                    Награда за выполнение (XP):
-                  </label>
-                  <input
-                    type="number"
-                    value={assignXp}
-                    onChange={(e) => setAssignXp(Number(e.target.value))}
-                    className="w-full p-2 border border-[#E5E1DA] bg-white text-[#1A1A1A] rounded"
-                  />
                 </div>
               </div>
 
@@ -2474,8 +2462,8 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               {/* Metrics */}
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="p-3 border border-[#E5E1DA] bg-white rounded">
-                  <span className="text-[10px] uppercase text-[#8C7D6B] block font-bold">Опыт (XP)</span>
-                  <span className="text-xl font-serif text-[#1A1A1A] font-bold">{selectedStudent.xp}</span>
+                  <span className="text-[10px] uppercase text-[#8C7D6B] block font-bold">Стрик</span>
+                  <span className="text-xl font-serif text-[#1A1A1A] font-bold">{selectedStudent.streakDays || 1} дн.</span>
                 </div>
                 <div className="p-3 border border-[#E5E1DA] bg-white rounded">
                   <span className="text-[10px] uppercase text-[#8C7D6B] block font-bold">Точность</span>

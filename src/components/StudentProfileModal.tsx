@@ -270,11 +270,11 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left">
                 <div className="p-4 border border-[#E5E1DA] bg-white">
                   <span className="text-[10px] font-sans uppercase tracking-widest text-[#8C7D6B] block">
-                    Опыт (XP)
+                    Пройдено занятий
                   </span>
-                  <p className="text-2xl font-serif text-[#1A1A1A] mt-0.5">{student.xp} XP</p>
+                  <p className="text-2xl font-serif text-[#1A1A1A] mt-0.5">{(student.sessionAttempts || []).length}</p>
                   <span className="text-[10px] font-sans text-[#2D4A32] flex items-center gap-1 mt-1">
-                    <Sparkles className="w-3 h-3" /> Уровень {Math.floor(student.xp / 300) + 1}
+                    <BookOpen className="w-3 h-3" /> Практика & тесты
                   </span>
                 </div>
 
@@ -642,7 +642,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                             </span>
                           </div>
                           <p className="text-[11px] font-sans text-[#6B655C]">
-                            Дата прохождения: {attempt.date} • +{attempt.xpGained} XP
+                            Дата прохождения: {attempt.date} • Результат: {attempt.scorePercent}%
                           </p>
                         </div>
 
@@ -742,7 +742,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           <div className="p-4 bg-[#FADBD8] border-t border-b border-[#9E3B3B] font-sans space-y-2">
             <p className="text-xs text-[#9E3B3B] font-bold">
               {confirmMode === 'reset'
-                ? `Сбросить весь прогресс ученика «${student.name}»? (XP, выученные слова и статистика обнулятся)`
+                ? `Сбросить весь прогресс ученика «${student.name}»? (Выученные слова и статистика обнулятся)`
                 : `Вы уверены, что хотите полностью удалить ученика «${student.name}»?`}
             </p>
             <div className="flex gap-2">

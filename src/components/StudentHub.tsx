@@ -148,22 +148,6 @@ export const StudentHub: React.FC<StudentHubProps> = ({
   };
   const currentThematicInfo = THEMATIC_GROUPS.find((g) => g.id === selectedThematicId) || THEMATIC_GROUPS[0];
 
-  // Calculate General Progress Level and Next Level Threshold
-  const userXp = currentStudent.xp || 0;
-  const currentLevel = Math.floor(userXp / 250) + 1;
-  const currentLevelXp = userXp % 250;
-  const nextLevelXp = 250;
-  const levelProgressPercent = Math.min(100, Math.round((currentLevelXp / nextLevelXp) * 100));
-
-  const levelRanks = [
-    { level: 1, title: 'Мафит (Μαθητής / Ученик)', icon: '🌱' },
-    { level: 2, title: 'Анагностес (Ἀναγνώστης / Чтец)', icon: '📜' },
-    { level: 3, title: 'Грамматевс (Γραμματεύς / Книжник)', icon: '✒️' },
-    { level: 4, title: 'Эрменевт (Ἑρμηνευτής / Толкователь)', icon: '🏛️' },
-    { level: 5, title: 'Дидаскалос (Διδάσκαλος / Наставник)', icon: '👑' },
-  ];
-  const rankInfo = levelRanks[Math.min(currentLevel - 1, levelRanks.length - 1)];
-
   // Active vs Reviewed Homework assignments
   const allHomeworks = currentStudent.assignedHomework || [];
   const activeHomeworks = allHomeworks.filter((hw) => !hw.studentReviewed);
@@ -190,7 +174,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
 
   return (
     <div className="space-y-8">
-      {/* Student Welcome Header & General Progress Level Card */}
+      {/* Student Welcome Header & Skills Progress */}
       <div className="border border-[#1A1A1A] p-6 sm:p-8 bg-[#F9F7F2] relative overflow-hidden shadow-xs">
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-3 max-w-xl">
@@ -212,7 +196,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                 {/* Guest Callout Box */}
                 <div className="bg-white border border-[#E5E1DA] p-3.5 rounded space-y-2.5 max-w-md shadow-2xs">
                   <div className="text-xs font-sans text-[#4A443D] leading-relaxed">
-                    Вы можете свободно тренировать слова, проходить карточки и тесты. Чтобы <strong className="text-[#1A1A1A]">накапливать очки опыта (XP)</strong>, открывать уровни мастерства и сдавать работы преподавателю — войдите в аккаунт студента.
+                    Вы можете свободно тренировать слова, проходить карточки и тесты. Чтобы <strong className="text-[#1A1A1A]">сохранять прогресс</strong> и сдавать работы преподавателю — войдите в аккаунт студента.
                   </div>
                   {onOpenAuthModal && (
                     <button
@@ -226,7 +210,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                       </svg>
-                      <span>Войти через Google и копить XP</span>
+                      <span>Войти через Google для синхронизации</span>
                     </button>
                   )}
                 </div>
@@ -236,9 +220,6 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C7D6B] font-bold">
                     Студент курса койне
-                  </span>
-                  <span className="text-xs font-sans px-2.5 py-0.5 bg-[#1A1A1A] text-white font-bold rounded">
-                    Уровень {currentLevel}: {rankInfo.icon} {rankInfo.title}
                   </span>
                   <span className="text-xs font-sans px-2 py-0.5 bg-[#E5E1DA] text-[#1A1A1A] rounded">
                     Стрик: {currentStudent.streakDays} дней 🔥
@@ -251,24 +232,6 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     ({currentStudent.greekAlias})
                   </span>
                 </h2>
-
-                {/* General Progress Level Bar */}
-                <div className="bg-white border border-[#E5E1DA] p-3 rounded space-y-1.5 max-w-md shadow-2xs">
-                  <div className="flex justify-between items-center text-[11px] font-sans">
-                    <span className="text-[#8C7D6B] font-bold">Общий прогресс уровня {currentLevel}</span>
-                    <span className="text-[#1A1A1A] font-bold">{currentLevelXp} / {nextLevelXp} XP ({levelProgressPercent}%)</span>
-                  </div>
-                  <div className="w-full h-2 bg-[#E5E1DA] rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-[#2D4A32] transition-all duration-500 rounded-full"
-                      style={{ width: `${levelProgressPercent}%` }}
-                    />
-                  </div>
-                  <div className="flex justify-between items-center text-[10px] font-sans text-[#8C7D6B]">
-                    <span>Всего опыта: {userXp} XP</span>
-                    <span>До ур. {currentLevel + 1}: {nextLevelXp - currentLevelXp} XP</span>
-                  </div>
-                </div>
 
                 {/* Multi-Aspect Skills Balance (3 Грани владения словом) */}
                 <div className="bg-white border border-[#E5E1DA] p-3 rounded space-y-2 max-w-md shadow-2xs font-sans">
@@ -479,10 +442,6 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                           (Без дедлайна)
                         </span>
                       )}
-
-                      <span className="text-[11px] font-sans text-[#2D4A32] font-bold">
-                        +{hw.xpReward} XP
-                      </span>
                     </div>
 
                     <h4 className="text-base font-serif font-bold text-[#1A1A1A]">
@@ -1412,7 +1371,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     )}
                     <div className="flex justify-between items-center gap-2">
                       <span className="text-[9px] font-sans uppercase tracking-widest opacity-60">
-                        Уровень {idx + 1}
+                        Раздел {idx + 1}
                       </span>
                       <span className="text-[9px] font-mono font-bold opacity-80">
                         {stats.averageMasteryPercent}%
@@ -1481,7 +1440,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                   }}
                   practiceButtonText={
                     completedChunkList.length >= totalTierChunks
-                      ? `Повторить уровень (все порции)`
+                      ? `Повторить раздел (все порции)`
                       : `Учить: Порция ${nextChunkIndex + 1}/${totalTierChunks} (${nextChunkStart}–${nextChunkEnd}) ➔`
                   }
                 />
@@ -1492,7 +1451,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-sans uppercase tracking-widest text-[#8C7D6B] font-bold">
-                          Порции уровня ({batchSize} слов в порции):
+                          Порции раздела ({batchSize} слов в порции):
                         </span>
                         <span className="text-[10px] font-sans text-[#2D4A32] font-bold bg-[#C5D9C8] px-1.5 py-0.2">
                           Пройдено: {completedChunkList.length} / {totalTierChunks}
