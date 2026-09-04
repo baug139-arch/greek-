@@ -276,16 +276,38 @@ export default function App() {
 
         // Fetch or create user profile
         let profile = await getUserProfileFromCloud(firebaseUser.uid);
+        if (!profile && firebaseUser.email) {
+          const studentDoc = await getStudentByEmailFromCloud(firebaseUser.email);
+          if (studentDoc && studentDoc.name && studentDoc.name !== 'Студент' && studentDoc.name !== 'Гость') {
+            profile = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              displayName: studentDoc.name,
+              photoURL: firebaseUser.photoURL || studentDoc.photoURL,
+              role: isMasterAdmin ? 'teacher' : 'student',
+              greekAlias: studentDoc.greekAlias || 'Ἰωάννης',
+              avatar: studentDoc.avatar || '👨‍🎓',
+              createdAt: new Date().toISOString(),
+            };
+            await saveUserProfileToCloud(profile);
+          }
+        }
 
         if (!profile) {
+          const localStudent = students.find(s => s.id === currentStudentId) || students[0];
+          const localName = (localStudent && localStudent.name && localStudent.name !== 'Студент' && localStudent.name !== 'Гость')
+            ? localStudent.name.trim()
+            : '';
+          const candidateName = localName || (firebaseUser.displayName?.trim()) || (isMasterAdmin ? 'Сурен Ханикян' : 'Студент');
+
           profile = {
             uid: firebaseUser.uid,
             email: firebaseUser.email || '',
-            displayName: firebaseUser.displayName || (isMasterAdmin ? 'Преподаватель' : 'Студент'),
+            displayName: candidateName,
             photoURL: firebaseUser.photoURL || undefined,
             role: isMasterAdmin ? 'teacher' : 'student',
-            greekAlias: isMasterAdmin ? 'Ἐρασμιανός' : 'Ἰωάννης',
-            avatar: isMasterAdmin ? '👨‍🏫' : '👨‍🎓',
+            greekAlias: localStudent?.greekAlias || (isMasterAdmin ? 'Ἐρασμιανός' : 'Ἰωάννης'),
+            avatar: localStudent?.avatar || (isMasterAdmin ? '👨‍🏫' : '👨‍🎓'),
             createdAt: new Date().toISOString(),
           };
           await saveUserProfileToCloud(profile);
@@ -300,6 +322,9 @@ export default function App() {
 
         setCurrentUserProfile(profile);
         localStorage.setItem('koine_user_profile', JSON.stringify(profile));
+        localStorage.setItem('koine_user_onboarded', 'true');
+        setIsWelcomeModalOpen(false);
+        setIsAuthModalOpen(false);
 
         // If user is teacher, default to teacher dashboard
         if (profile.role === 'teacher' || isMasterAdmin) {

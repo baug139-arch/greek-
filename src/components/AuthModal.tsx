@@ -14,6 +14,11 @@ import {
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import { signInWithGoogle, logOut } from '../firebase';
+import { 
+  getUserProfileFromCloud, 
+  getStudentByEmailFromCloud, 
+  saveUserProfileToCloud 
+} from '../utils/cloudSync';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -45,11 +50,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [authError, setAuthError] = useState<string | null>(null);
 
   // Profile Edit State when logged in
+  const [displayName, setDisplayName] = useState(currentUserProfile?.displayName || '');
   const [selectedRole, setSelectedRole] = useState<'student' | 'teacher'>(
     currentUserProfile?.role || 'student'
   );
-  const [greekAlias, setGreekAlias] = useState(currentUserProfile?.greekAlias || 'Ἀνδρέας');
+  const [greekAlias, setGreekAlias] = useState(currentUserProfile?.greekAlias || 'Ἰωάννης');
   const [avatar, setAvatar] = useState(currentUserProfile?.avatar || '👨‍🎓');
+
+  React.useEffect(() => {
+    if (currentUserProfile) {
+      setDisplayName(currentUserProfile.displayName || '');
+      setSelectedRole(currentUserProfile.role || 'student');
+      setGreekAlias(currentUserProfile.greekAlias || 'Ἰωάννης');
+      setAvatar(currentUserProfile.avatar || '👨‍🎓');
+    }
+  }, [currentUserProfile]);
 
   if (!isOpen) return null;
 
@@ -60,16 +75,59 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const user = await signInWithGoogle();
       if (user) {
         const isMasterTeacher = user.email?.toLowerCase() === 'baug139@gmail.com';
+
+        // 1. Check if user profile already exists in Cloud (returning user)
+        let existingProfile = await getUserProfileFromCloud(user.uid);
+        if (!existingProfile && user.email) {
+          const studentDoc = await getStudentByEmailFromCloud(user.email);
+          if (studentDoc && studentDoc.name && studentDoc.name !== 'Студент' && studentDoc.name !== 'Гость') {
+            existingProfile = {
+              uid: user.uid,
+              email: user.email,
+              displayName: studentDoc.name,
+              photoURL: user.photoURL || studentDoc.photoURL,
+              role: isMasterTeacher ? 'teacher' : 'student',
+              greekAlias: studentDoc.greekAlias || 'Ἰωάννης',
+              avatar: studentDoc.avatar || '👨‍🎓',
+              createdAt: new Date().toISOString(),
+            };
+            await saveUserProfileToCloud(existingProfile);
+          }
+        }
+
+        // RETURNING USER: If profile already exists with a name, IMMEDIATELY close modal!
+        if (existingProfile && existingProfile.displayName && existingProfile.displayName !== 'Студент' && existingProfile.displayName !== 'Гость') {
+          onProfileUpdated(existingProfile);
+          onClose(); // Seamless login without any prompts!
+          return;
+        }
+
+        // 2. First-time User:
+        const initialName = (user.displayName && user.displayName !== 'Студент' && user.displayName !== 'Гость')
+          ? user.displayName.trim()
+          : (isMasterTeacher ? 'Сурен Ханикян' : '');
+
         const newProfile: UserProfile = {
           uid: user.uid,
           email: user.email || '',
-          displayName: user.displayName || (isMasterTeacher ? 'Сурен Ханикян' : 'Студент'),
+          displayName: initialName || 'Студент',
           photoURL: user.photoURL || undefined,
-          role: isMasterTeacher ? 'teacher' : (currentUserProfile?.role || 'student'),
-          greekAlias: isMasterTeacher ? 'Ἐраσμιανός' : (currentUserProfile?.greekAlias || 'Ἰωάννης'),
-          avatar: isMasterTeacher ? '👨‍🏫' : (currentUserProfile?.avatar || '👨‍🎓'),
-          createdAt: currentUserProfile?.createdAt || new Date().toISOString(),
+          role: isMasterTeacher ? 'teacher' : 'student',
+          greekAlias: isMasterTeacher ? 'Ἐρασμιανός' : 'Ἰωάννης',
+          avatar: isMasterTeacher ? '👨‍🏫' : '👨‍🎓',
+          createdAt: new Date().toISOString(),
         };
+
+        // If Google already provided a real name, save and close immediately!
+        if (initialName && initialName.length > 1) {
+          await saveUserProfileToCloud(newProfile);
+          onProfileUpdated(newProfile);
+          onClose(); // Seamless login!
+          return;
+        }
+
+        // Only if no name could be found, show the one-time name input in the modal
+        setDisplayName(initialName);
         setSelectedRole(newProfile.role);
         setGreekAlias(newProfile.greekAlias);
         setAvatar(newProfile.avatar);
@@ -83,14 +141,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleSaveProfileChanges = () => {
+  const handleSaveProfileChanges = async () => {
     if (!currentUserProfile) return;
+    const trimmed = displayName.trim() || currentUserProfile.displayName || 'Студент';
     const updated: UserProfile = {
       ...currentUserProfile,
+      displayName: trimmed,
       role: selectedRole,
       greekAlias,
       avatar,
     };
+    await saveUserProfileToCloud(updated);
     onProfileUpdated(updated);
     onClose();
   };
@@ -304,6 +365,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </span>
                 </div>
               )}
+
+              {/* Real Name Input Field */}
+              <div className="space-y-1.5">
+                <label className="block text-[#1A1A1A] uppercase tracking-wider font-bold text-[10px] font-sans">
+                  Ваше имя в классе (ФИО или имя): <span className="text-[#9E3B3B]">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Ваше имя или фамилия (например: Сурен Ханикян)"
+                  className="w-full p-2.5 text-xs border border-[#1A1A1A] bg-white rounded text-[#1A1A1A] font-serif font-bold focus:outline-hidden focus:ring-1 focus:ring-[#2D4A32]"
+                />
+              </div>
 
               {/* Greek Alias Selection */}
               <div className="space-y-2">
