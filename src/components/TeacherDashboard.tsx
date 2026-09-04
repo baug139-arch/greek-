@@ -392,11 +392,6 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         expectedGreekAnswer: assignmentType === 'greek_composition' ? compositionExpectedGreek.trim() : undefined,
         manualMorphologyWords: assignmentType === 'manual_morphology' ? validManualWords : undefined,
         examConfig: assignmentType === 'exam' ? { wordCount: Math.min(examWordCount, Math.max(1, totalWords)) } : undefined,
-        morphologyConfig: assignmentType === 'morphology' ? { targetPos: morphologyTargetPos, wordCount: morphologyWordCount } : undefined,
-        trainingMode: assignmentType === 'exam' ? 'typing' : (assignTrainingMode === 'all' ? undefined : assignTrainingMode),
-        direction: assignmentType === 'exam' ? 'greek_to_ru' : (assignTrainingDirection === 'bidirectional' ? undefined : assignTrainingDirection),
-        assignedDate: new Date().toISOString().split('T')[0],
-        dueDate: isNoDeadline ? null : assignDueDate,
         xpReward: assignXp,
         teacherGradeStatus: (assignmentType === 'exam' || assignmentType === 'greek_composition' || assignmentType === 'manual_morphology') ? 'pending' : undefined,
         requiredRounds: assignmentType === 'practice' ? assignRounds : 1,
@@ -413,115 +408,145 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   const handlePrintWorksheet = () => {
     let printWords: any[] = [];
     if (assignmentType === 'exam') {
-      const selectedMods = selectedCourseIds.map((cid) => {
-        const isList = customLists.find((l) => l.id === cid);
-        if (isList) return { id: isList.id, title: isList.title, mode: 'custom_list' as const, targetId: isList.id };
-        const isFreq = FREQUENCY_TIERS.find((t) => t.id === cid);
-        if (isFreq) return { id: isFreq.id, title: isFreq.titleRu, mode: 'frequency' as const, targetId: isFreq.id };
-        const isThematic = THEMATIC_GROUPS.find((g) => g.id === cid);
-        if (isThematic) return { id: isThematic.id, title: isThematic.nameRu, mode: 'thematic' as const, targetId: isThematic.id };
-        const isChapter = JOHN_CHAPTERS.find((c) => c.id === cid);
-        return { id: isChapter?.id || cid, title: isChapter?.titleRu || cid, mode: 'contextual_reader' as const, targetId: cid };
-      });
+      const selectedMods = getSelectedModulesInfo(selectedCourseIds.length > 0 ? selectedCourseIds : ['john_1']);
       const combinedWords = getWordsForSelectedModules(selectedMods, customLists);
       // Randomly select for exam
       const shuffled = [...combinedWords].sort(() => 0.5 - Math.random());
-      printWords = shuffled.slice(0, examWordCount);
+      const targetCount = examWordCount > 0 ? examWordCount : Math.min(20, Math.max(1, combinedWords.length));
+      printWords = shuffled.slice(0, Math.min(targetCount, combinedWords.length));
     } else if (assignmentType === 'manual_morphology') {
-      printWords = manualMorphologyItems.filter((w) => w.greekWord.trim().length > 0);
+      printWords = manualMorphologyItems.filter((w) => w.greekWord && w.greekWord.trim().length > 0);
     }
 
     if (printWords.length === 0) {
-      alert('Нет слов для вывода на печать.');
-      return;
-    }
-
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      alert('Пожалуйста, разрешите всплывающие окна в браузере для печати.');
+      alert('Нет слов для вывода на печать. Пожалуйста, выберите модули со словами или введите слова для разбора.');
       return;
     }
 
     let finalTitle = assignTitle.trim() || (assignmentType === 'exam' ? 'Контрольная работа' : 'Морфологический разбор');
 
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Бланк: ${finalTitle}</title>
-        <style>
-          body { font-family: 'Times New Roman', serif; padding: 20px; color: #000; font-size: 14px; }
-          h1, h2 { text-align: center; font-family: sans-serif; font-size: 1.5em; }
-          .header-info { display: flex; justify-content: space-between; margin-bottom: 25px; font-family: sans-serif; font-size: 1.1em; }
-          .line { border-bottom: 1px solid #000; display: inline-block; width: 300px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { border: 1px solid #000; padding: 12px; text-align: left; }
-          th { background-color: #f9f9f9; font-family: sans-serif; }
-          .page-break { page-break-before: always; }
-          .greek-text { font-size: 1.4em; }
-          .hint { font-size: 0.85em; color: #555; font-family: sans-serif; margin-top: 4px; display: block; }
-        </style>
-      </head>
-      <body>
-        <!-- STUDENT PAGE -->
-        <h1>${finalTitle}</h1>
-        <div class="header-info">
-          <div>Имя студента: <span class="line"></span></div>
-          <div>Дата: <span class="line" style="width: 150px;"></span></div>
-        </div>
-        
-        <table>
-          <thead>
-            ${assignmentType === 'exam' 
-              ? `<tr><th style="width: 40px;">#</th><th style="width: 45%;">Слово (Греческий)</th><th>Перевод на русский</th></tr>`
-              : `<tr><th style="width: 40px;">#</th><th style="width: 35%;">Слово в тексте</th><th>Морфологический разбор</th></tr>`
-            }
-          </thead>
-          <tbody>
-            ${printWords.map((w, i) => {
-              if (assignmentType === 'exam') {
-                 return `<tr><td>\${i+1}</td><td class="greek-text">\${w.greek}</td><td></td></tr>`;
-              } else {
-                 const ctx = w.contextPhrase ? `<span class="hint">Контекст: <i>\${w.contextPhrase}</i></span>` : '';
-                 const ref = w.verseRef ? `<span class="hint">Ссылка: <b>\${w.verseRef}</b></span>` : '';
-                 return `<tr><td>\${i+1}</td><td><span class="greek-text">\${w.greekWord}</span>\${ctx}\${ref}</td><td><div style="min-height: 40px;"></div></td></tr>`;
-              }
-            }).join('')}
-          </tbody>
-        </table>
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Бланк: ${finalTitle}</title>
+  <style>
+    @page { size: A4; margin: 15mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Times New Roman", serif; padding: 10px; color: #111; font-size: 14px; margin: 0; }
+    h1, h2 { text-align: center; font-size: 1.4em; margin-bottom: 8px; }
+    .header-info { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.05em; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+    .line { border-bottom: 1px solid #000; display: inline-block; width: 220px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #333; padding: 8px 10px; text-align: left; vertical-align: middle; }
+    th { background-color: #f2f2f2; }
+    .page-break { page-break-before: always; }
+    .greek-text { font-size: 1.35em; font-family: "Times New Roman", serif; font-weight: bold; }
+    .hint { font-size: 0.85em; color: #555; margin-top: 2px; display: block; }
+  </style>
+</head>
+<body>
+  <!-- STUDENT PAGE -->
+  <h1>${finalTitle}</h1>
+  <div class="header-info">
+    <div><b>Имя студента:</b> <span class="line"></span></div>
+    <div><b>Дата:</b> <span class="line" style="width: 120px;"></span></div>
+  </div>
+  
+  <table>
+    <thead>
+      ${assignmentType === 'exam' 
+        ? '<tr><th style="width: 40px; text-align: center;">№</th><th style="width: 45%;">Слово (Греческий)</th><th>Перевод на русский</th></tr>'
+        : '<tr><th style="width: 40px; text-align: center;">№</th><th style="width: 35%;">Слово в тексте</th><th>Морфологический разбор</th></tr>'
+      }
+    </thead>
+    <tbody>
+      ${printWords.map((w, i) => {
+        if (assignmentType === 'exam') {
+           return `<tr><td style="text-align: center;">${i+1}</td><td class="greek-text">${w.greek || w.lemma}</td><td></td></tr>`;
+        } else {
+           const ctx = w.contextPhrase ? `<span class="hint">Контекст: <i>${w.contextPhrase}</i></span>` : '';
+           const ref = w.verseRef ? `<span class="hint">Ссылка: <b>${w.verseRef}</b></span>` : '';
+           return `<tr><td style="text-align: center;">${i+1}</td><td><span class="greek-text">${w.greekWord}</span>${ctx}${ref}</td><td><div style="min-height: 36px;"></div></td></tr>`;
+        }
+      }).join('')}
+    </tbody>
+  </table>
 
-        <div class="page-break"></div>
+  <div class="page-break"></div>
 
-        <!-- TEACHER KEY PAGE -->
-        <h2>Ключи для преподавателя: ${finalTitle}</h2>
-        <table>
-          <thead>
-            ${assignmentType === 'exam' 
-              ? `<tr><th style="width: 40px;">#</th><th style="width: 45%;">Слово (Греческий)</th><th>Правильный перевод</th></tr>`
-              : `<tr><th style="width: 40px;">#</th><th style="width: 35%;">Слово в тексте</th><th>Заметки для проверки</th></tr>`
+  <!-- TEACHER KEY PAGE -->
+  <h2>Ключи для преподавателя: ${finalTitle}</h2>
+  <table>
+    <thead>
+      ${assignmentType === 'exam' 
+        ? '<tr><th style="width: 40px; text-align: center;">№</th><th style="width: 45%;">Слово (Греческий)</th><th>Правильный перевод</th></tr>'
+        : '<tr><th style="width: 40px; text-align: center;">№</th><th style="width: 35%;">Слово в тексте</th><th>Заметки для проверки</th></tr>'
+      }
+    </thead>
+    <tbody>
+      ${printWords.map((w, i) => {
+        if (assignmentType === 'exam') {
+           return `<tr><td style="text-align: center;">${i+1}</td><td class="greek-text">${w.greek || w.lemma}</td><td>${w.translationRu || ''}</td></tr>`;
+        } else {
+           const ctx = w.contextPhrase ? `<span class="hint"><i>${w.contextPhrase}</i></span>` : '';
+           const notes = w.teacherReferenceNotes || '—';
+           return `<tr><td style="text-align: center;">${i+1}</td><td><span class="greek-text">${w.greekWord}</span>${ctx}</td><td>${notes}</td></tr>`;
+        }
+      }).join('')}
+    </tbody>
+  </table>
+</body>
+</html>`;
+
+    // 1. Try iframe method (smooth, no popup blocker)
+    const existingFrame = document.getElementById('print-worksheet-iframe');
+    if (existingFrame) {
+      existingFrame.remove();
+    }
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'print-worksheet-iframe';
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    document.body.appendChild(iframe);
+
+    try {
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(html);
+        doc.close();
+
+        setTimeout(() => {
+          try {
+            iframe.contentWindow?.focus();
+            iframe.contentWindow?.print();
+          } catch (e) {
+            console.warn('Iframe print failed, falling back to window.open:', e);
+            const win = window.open('', '_blank');
+            if (win) {
+              win.document.write(html);
+              win.document.close();
+              win.focus();
+              win.print();
             }
-          </thead>
-          <tbody>
-            ${printWords.map((w, i) => {
-              if (assignmentType === 'exam') {
-                 return `<tr><td>\${i+1}</td><td class="greek-text">\${w.greek}</td><td>\${w.translationRu || ''}</td></tr>`;
-              } else {
-                 const ctx = w.contextPhrase ? `<span class="hint"><i>\${w.contextPhrase}</i></span>` : '';
-                 const notes = w.teacherReferenceNotes || '—';
-                 return `<tr><td>\${i+1}</td><td><span class="greek-text">\${w.greekWord}</span>\${ctx}</td><td>\${notes}</td></tr>`;
-              }
-            }).join('')}
-          </tbody>
-        </table>
-        
-        <script>
-          window.onload = function() { window.print(); };
-        </script>
-      </body>
-      </html>
-    `;
-    printWindow.document.write(html);
-    printWindow.document.close();
+          }
+        }, 300);
+      }
+    } catch (err) {
+      console.error('Print generation error:', err);
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(html);
+        win.document.close();
+        win.focus();
+        win.print();
+      }
+    }
   };
 
   const handleCreateCustomListSubmit = (e: React.FormEvent) => {
