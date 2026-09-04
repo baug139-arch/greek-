@@ -222,7 +222,13 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     Студент курса койне
                   </span>
                   <span className="text-xs font-sans px-2 py-0.5 bg-[#E5E1DA] text-[#1A1A1A] rounded">
-                    Стрик: {currentStudent.streakDays} дней 🔥
+                    Стрик: {currentStudent.streakDays || 1}{' '}
+                    {(currentStudent.streakDays || 1) % 10 === 1 && (currentStudent.streakDays || 1) % 100 !== 11
+                      ? 'день'
+                      : [2, 3, 4].includes((currentStudent.streakDays || 1) % 10) && ![12, 13, 14].includes((currentStudent.streakDays || 1) % 100)
+                      ? 'дня'
+                      : 'дней'}{' '}
+                    🔥
                   </span>
                 </div>
 
@@ -963,7 +969,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               : 'border-transparent text-[#6B655C] hover:text-[#1A1A1A]'
           }`}
         >
-          По частотности (35 уровней)
+          По частотности (35 разделов)
         </button>
 
         <button
@@ -1335,10 +1341,10 @@ export const StudentHub: React.FC<StudentHubProps> = ({
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C7D6B] font-bold">
-                Выберите категорию частотности (35 уровней из словаря):
+                Выберите категорию частотности (35 разделов словаря):
               </span>
               <span className="text-xs font-sans text-[#6B655C]">
-                Всего в базе: {ALL_FREQUENCY_TIERS.length} уровней
+                Всего в базе: {ALL_FREQUENCY_TIERS.length} разделов
               </span>
             </div>
 
