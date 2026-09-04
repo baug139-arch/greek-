@@ -95,22 +95,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           }
         }
 
-        // RETURNING USER: If profile already exists with a name, IMMEDIATELY close modal!
-        if (existingProfile && existingProfile.displayName && existingProfile.displayName !== 'Студент' && existingProfile.displayName !== 'Гость') {
+        // RETURNING USER: If profile already exists in Cloud, IMMEDIATELY close modal!
+        if (existingProfile) {
           onProfileUpdated(existingProfile);
           onClose(); // Seamless login without any prompts!
           return;
         }
 
         // 2. First-time User:
-        const initialName = (user.displayName && user.displayName !== 'Студент' && user.displayName !== 'Гость')
-          ? user.displayName.trim()
-          : (isMasterTeacher ? 'Сурен Ханикян' : '');
+        const initialName = user.displayName?.trim() || (isMasterTeacher ? 'Сурен Ханикян' : 'Сурен Ханикян');
 
         const newProfile: UserProfile = {
           uid: user.uid,
           email: user.email || '',
-          displayName: initialName || 'Студент',
+          displayName: initialName,
           photoURL: user.photoURL || undefined,
           role: isMasterTeacher ? 'teacher' : 'student',
           greekAlias: isMasterTeacher ? 'Ἐρασμιανός' : 'Ἰωάννης',
@@ -118,20 +116,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           createdAt: new Date().toISOString(),
         };
 
-        // If Google already provided a real name, save and close immediately!
-        if (initialName && initialName.length > 1) {
-          await saveUserProfileToCloud(newProfile);
-          onProfileUpdated(newProfile);
-          onClose(); // Seamless login!
-          return;
-        }
-
-        // Only if no name could be found, show the one-time name input in the modal
-        setDisplayName(initialName);
-        setSelectedRole(newProfile.role);
-        setGreekAlias(newProfile.greekAlias);
-        setAvatar(newProfile.avatar);
+        await saveUserProfileToCloud(newProfile);
         onProfileUpdated(newProfile);
+        onClose(); // Seamless login!
+        return;
       }
     } catch (err: any) {
       console.error('Google Sign In Error:', err);

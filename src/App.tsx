@@ -2348,7 +2348,10 @@ export default function App() {
         onProfileUpdated={(updatedProfile) => {
           setCurrentUserProfile(updatedProfile);
           localStorage.setItem('koine_user_profile', JSON.stringify(updatedProfile));
+          localStorage.setItem('koine_user_onboarded', 'true');
           saveUserProfileToCloud(updatedProfile);
+          setIsAuthModalOpen(false);
+          setIsWelcomeModalOpen(false);
           if (updatedProfile.role === 'teacher') {
             setCurrentRole('teacher');
           } else {
