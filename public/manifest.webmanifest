@@ -8,7 +8,7 @@
   "display_override": ["standalone", "window-controls-overlay", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#FDFCFB",
-  "theme_color": "#1E293B",
+  "theme_color": "#2D0B16",
   "categories": ["education", "books"],
   "lang": "ru",
   "icons": [

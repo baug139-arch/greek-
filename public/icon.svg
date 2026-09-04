@@ -1,37 +1,114 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E293B" />
-      <stop offset="50%" stop-color="#0F172A" />
-      <stop offset="100%" stop-color="#020617" />
+    <!-- Rich Imperial Byzantine Gradient -->
+    <radialGradient id="bgRadial" cx="50%" cy="40%" r="75%">
+      <stop offset="0%" stop-color="#4A1525" />
+      <stop offset="45%" stop-color="#2D0B16" />
+      <stop offset="85%" stop-color="#18040B" />
+      <stop offset="100%" stop-color="#0E0206" />
+    </radialGradient>
+
+    <!-- Master Lustrous Gold Gradient -->
+    <linearGradient id="goldLinear" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF3B0" />
+      <stop offset="25%" stop-color="#F6D365" />
+      <stop offset="50%" stop-color="#D4AF37" />
+      <stop offset="75%" stop-color="#AA771C" />
+      <stop offset="100%" stop-color="#7B4E08" />
     </linearGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FDE047" />
-      <stop offset="50%" stop-color="#CA8A04" />
-      <stop offset="100%" stop-color="#A16207" />
+
+    <!-- Highlight Gold for 3D edges -->
+    <linearGradient id="goldLight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFBEB" />
+      <stop offset="50%" stop-color="#FBBF24" />
+      <stop offset="100%" stop-color="#92400E" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#CA8A04" flood-opacity="0.3"/>
+
+    <!-- Subtle Outer Glow -->
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#F59E0B" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.6"/>
     </filter>
   </defs>
-  
-  <!-- Background with rounded corners -->
-  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
-  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="url(#goldGrad)" stroke-width="4" stroke-opacity="0.3"/>
-  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#goldGrad)" stroke-width="3" stroke-dasharray="8 6" stroke-opacity="0.4"/>
-  
-  <!-- Central Greek Emblem: Α Ω and Book / Cross motif -->
-  <g filter="url(#glow)">
-    <!-- Greek Alpha -->
-    <text x="180" y="295" font-family="'Cinzel', 'Times New Roman', Georgia, serif" font-size="160" font-weight="700" fill="url(#goldGrad)" text-anchor="middle">Α</text>
-    <!-- Greek Omega -->
-    <text x="332" y="295" font-family="'Cinzel', 'Times New Roman', Georgia, serif" font-size="160" font-weight="700" fill="url(#goldGrad)" text-anchor="middle">Ω</text>
+
+  <!-- Rounded App Icon Background -->
+  <rect width="512" height="512" rx="116" fill="url(#bgRadial)"/>
+
+  <!-- Ornate Outer Gold Borders -->
+  <rect x="22" y="22" width="468" height="468" rx="98" fill="none" stroke="url(#goldLinear)" stroke-width="3.5" stroke-opacity="0.45"/>
+  <rect x="30" y="30" width="452" height="452" rx="90" fill="none" stroke="url(#goldLight)" stroke-width="1.5" stroke-opacity="0.25"/>
+
+  <!-- Antique Beaded Ring -->
+  <circle cx="256" cy="235" r="168" fill="none" stroke="url(#goldLinear)" stroke-width="2.5" stroke-opacity="0.5" stroke-dasharray="3 7"/>
+  <circle cx="256" cy="235" r="158" fill="none" stroke="url(#goldLight)" stroke-width="1.5" stroke-opacity="0.35"/>
+
+  <!-- Central Emblem: Chi-Rho (☧) with Alpha (Α) and Omega (Ω) and Open Gospel Book -->
+  <g filter="url(#goldGlow)">
+    <!-- The Chi (X) -->
+    <path d="M192 145 L320 325" stroke="url(#goldLinear)" stroke-width="20" stroke-linecap="round"/>
+    <path d="M320 145 L192 325" stroke="url(#goldLinear)" stroke-width="20" stroke-linecap="round"/>
     
-    <!-- Central Divider / Chi-Rho or Olive Branch Accent -->
-    <circle cx="256" cy="256" r="8" fill="#FDE047"/>
-    <path d="M256 150 L256 360" stroke="url(#goldGrad)" stroke-width="3" stroke-linecap="round" stroke-opacity="0.6"/>
+    <!-- The Rho (P) Vertical Stem -->
+    <path d="M256 95 L256 345" stroke="url(#goldLight)" stroke-width="22" stroke-linecap="round"/>
+    
+    <!-- The Rho (P) Loop with Serif -->
+    <path d="M256 102 C305 102 328 122 328 160 C328 198 305 218 256 218" fill="none" stroke="url(#goldLight)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Serif crossbar caps -->
+    <line x1="236" y1="345" x2="276" y2="345" stroke="url(#goldLinear)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="242" y1="95" x2="270" y2="95" stroke="url(#goldLight)" stroke-width="10" stroke-linecap="round"/>
   </g>
-  
-  <!-- Subtitle Text -->
-  <text x="256" y="415" font-family="'Cinzel', 'Times New Roman', Georgia, serif" font-size="34" font-weight="600" fill="#E2E8F0" letter-spacing="6" text-anchor="middle">ΚΟΙΝΗ</text>
+
+  <!-- Greek Letters: Α (Alpha) and Ω (Omega) on the sides -->
+  <g filter="url(#subtleShadow)">
+    <!-- Alpha (Left) -->
+    <text x="145" y="248" 
+          font-family="'Cinzel', 'EB Garamond', 'Times New Roman', Georgia, serif" 
+          font-size="82" 
+          font-weight="800" 
+          fill="url(#goldLight)" 
+          text-anchor="middle"
+          letter-spacing="1">Α</text>
+
+    <!-- Omega (Right) -->
+    <text x="367" y="248" 
+          font-family="'Cinzel', 'EB Garamond', 'Times New Roman', Georgia, serif" 
+          font-size="82" 
+          font-weight="800" 
+          fill="url(#goldLight)" 
+          text-anchor="middle"
+          letter-spacing="1">Ω</text>
+  </g>
+
+  <!-- Open Gospel Codex (Book) at Bottom -->
+  <g filter="url(#subtleShadow)">
+    <!-- Left Page -->
+    <path d="M256 405 C220 395 180 395 140 405 L140 440 C180 430 220 430 256 442 Z" 
+          fill="url(#goldLinear)" opacity="0.95"/>
+    <!-- Right Page -->
+    <path d="M256 405 C292 395 332 395 372 405 L372 440 C332 430 292 430 256 442 Z" 
+          fill="url(#goldLinear)" opacity="0.95"/>
+    <!-- Central Ribbon Bookmark -->
+    <path d="M256 395 L256 462 L250 454 L244 462 L244 395 Z" 
+          fill="#FFF3B0"/>
+    <!-- Book Page Lines (Script Representation) -->
+    <line x1="165" y1="416" x2="232" y2="411" stroke="#4A1525" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="165" y1="426" x2="232" y2="421" stroke="#4A1525" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="280" y1="411" x2="347" y2="416" stroke="#4A1525" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="280" y1="421" x2="347" y2="426" stroke="#4A1525" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  </g>
+
+  <!-- Inscription: ἙΛΛΗΝΙΚΗ КΟΙΝΗ -->
+  <text x="256" y="482" 
+        font-family="'Cinzel', 'Plus Jakarta Sans', sans-serif" 
+        font-size="20" 
+        font-weight="700" 
+        fill="#FDF0A6" 
+        letter-spacing="5" 
+        text-anchor="middle"
+        opacity="0.95">ἙΛΛΗΝΙΚΗ ΚΟΙΝΗ</text>
 </svg>
