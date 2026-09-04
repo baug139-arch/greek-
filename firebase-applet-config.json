@@ -1,12 +1,11 @@
 {
-  "projectId": "fair-xyston-g67s8",
-  "appId": "1:846878268967:web:173168c3c23d520bca3802",
-  "apiKey": "AIzaSyC8ORs7WUah6rxQZ5YwjBLogWWfUc71vKU",
-  "authDomain": "fair-xyston-g67s8.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-1dd0f44f-f7a1-4d52-8292-fe62ec9dce35",
-  "storageBucket": "fair-xyston-g67s8.firebasestorage.app",
-  "messagingSenderId": "846878268967",
-  "measurementId": "",
-  "oAuthClientId": "846878268967-ecpv8ckh6joc4vo0mahksupo9ohmrg37.apps.googleusercontent.com",
-  "recaptchaSiteKey": ""
+  "projectId": "greekvercel",
+  "appId": "1:150118942525:web:129de8f1f62cddabc2a754",
+  "storageBucket": "greekvercel.firebasestorage.app",
+  "apiKey": "AIzaSyAvdNDZHYiSiPzj21O_ystHqrDJjXe-nvg",
+  "authDomain": "greekvercel.firebaseapp.com",
+  "messagingSenderId": "150118942525",
+  "measurementId": "G-9W6DN5T5F0",
+  "projectNumber": "150118942525",
+  "firestoreDatabaseId": "(default)"
 }
