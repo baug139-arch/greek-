@@ -348,18 +348,32 @@ const BASE_MORPHOLOGY_DATABASE: MorphologyWord[] = [
   
   // VERBS (Aorist 2 Active Indicative)
   {
-    id: 'm_verb_13',
+    id: 'm_verb_13_1sg',
     form: 'ἦλθον',
     stem: 'ἦλθ',
     ending: 'ον',
     lemma: 'ἔρχομαι',
-    translation: 'я пришел / они пришли',
+    translation: 'я пришел (1-е л. ед.ч.)',
     pos: 'verb',
     tense: 'aor',
     voice: 'act',
     mood: 'ind',
-    person: '1', // Contextually can be 3pl, default 1sg
+    person: '1',
     number: 'sg'
+  },
+  {
+    id: 'm_verb_13_3pl',
+    form: 'ἦλθον',
+    stem: 'ἦλθ',
+    ending: 'ον',
+    lemma: 'ἔρχομαι',
+    translation: 'они пришли (3-е л. мн.ч.)',
+    pos: 'verb',
+    tense: 'aor',
+    voice: 'act',
+    mood: 'ind',
+    person: '3',
+    number: 'pl'
   },
   {
     id: 'm_verb_14',

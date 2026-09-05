@@ -334,7 +334,7 @@ export interface UserProfile {
 }
 
 // Morphology Data Models
-export type MorphPartOfSpeech = 'noun' | 'verb' | 'adjective' | 'pronoun' | 'participle';
+export type MorphPartOfSpeech = 'noun' | 'verb' | 'adjective' | 'pronoun' | 'participle' | 'infinitive';
 
 export interface MorphologyWord {
   id: string;

@@ -62,7 +62,8 @@ export const EXTRA_MORPHOLOGY_DATABASE: MorphologyWord[] = [
   { id: 'm_v_echo_1', form: 'ἔχω', stem: 'ἔχ', ending: 'ω', lemma: 'ἔχω', translation: 'я имею', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '1', number: 'sg' },
   { id: 'm_v_echo_2', form: 'ἔχει', stem: 'ἔχ', ending: 'ει', lemma: 'ἔχω', translation: 'он имеет', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '3', number: 'sg' },
   { id: 'm_v_echo_3', form: 'ἔχουσιν', stem: 'ἔχ', ending: 'ουσιν', lemma: 'ἔχω', translation: 'они имеют', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '3', number: 'pl' },
-  { id: 'm_v_echo_4', form: 'εἶχον', stem: 'εἶχ', ending: 'ον', lemma: 'ἔχω', translation: 'я имел / они имели', pos: 'verb', tense: 'impf', voice: 'act', mood: 'ind', person: '1', number: 'sg' }, // Can be 3pl, trainer might clash. Let's stick to 1sg for impf
+  { id: 'm_v_echo_4_1sg', form: 'εἶχον', stem: 'εἶχ', ending: 'ον', lemma: 'ἔχω', translation: 'я имел (1-е л. ед.ч.)', pos: 'verb', tense: 'impf', voice: 'act', mood: 'ind', person: '1', number: 'sg' },
+  { id: 'm_v_echo_4_3pl', form: 'εἶχον', stem: 'εἶχ', ending: 'ον', lemma: 'ἔχω', translation: 'они имели (3-е л. мн.ч.)', pos: 'verb', tense: 'impf', voice: 'act', mood: 'ind', person: '3', number: 'pl' },
   
   { id: 'm_v_erchomai_1', form: 'ἔρχομαι', stem: 'ἔρχ', ending: 'ομαι', lemma: 'ἔρχομαι', translation: 'я прихожу', pos: 'verb', tense: 'pres', voice: 'mid', mood: 'ind', person: '1', number: 'sg' },
   { id: 'm_v_erchomai_2', form: 'ἔρχεται', stem: 'ἔρχ', ending: 'εται', lemma: 'ἔρχομαι', translation: 'он приходит', pos: 'verb', tense: 'pres', voice: 'mid', mood: 'ind', person: '3', number: 'sg' },
@@ -402,6 +403,7 @@ export const EXTRA_MORPHOLOGY_DATABASE: MorphologyWord[] = [
   { id: 'm_ext_peithω_328', form: 'πεῖσαι', stem: '', ending: '', lemma: 'πείθω', translation: 'убедить', pos: 'verb', tense: 'aor', voice: 'act', mood: 'inf' },
   { id: 'm_ext_peithω_329', form: 'πείσας', stem: '', ending: '', lemma: 'πείθω', translation: 'убедивший', pos: 'participle', tense: 'aor', voice: 'act', case: 'nom', gender: 'm', number: 'sg' },
   { id: 'm_ext_pemπω_330', form: 'πέμψαι', stem: '', ending: '', lemma: 'πέμπω', translation: 'послать', pos: 'verb', tense: 'aor', voice: 'act', mood: 'inf' },
+  { id: 'm_ext_pemπω_330_impv', form: 'πέμψαι', stem: '', ending: '', lemma: 'πέμπω', translation: 'пошли себе / отправь (аор. сред. повел.)', pos: 'verb', tense: 'aor', voice: 'mid', mood: 'impv', person: '2', number: 'sg' },
   { id: 'm_ext_pemπω_331', form: 'πέμψας', stem: '', ending: '', lemma: 'πέμπω', translation: 'пославший', pos: 'participle', tense: 'aor', voice: 'act', case: 'nom', gender: 'm', number: 'sg' },
   { id: 'm_ext_perιπateω_332', form: 'περιπατεῖν', stem: '', ending: '', lemma: 'περιπατέω', translation: 'ходить', pos: 'verb', tense: 'pres', voice: 'act', mood: 'inf' },
   { id: 'm_ext_perιπateω_333', form: 'περιπατῶν', stem: '', ending: '', lemma: 'περιπατέω', translation: 'ходящий', pos: 'participle', tense: 'pres', voice: 'act', case: 'nom', gender: 'm', number: 'sg' },

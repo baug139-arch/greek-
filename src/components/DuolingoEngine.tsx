@@ -669,6 +669,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   const currentEx = exercises[currentIndex];
 
   useEffect(() => {
+    if (isChunkFinished || isFinished) return;
+
     const generated = generateExercisesForPool(currentChunkWords, currentMode, currentDirection, currentChunkRound);
     setExercises(generated);
     setCurrentIndex(0);
@@ -689,7 +691,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     setMatchedPairs([]);
     setSelectedGreek(null);
     setSelectedRussian(null);
-  }, [currentChunkIndex, currentMode, currentDirection, currentChunkRound, words, effectiveBatchSize]);
+  }, [currentChunkIndex, currentMode, currentDirection, currentChunkRound, words, effectiveBatchSize, isChunkFinished, isFinished]);
 
   useEffect(() => {
     if (!currentEx) return;

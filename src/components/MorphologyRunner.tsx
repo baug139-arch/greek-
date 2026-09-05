@@ -88,6 +88,108 @@ const generateGrammarHint = (word: MorphologyWord | undefined): string => {
   return rules.join(' ');
 };
 
+export const isVariantInfinitive = (v: MorphologyWord | undefined): boolean => {
+  if (!v) return false;
+  return v.pos === 'infinitive' || (v.pos === 'verb' && v.mood === 'inf');
+};
+
+export const isVariantFiniteVerb = (v: MorphologyWord | undefined): boolean => {
+  if (!v) return false;
+  return v.pos === 'verb' && v.mood !== 'inf';
+};
+
+const POS_OPTIONS = [
+  { value: 'verb', label: 'Личный глагол' },
+  { value: 'infinitive', label: 'Инфинитив' },
+  { value: 'participle', label: 'Причастие' },
+  { value: 'noun', label: 'Существительное' },
+  { value: 'adjective', label: 'Прилагательное' },
+  { value: 'pronoun', label: 'Местоимение' },
+];
+
+const NOUN_CASES = [
+  { value: 'nom', label: 'Именительный' },
+  { value: 'gen', label: 'Родительный' },
+  { value: 'dat', label: 'Дательный' },
+  { value: 'acc', label: 'Винительный' },
+  { value: 'voc', label: 'Звательный' },
+];
+
+const GENDERS = [
+  { value: 'm', label: 'Мужской' },
+  { value: 'f', label: 'Женский' },
+  { value: 'n', label: 'Средний' },
+];
+
+const NUMBERS = [
+  { value: 'sg', label: 'Единственное' },
+  { value: 'pl', label: 'Множественное' },
+];
+
+const TENSES = [
+  { value: 'pres', label: 'Настоящее' },
+  { value: 'impf', label: 'Имперфект' },
+  { value: 'fut', label: 'Будущее' },
+  { value: 'aor', label: 'Аорист' },
+  { value: 'perf', label: 'Перфект' },
+  { value: 'plup', label: 'Плюсквамперфект' },
+];
+
+const VOICES = [
+  { value: 'act', label: 'Действительный' },
+  { value: 'mid', label: 'Медиальный' },
+  { value: 'pass', label: 'Страдательный' },
+];
+
+const MOODS = [
+  { value: 'ind', label: 'Изъявительное (Ind)' },
+  { value: 'subj', label: 'Сослагательное (Subj)' },
+  { value: 'opt', label: 'Оптатив' },
+  { value: 'impv', label: 'Повелительное (Imp)' },
+];
+
+const PERSONS = [
+  { value: '1', label: '1-е лицо' },
+  { value: '2', label: '2-е лицо' },
+  { value: '3', label: '3-е лицо' },
+];
+
+const PERSON_NUMBERS = [
+  { value: '1sg', label: '1-е лицо, ед.ч.' },
+  { value: '2sg', label: '2-е лицо, ед.ч.' },
+  { value: '3sg', label: '3-е лицо, ед.ч.' },
+  { value: '1pl', label: '1-е лицо, мн.ч.' },
+  { value: '2pl', label: '2-е лицо, мн.ч.' },
+  { value: '3pl', label: '3-е лицо, мн.ч.' },
+];
+
+const CATEGORY_MAP: Record<string, { label: string, options: any[] }> = {
+  pos: { label: 'Часть речи', options: POS_OPTIONS },
+  case: { label: 'Падеж', options: NOUN_CASES },
+  number: { label: 'Число', options: NUMBERS },
+  gender: { label: 'Род', options: GENDERS },
+  tense: { label: 'Время', options: TENSES },
+  voice: { label: 'Залог', options: VOICES },
+  mood: { label: 'Наклонение', options: MOODS },
+  person: { label: 'Лицо', options: PERSONS },
+  personNumber: { label: 'Лицо и число', options: PERSON_NUMBERS }
+};
+
+let sharedAudioCtx: AudioContext | null = null;
+const getAudioContext = (): AudioContext | null => {
+  try {
+    if (!sharedAudioCtx || sharedAudioCtx.state === 'closed') {
+      sharedAudioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    if (sharedAudioCtx.state === 'suspended') {
+      sharedAudioCtx.resume();
+    }
+    return sharedAudioCtx;
+  } catch (e) {
+    return null;
+  }
+};
+
 export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onComplete, onExit, title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -102,11 +204,81 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
   const [hintLevel, setHintLevel] = useState<number>(0);
   const [correctSelections, setCorrectSelections] = useState<Record<string, string>>({});
   const [wrongSelections, setWrongSelections] = useState<Record<string, string[]>>({});
+  const [categoryAlternatives, setCategoryAlternatives] = useState<Record<string, string[]>>({});
   const [sessionMissedIds, setSessionMissedIds] = useState<Set<string>>(new Set());
   const [sessionMasteredIds, setSessionMasteredIds] = useState<Set<string>>(new Set());
   const [madeMistakeOnCurrent, setMadeMistakeOnCurrent] = useState(false);
   const [feedback, setFeedback] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorDetails, setErrorDetails] = useState<string[]>([]);
+
+  // Check if voice should be single "Медиально-страдательный" (pres, impf, perf, plup)
+  const isMediopassive = useMemo(() => {
+    return currentVariants.some(v => {
+      const t = v.tense;
+      const isPresOrImpf = !t || t === 'pres' || t === 'impf' || t === 'perf' || t === 'plup';
+      const hasMidOrPass = v.voice === 'mid' || v.voice === 'pass' || v.voice === 'midpass' ||
+        (Array.isArray(v.voice) && (v.voice.includes('mid') || v.voice.includes('pass')));
+      return isPresOrImpf && hasMidOrPass;
+    });
+  }, [currentVariants]);
+
+  // Check if current form is polysemic / has multiple parsing interpretations (Variant 1)
+  const { isPolysemic, variantCountDescription, allKnownVariantLabels } = useMemo(() => {
+    if (!currentVariants || currentVariants.length === 0) {
+      return { isPolysemic: false, variantCountDescription: '', allKnownVariantLabels: [] };
+    }
+
+    const labels: string[] = [];
+    currentVariants.forEach((v) => {
+      let desc = '';
+      if (isVariantInfinitive(v)) {
+        const tLabel = TENSES.find(t => t.value === v.tense)?.label || '';
+        const vLabel = Array.isArray(v.voice) 
+          ? v.voice.map(x => VOICES.find(y => y.value === x)?.label || x).join('/') 
+          : (VOICES.find(x => x.value === v.voice)?.label || (v.voice === 'midpass' ? 'Медиально-страдательный' : ''));
+        desc = ['Инфинитив', tLabel, vLabel].filter(Boolean).join(', ');
+      } else if (isVariantFiniteVerb(v)) {
+        const pLabel = v.person ? (Array.isArray(v.person) ? v.person.join('/') : v.person) : '';
+        const nLabel = v.number ? (Array.isArray(v.number) ? v.number.join('/') : v.number) : '';
+        const pnStr = pLabel && nLabel ? `${pLabel} л. ${nLabel === 'sg' ? 'ед.ч.' : 'мн.ч.'}` : '';
+        const mLabel = MOODS.find(m => m.value === v.mood)?.label.split(' ')[0] || '';
+        const tLabel = TENSES.find(t => t.value === v.tense)?.label || '';
+        desc = [pnStr, mLabel, tLabel].filter(Boolean).join(', ');
+      } else if (v.pos === 'noun' || v.pos === 'adjective' || v.pos === 'pronoun') {
+        const cLabel = Array.isArray(v.case) 
+          ? v.case.map(c => NOUN_CASES.find(x => x.value === c)?.label).join('/') 
+          : (NOUN_CASES.find(x => x.value === v.case)?.label || '');
+        const nLabel = NUMBERS.find(n => n.value === v.number)?.label || '';
+        const gLabel = v.gender ? (Array.isArray(v.gender) ? v.gender.join('/') : GENDERS.find(g => g.value === v.gender)?.label) : '';
+        desc = [cLabel, nLabel, gLabel].filter(Boolean).join(', ');
+      } else if (v.pos === 'participle') {
+        const cLabel = Array.isArray(v.case) 
+          ? v.case.map(c => NOUN_CASES.find(x => x.value === c)?.label).join('/') 
+          : (NOUN_CASES.find(x => x.value === v.case)?.label || '');
+        const tLabel = TENSES.find(t => t.value === v.tense)?.label || '';
+        desc = ['Причастие', tLabel, cLabel].filter(Boolean).join(', ');
+      }
+      if (desc && !labels.includes(desc)) {
+        labels.push(desc);
+      }
+    });
+
+    const hasArrayMultis = currentVariants.some(v => 
+      ['case', 'gender', 'number', 'tense', 'mood', 'person'].some(k => {
+        const val = v[k as keyof MorphologyWord];
+        return Array.isArray(val) && val.length > 1;
+      })
+    );
+
+    const isMulti = currentVariants.length > 1 || hasArrayMultis || labels.length > 1;
+    const count = Math.max(currentVariants.length, labels.length, hasArrayMultis ? 2 : 1);
+
+    return {
+      isPolysemic: isMulti,
+      variantCountDescription: `${count} варианта разбора`,
+      allKnownVariantLabels: labels,
+    };
+  }, [currentVariants]);
 
   const possibleVariants = useMemo(() => {
     if (currentVariants.length === 0) return [];
@@ -115,12 +287,23 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
         if (cat === 'person' || cat === 'number') {
           // Handled safely because we store person and number separately even if chosen together
         }
+
+        if (cat === 'pos') {
+          if (val === 'infinitive') {
+            if (!isVariantInfinitive(variant)) return false;
+          } else if (val === 'verb') {
+            if (!isVariantFiniteVerb(variant)) return false;
+          } else {
+            if (variant.pos !== val) return false;
+          }
+          continue;
+        }
         
         const expected = variant[cat as keyof MorphologyWord];
         if (expected === undefined) return false;
         
         if (cat === 'voice' && val === 'midpass') {
-          const match = (expected === 'mid' || expected === 'pass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+          const match = (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
           if (!match) return false;
         } else {
           const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
@@ -131,86 +314,10 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
     });
   }, [currentVariants, correctSelections]);
 
-  const POS_OPTIONS = [
-    { value: 'noun', label: 'Существительное' },
-    { value: 'verb', label: 'Глагол' },
-    { value: 'participle', label: 'Причастие' },
-    { value: 'adjective', label: 'Прилагательное' },
-    { value: 'pronoun', label: 'Местоимение' },
-  ];
-
-  const NOUN_CASES = [
-    { value: 'nom', label: 'Именительный' },
-    { value: 'gen', label: 'Родительный' },
-    { value: 'dat', label: 'Дательный' },
-    { value: 'acc', label: 'Винительный' },
-    { value: 'voc', label: 'Звательный' },
-  ];
-
-  const GENDERS = [
-    { value: 'm', label: 'Мужской' },
-    { value: 'f', label: 'Женский' },
-    { value: 'n', label: 'Средний' },
-  ];
-
-  const NUMBERS = [
-    { value: 'sg', label: 'Единственное' },
-    { value: 'pl', label: 'Множественное' },
-  ];
-
-  const TENSES = [
-    { value: 'pres', label: 'Настоящее' },
-    { value: 'impf', label: 'Имперфект' },
-    { value: 'fut', label: 'Будущее' },
-    { value: 'aor', label: 'Аорист' },
-    { value: 'perf', label: 'Перфект' },
-    { value: 'plup', label: 'Плюсквамперфект' },
-  ];
-
-  const VOICES = [
-    { value: 'act', label: 'Действительный' },
-    { value: 'mid', label: 'Медиальный' },
-    { value: 'pass', label: 'Страдательный' },
-  ];
-
-  const MOODS = [
-    { value: 'ind', label: 'Изъявительное (Ind)' },
-    { value: 'subj', label: 'Сослагательное (Subj)' },
-    { value: 'opt', label: 'Оптатив' },
-    { value: 'impv', label: 'Повелительное (Imp)' },
-    { value: 'inf', label: 'Инфинитив' },
-  ];
-
-  const PERSONS = [
-    { value: '1', label: '1-е лицо' },
-    { value: '2', label: '2-е лицо' },
-    { value: '3', label: '3-е лицо' },
-  ];
-
-  const PERSON_NUMBERS = [
-    { value: '1sg', label: '1-е лицо, ед.ч.' },
-    { value: '2sg', label: '2-е лицо, ед.ч.' },
-    { value: '3sg', label: '3-е лицо, ед.ч.' },
-    { value: '1pl', label: '1-е лицо, мн.ч.' },
-    { value: '2pl', label: '2-е лицо, мн.ч.' },
-    { value: '3pl', label: '3-е лицо, мн.ч.' },
-  ];
-
-  const CATEGORY_MAP: Record<string, { label: string, options: any[] }> = {
-    pos: { label: 'Часть речи', options: POS_OPTIONS },
-    case: { label: 'Падеж', options: NOUN_CASES },
-    number: { label: 'Число', options: NUMBERS },
-    gender: { label: 'Род', options: GENDERS },
-    tense: { label: 'Время', options: TENSES },
-    voice: { label: 'Залог', options: VOICES },
-    mood: { label: 'Наклонение', options: MOODS },
-    person: { label: 'Лицо', options: PERSONS },
-    personNumber: { label: 'Лицо и число', options: PERSON_NUMBERS }
-  };
-
   const playClickSound = () => {
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = getAudioContext();
+      if (!ctx) return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
@@ -226,7 +333,8 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
 
   const playErrorSound = () => {
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = getAudioContext();
+      if (!ctx) return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
@@ -243,7 +351,8 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
 
   const playSuccessSound = () => {
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const ctx = getAudioContext();
+      if (!ctx) return;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.connect(gain);
@@ -259,6 +368,10 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
   };
 
   const getRequiredCategories = (word: MorphologyWord) => {
+    if (isVariantInfinitive(word)) {
+      // Infinitives only require POS, Tense, and Voice (no mood, person, number, case, gender)
+      return ['pos', 'tense', 'voice'];
+    }
     const allCats = ['pos', 'case', 'number', 'gender', 'tense', 'voice', 'mood', 'person'];
     return allCats.filter(cat => word[cat as keyof MorphologyWord] !== undefined);
   };
@@ -270,9 +383,15 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
          const val = selections[cat];
          if (val === undefined) return false;
          
+         if (cat === 'pos') {
+           if (val === 'infinitive') return isVariantInfinitive(variant);
+           if (val === 'verb') return isVariantFiniteVerb(variant);
+           return variant.pos === val;
+         }
+
          const expected = variant[cat as keyof MorphologyWord];
          if (cat === 'voice' && val === 'midpass') {
-           return (expected === 'mid' || expected === 'pass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+           return (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
          } else {
            return Array.isArray(expected) ? expected.includes(val) : expected === val;
          }
@@ -283,7 +402,6 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
   const triggerSuccess = (finalSelections: Record<string, string>) => {
     setFeedback('success');
     playSuccessSound();
-    setScore(s => s + 1);
   };
 
   const handleOptionClick = (category: string, value: string) => {
@@ -305,11 +423,22 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
     
     const isValid = currentVariants.some(variant => {
       for (const [cat, val] of Object.entries(testSelections)) {
+        if (cat === 'pos') {
+          if (val === 'infinitive') {
+            if (!isVariantInfinitive(variant)) return false;
+          } else if (val === 'verb') {
+            if (!isVariantFiniteVerb(variant)) return false;
+          } else {
+            if (variant.pos !== val) return false;
+          }
+          continue;
+        }
+
         const expected = variant[cat as keyof MorphologyWord];
         if (expected === undefined) return false;
         
         if (cat === 'voice' && val === 'midpass') {
-           const match = (expected === 'mid' || expected === 'pass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+           const match = (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
            if (!match) return false;
         } else {
            const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
@@ -323,9 +452,93 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
       playClickSound();
       setCorrectSelections(testSelections);
 
+      // On-the-fly Variant 1: Calculate other valid alternatives for this category
+      if (category === 'personNumber') {
+        const altOptions = PERSON_NUMBERS.filter(pn => {
+          if (pn.value === value) return false;
+          const p = pn.value[0];
+          const n = pn.value.substring(1);
+          const testObj = { ...correctSelections, person: p, number: n };
+          return currentVariants.some(variant => {
+            for (const [cat, val] of Object.entries(testObj)) {
+              if (cat === 'pos') {
+                if (val === 'infinitive') {
+                  if (!isVariantInfinitive(variant)) return false;
+                } else if (val === 'verb') {
+                  if (!isVariantFiniteVerb(variant)) return false;
+                } else {
+                  if (variant.pos !== val) return false;
+                }
+                continue;
+              }
+
+              const expected = variant[cat as keyof MorphologyWord];
+              if (expected === undefined) return false;
+              if (cat === 'voice' && val === 'midpass') {
+                if (expected !== 'mid' && expected !== 'pass' && expected !== 'midpass' && !(Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass')))) return false;
+              } else {
+                if (Array.isArray(expected) ? !expected.includes(val) : expected !== val) return false;
+              }
+            }
+            return true;
+          });
+        });
+        if (altOptions.length > 0) {
+          setCategoryAlternatives(prev => ({
+            ...prev,
+            personNumber: altOptions.map(o => o.label)
+          }));
+        }
+      } else {
+        const meta = CATEGORY_MAP[category];
+        if (meta) {
+          let checkOptions = meta.options;
+          if (category === 'voice' && isMediopassive) {
+            checkOptions = [
+              { value: 'act', label: 'Действительный' },
+              { value: 'midpass', label: 'Медиально-страдательный' }
+            ];
+          }
+          const altOptions = checkOptions.filter(opt => {
+            if (opt.value === value) return false;
+            const testObj = { ...correctSelections, [category]: opt.value };
+            return currentVariants.some(variant => {
+              for (const [cat, val] of Object.entries(testObj)) {
+                if (cat === 'pos') {
+                  if (val === 'infinitive') {
+                    if (!isVariantInfinitive(variant)) return false;
+                  } else if (val === 'verb') {
+                    if (!isVariantFiniteVerb(variant)) return false;
+                  } else {
+                    if (variant.pos !== val) return false;
+                  }
+                  continue;
+                }
+
+                const expected = variant[cat as keyof MorphologyWord];
+                if (expected === undefined) return false;
+                if (cat === 'voice' && val === 'midpass') {
+                  if (expected !== 'mid' && expected !== 'pass' && expected !== 'midpass' && !(Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass')))) return false;
+                } else {
+                  if (Array.isArray(expected) ? !expected.includes(val) : expected !== val) return false;
+                }
+              }
+              return true;
+            });
+          });
+          if (altOptions.length > 0) {
+            setCategoryAlternatives(prev => ({
+              ...prev,
+              [category]: altOptions.map(o => o.label)
+            }));
+          }
+        }
+      }
+
       if (isWordComplete(testSelections)) {
         if (!madeMistakeOnCurrent && hintLevel === 0) {
           setSessionMasteredIds(prev => new Set(prev).add(currentVariants[0].id));
+          setScore(s => s + 1);
         }
         triggerSuccess(testSelections);
       }
@@ -343,7 +556,9 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
 
   const handleNext = () => {
     if (currentIndex + 1 >= words.length) {
-      onComplete((score / words.length) * 100, 0, Array.from(sessionMissedIds), Array.from(sessionMasteredIds));
+      const accuracyPercent = Math.round((score / words.length) * 100);
+      const earnedXp = Math.max(10, score * 15);
+      onComplete(accuracyPercent, earnedXp, Array.from(sessionMissedIds), Array.from(sessionMasteredIds));
     } else {
       setCurrentIndex(i => i + 1);
       setFeedback('idle');
@@ -351,6 +566,7 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
       setHintLevel(0);
       setCorrectSelections({});
       setWrongSelections({});
+      setCategoryAlternatives({});
       setMadeMistakeOnCurrent(false);
     }
   };
@@ -393,13 +609,12 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
     
     let options = meta.options;
 
-    if (category === 'voice' && correctSelections.tense) {
-      if (['pres', 'impf', 'perf', 'plup'].includes(correctSelections.tense)) {
-        options = [
-          { value: 'act', label: 'Действительный' },
-          { value: 'midpass', label: 'Медиально-страдательный' }
-        ];
-      }
+    // If mediopassive applies, collapse to single "Медиально-страдательный" button
+    if (category === 'voice' && isMediopassive) {
+      options = [
+        { value: 'act', label: 'Действительный' },
+        { value: 'midpass', label: 'Медиально-страдательный' }
+      ];
     }
 
     return (
@@ -412,7 +627,7 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
             if (category === 'personNumber') {
                isCorrect = correctSelections['person'] === opt.value[0] && correctSelections['number'] === opt.value.substring(1);
             } else if (category === 'voice' && opt.value === 'midpass') {
-               isCorrect = correctSelections['voice'] === 'mid' || correctSelections['voice'] === 'pass';
+               isCorrect = correctSelections['voice'] === 'mid' || correctSelections['voice'] === 'pass' || correctSelections['voice'] === 'midpass';
             } else {
                isCorrect = correctSelections[category] === opt.value;
             }
@@ -440,6 +655,29 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
             );
           })}
         </div>
+
+        {/* On-the-fly Variant 1 Hint: Display alternative valid parsing */}
+        {category === 'personNumber' ? (
+          correctSelections.person && correctSelections.number && categoryAlternatives.personNumber && categoryAlternatives.personNumber.length > 0 && (
+            <div className="flex items-center gap-2 text-xs text-[#2D4A32] bg-[#E8F3EB] border border-[#C5D9C8] px-3 py-1.5 rounded-lg shadow-2xs animate-fade-in mt-1">
+              <Check className="w-3.5 h-3.5 text-[#2D4A32] shrink-0" />
+              <span>
+                Принято: <strong>{PERSON_NUMBERS.find(o => o.value === `${correctSelections.person}${correctSelections.number}`)?.label}</strong>. 
+                Также верно для этой формы: <strong>{categoryAlternatives.personNumber.join(' или ')}</strong>.
+              </span>
+            </div>
+          )
+        ) : (
+          correctSelections[category] && categoryAlternatives[category] && categoryAlternatives[category].length > 0 && (
+            <div className="flex items-center gap-2 text-xs text-[#2D4A32] bg-[#E8F3EB] border border-[#C5D9C8] px-3 py-1.5 rounded-lg shadow-2xs animate-fade-in mt-1">
+              <Check className="w-3.5 h-3.5 text-[#2D4A32] shrink-0" />
+              <span>
+                Принято: <strong>{meta.options.find(o => o.value === correctSelections[category])?.label || correctSelections[category]}</strong>. 
+                Также верно для этой формы: <strong>{categoryAlternatives[category].join(' или ')}</strong>.
+              </span>
+            </div>
+          )
+        )}
       </div>
     );
   };
@@ -494,6 +732,26 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
                 currentForm
               )}
             </div>
+
+            {isPolysemic && (
+              <div className="mt-2.5 inline-flex flex-col sm:flex-row items-center gap-1.5 px-3.5 py-1.5 bg-amber-50 border border-amber-300 text-amber-900 text-xs font-sans rounded-lg font-medium shadow-2xs">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">ℹ️</span>
+                  <span className="font-bold">Многозначная форма:</span>
+                  <span>{variantCountDescription} (подходит любой)</span>
+                </div>
+                {allKnownVariantLabels.length > 0 && (
+                  <div className="flex flex-wrap items-center justify-center gap-1 text-[11px] text-[#78350F] bg-amber-100/70 px-2 py-0.5 rounded border border-amber-200">
+                    {allKnownVariantLabels.map((lbl, i) => (
+                      <span key={i} className="flex items-center gap-1">
+                        {i > 0 && <span className="opacity-40">•</span>}
+                        <span>{lbl}</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
             
             {hintLevel >= 2 && (
               <div className="text-xs sm:text-sm text-[#92400E] font-medium bg-[#FFFBEB] inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 rounded">
@@ -517,22 +775,35 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
                   Шпаргалка: Полный разбор
                 </h4>
                 <p><strong>Форма:</strong> {completedVariant?.form}</p>
-                <p><strong>Часть речи:</strong> {completedVariant?.pos === 'noun' ? 'Существительное' : completedVariant?.pos === 'verb' ? 'Глагол' : completedVariant?.pos === 'participle' ? 'Причастие' : completedVariant?.pos === 'adjective' ? 'Прилагательное' : 'Местоимение'}</p>
-                {(completedVariant?.pos === 'noun' || completedVariant?.pos === 'adjective' || completedVariant?.pos === 'pronoun') && (
-                  <p><strong>Морфология:</strong> {NOUN_CASES.find(c => c.value === (Array.isArray(completedVariant.case) ? completedVariant.case[0] : completedVariant.case))?.label} падеж, {NUMBERS.find(n => n.value === (Array.isArray(completedVariant.number) ? completedVariant.number[0] : completedVariant.number))?.label} число{completedVariant.gender ? `, ${GENDERS.find(g => g.value === (Array.isArray(completedVariant.gender) ? completedVariant.gender[0] : completedVariant.gender))?.label} род` : ''}.</p>
-                )}
-                {completedVariant?.pos === 'verb' && (
+                <p><strong>Часть речи:</strong> {
+                  isVariantInfinitive(completedVariant) ? 'Инфинитив' :
+                  completedVariant?.pos === 'noun' ? 'Существительное' : 
+                  completedVariant?.pos === 'verb' ? 'Личный глагол' : 
+                  completedVariant?.pos === 'participle' ? 'Причастие' : 
+                  completedVariant?.pos === 'adjective' ? 'Прилагательное' : 'Местоимение'
+                }</p>
+                {isVariantInfinitive(completedVariant) && (
                   <p><strong>Морфология:</strong> {TENSES.find(t => t.value === completedVariant.tense)?.label}, {
                     Array.isArray(completedVariant.voice) 
                     ? completedVariant.voice.map(v => VOICES.find(x => x.value === v)?.label).join(' / ') 
-                    : VOICES.find(v => v.value === completedVariant.voice)?.label
+                    : (VOICES.find(v => v.value === completedVariant.voice)?.label || (completedVariant.voice === 'midpass' ? 'Медиально-страдательный' : ''))
+                  }. (Неличная форма глагола, без лица и числа).</p>
+                )}
+                {(completedVariant?.pos === 'noun' || completedVariant?.pos === 'adjective' || completedVariant?.pos === 'pronoun') && (
+                  <p><strong>Морфология:</strong> {NOUN_CASES.find(c => c.value === (Array.isArray(completedVariant.case) ? completedVariant.case[0] : completedVariant.case))?.label} падеж, {NUMBERS.find(n => n.value === (Array.isArray(completedVariant.number) ? completedVariant.number[0] : completedVariant.number))?.label} число{completedVariant.gender ? `, ${GENDERS.find(g => g.value === (Array.isArray(completedVariant.gender) ? completedVariant.gender[0] : completedVariant.gender))?.label} род` : ''}.</p>
+                )}
+                {isVariantFiniteVerb(completedVariant) && (
+                  <p><strong>Морфология:</strong> {TENSES.find(t => t.value === completedVariant.tense)?.label}, {
+                    Array.isArray(completedVariant.voice) 
+                    ? completedVariant.voice.map(v => VOICES.find(x => x.value === v)?.label).join(' / ') 
+                    : (VOICES.find(v => v.value === completedVariant.voice)?.label || (completedVariant.voice === 'midpass' ? 'Медиально-страдательный' : ''))
                   }, {MOODS.find(m => m.value === completedVariant.mood)?.label}{completedVariant.person ? `, ${PERSONS.find(p => p.value === completedVariant.person)?.label}` : ''}{completedVariant.number ? `, ${NUMBERS.find(n => n.value === completedVariant.number)?.label} число` : ''}.</p>
                 )}
                 {completedVariant?.pos === 'participle' && (
                   <p><strong>Морфология:</strong> {TENSES.find(t => t.value === completedVariant.tense)?.label}, {
                     Array.isArray(completedVariant.voice) 
                     ? completedVariant.voice.map(v => VOICES.find(x => x.value === v)?.label).join(' / ') 
-                    : VOICES.find(v => v.value === completedVariant.voice)?.label
+                    : (VOICES.find(v => v.value === completedVariant.voice)?.label || (completedVariant.voice === 'midpass' ? 'Медиально-страдательный' : ''))
                   }, {NOUN_CASES.find(c => c.value === (Array.isArray(completedVariant.case) ? completedVariant.case[0] : completedVariant.case))?.label} падеж, {NUMBERS.find(n => n.value === (Array.isArray(completedVariant.number) ? completedVariant.number[0] : completedVariant.number))?.label} число, {GENDERS.find(g => g.value === (Array.isArray(completedVariant.gender) ? completedVariant.gender[0] : completedVariant.gender))?.label} род.</p>
                 )}
               </div>
@@ -550,7 +821,7 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
                     <span className="font-bold opacity-70 mb-0.5">Разные грамматические пути:</span>
                     {currentVariants.map((v, idx) => (
                        <div key={idx} className="text-[11px] sm:text-xs">
-                          • {v.pos === 'noun' ? 'Существительное' : v.pos === 'verb' ? 'Глагол' : v.pos === 'participle' ? 'Причастие' : v.pos === 'adjective' ? 'Прилагательное' : 'Местоимение'}: {
+                          • {isVariantInfinitive(v) ? 'Инфинитив' : v.pos === 'noun' ? 'Существительное' : v.pos === 'verb' ? 'Личный глагол' : v.pos === 'participle' ? 'Причастие' : v.pos === 'adjective' ? 'Прилагательное' : 'Местоимение'}: {
                              getRequiredCategories(v).filter(c => c !== 'pos').map(c => {
                                 const val = v[c as keyof MorphologyWord];
                                 const strVal = Array.isArray(val) ? val.map(x => CATEGORY_MAP[c]?.options.find(o=>o.value===x)?.label || x).join('/') : (CATEGORY_MAP[c]?.options.find(o=>o.value===val)?.label || val);

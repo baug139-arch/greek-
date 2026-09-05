@@ -1425,7 +1425,8 @@ export default function App() {
       } else if (config.targetPos === 'noun') {
         pool = pool.filter(w => w.pos === 'noun');
       } else if (config.targetPos === 'verb') {
-        pool = pool.filter(w => w.pos === 'verb');
+        // Includes finite verbs, participles, and infinitives
+        pool = pool.filter(w => w.pos === 'verb' || w.pos === 'participle' || w.pos === 'infinitive');
       } else if (config.targetPos === 'adjective') {
         pool = pool.filter(w => w.pos === 'adjective');
       }
@@ -1434,6 +1435,34 @@ export default function App() {
     let count = config?.wordCount || 10;
     if (config?.targetPos === 'mistakes') {
       count = Math.min(pool.length, 15);
+    }
+
+    // Balanced selection for verb system (finite verbs, participles, infinitives)
+    if (config?.targetPos === 'verb') {
+      const finitePool = pool.filter(w => w.pos === 'verb' && w.mood !== 'inf').sort(() => 0.5 - Math.random());
+      const partPool = pool.filter(w => w.pos === 'participle').sort(() => 0.5 - Math.random());
+      const infPool = pool.filter(w => w.pos === 'infinitive' || (w.pos === 'verb' && w.mood === 'inf')).sort(() => 0.5 - Math.random());
+      
+      const selected = [];
+      const groups = [finitePool, partPool, infPool];
+      while (selected.length < count) {
+        let added = false;
+        for (const g of groups) {
+          if (selected.length >= count) break;
+          if (g.length > 0) {
+            selected.push(g.pop()!);
+            added = true;
+          }
+        }
+        if (!added) break;
+      }
+      
+      // Shuffle selected words
+      for (let i = selected.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [selected[i], selected[j]] = [selected[j], selected[i]];
+      }
+      return selected;
     }
     
     // Better mix balancing logic for "all" / "mix" mode
