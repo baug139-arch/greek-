@@ -67,6 +67,15 @@ export function createLettersForWord(word: string): { id: string; char: string }
     .sort(() => Math.random() - 0.5);
 }
 
+export function shuffleArray<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 interface DuolingoEngineProps {
   title: string;
   sectionId?: string;
@@ -291,7 +300,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 2: CONSTRUCTOR / BUILDER (Конструктор слова из греческих букв: РУС ➔ ГРЕК)
     // =========================================================================
     else if (mode === 'builder') {
-      pool.forEach((w, idx) => {
+      shuffleArray(pool).forEach((w, idx) => {
         generated.push({
           id: `word_builder_${idx}_${w.id}`,
           type: 'word_builder',
@@ -308,7 +317,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 3: TYPING / SPELLING (Письмо: ГРЕК ➔ РУС)
     // =========================================================================
     else if (mode === 'typing') {
-      pool.forEach((w, idx) => {
+      shuffleArray(pool).forEach((w, idx) => {
         generated.push({
           id: `typing_gr_ru_${idx}_${w.id}`,
           type: 'typing_input',
@@ -325,7 +334,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 4: QUIZ / MULTIPLE CHOICE (Тест и выбор ответа)
     // =========================================================================
     else if (mode === 'quiz') {
-      pool.forEach((w, idx) => {
+      shuffleArray(pool).forEach((w, idx) => {
         const isRuToGreek = direction === 'ru_to_greek' || (direction === 'bidirectional' && idx % 2 !== 0);
 
         if (isRuToGreek) {
@@ -366,7 +375,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 5: AUDIO / LISTENING (Аудирование: ГРЕК ➔ РУС)
     // =========================================================================
     else if (mode === 'audio') {
-      pool.forEach((w, idx) => {
+      shuffleArray(pool).forEach((w, idx) => {
         const distractors = pool
           .filter((item) => item.id !== w.id)
           .map((item) => item.translationRu)
@@ -394,7 +403,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           type: 'match_pairs',
           promptRu: 'Соедините греческие слова с их русским переводом',
           correctAnswer: 'all_matched',
-          pairs: pool.map((w) => ({
+          pairs: shuffleArray(pool).map((w) => ({
             greek: w.greek,
             translation: w.translationRu,
           })),
@@ -423,7 +432,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Карточки -> Тест -> Конструктор -> Письмо -> Аудио -> Матчинг
       // -----------------------------------------------------------------------
       if (round === 0) {
-        // 1. Flashcards for all
+        // 1. Flashcards for all (по порядку, для первого структурированного знакомства)
         pool.forEach((w, idx) => {
           generated.push({
             id: `all_r0_fc_${idx}_${w.id}`,
@@ -435,8 +444,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 2. Multiple choice for all (Тест)
-        pool.forEach((w, idx) => {
+        // 2. Multiple choice for all (Тест - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           if (direction === 'greek_to_ru' || (direction === 'bidirectional' && idx % 2 === 0)) {
             const distractors = pool
               .filter((item) => item.id !== w.id)
@@ -470,8 +479,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           }
         });
 
-        // 3. Word Letter Builder for all (Greek) (Конструктор)
-        pool.forEach((w, idx) => {
+        // 3. Word Letter Builder for all (Greek) (Конструктор - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           generated.push({
             id: `all_r0_word_builder_${idx}_${w.id}`,
             type: 'word_builder',
@@ -483,8 +492,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 4. Typing Input for all (Russian) (Письмо)
-        pool.forEach((w, idx) => {
+        // 4. Typing Input for all (Russian) (Письмо - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           generated.push({
             id: `all_r0_typing_${idx}_${w.id}`,
             type: 'typing_input',
@@ -496,8 +505,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 5. Audio listening for all (Аудио)
-        pool.forEach((w, idx) => {
+        // 5. Audio listening for all (Аудио - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           const audioDistractors = pool
             .filter((item) => item.id !== w.id)
             .map((item) => item.translationRu)
@@ -518,8 +527,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Тест -> Аудио -> Письмо -> Финальный матчинг
       // -----------------------------------------------------------------------
       else if (round === 1) {
-        // 1. Multiple choice / Reverse choice (Тест)
-        pool.forEach((w, idx) => {
+        // 1. Multiple choice / Reverse choice (Тест - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           const isReverse = idx % 2 !== 0;
           if (isReverse) {
             const distractors = pool
@@ -554,8 +563,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           }
         });
 
-        // 2. Audio listening for all (Аудио)
-        pool.forEach((w, idx) => {
+        // 2. Audio listening for all (Аудио - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           const audioDistractors = pool
             .filter((item) => item.id !== w.id)
             .map((item) => item.translationRu)
@@ -570,8 +579,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 3. Typing Input for all (Письмо)
-        pool.forEach((w, idx) => {
+        // 3. Typing Input for all (Письмо - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           generated.push({
             id: `all_r1_typing_${idx}_${w.id}`,
             type: 'typing_input',
@@ -589,8 +598,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Быстрый тест -> Письмо -> Финальный матчинг
       // -----------------------------------------------------------------------
       else {
-        // 1. Quick Quiz (50% грек->рус, 50% рус->грек)
-        pool.forEach((w, idx) => {
+        // 1. Quick Quiz (50% грек->рус, 50% рус->грек - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           const isReverse = idx % 2 !== 0;
           if (isReverse) {
             const distractors = pool
@@ -625,8 +634,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           }
         });
 
-        // 2. Typing Input for all (Активное извлечение из памяти)
-        pool.forEach((w, idx) => {
+        // 2. Typing Input for all (Активное извлечение из памяти - перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           generated.push({
             id: `all_r2_typing_${idx}_${w.id}`,
             type: 'typing_input',
@@ -639,14 +648,14 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
         });
       }
 
-      // Финальный блиц-матчинг всех пар порции для закрепления
+      // Финальный блиц-матчинг всех пар порции для закрепления (перемешанные пары)
       if (pool.length >= 2) {
         generated.push({
           id: `all_pairs_batch_final`,
           type: 'match_pairs',
           promptRu: 'Итоговый блиц: соедините пары слов с переводом',
           correctAnswer: 'all_matched',
-          pairs: pool.map((w) => ({
+          pairs: shuffleArray(pool).map((w) => ({
             greek: w.greek,
             translation: w.translationRu,
           })),
