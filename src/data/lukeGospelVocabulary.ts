@@ -26,7 +26,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "поскольку, так как",
     "frequency": 1,
     "contextPhrase": "Ἐπειδήπερ πολλοὶ ἐπεχείρησαν...",
-    "contextRu": "поскольку, так как",
+    "contextRu": "Как уже многие начали...",
     "partOfSpeech": "conjunction"
   },
   {
@@ -37,7 +37,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "берусь, предпринимаю, пытаюсь",
     "frequency": 3,
     "contextPhrase": "πολλοὶ ἐπεχείρησαν ἀνατάξασθαι...",
-    "contextRu": "берусь, предпринимаю, пытаюсь",
+    "contextRu": "многие начали составлять...",
     "partOfSpeech": "verb"
   },
   {
@@ -48,7 +48,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "составляю по порядку, упорядочиваю",
     "frequency": 1,
     "contextPhrase": "...ἀνατάξασθαι διήγησιν...",
-    "contextRu": "составляю по порядку, упорядочиваю",
+    "contextRu": "...составлять повествования...",
     "partOfSpeech": "verb"
   },
   {
@@ -59,7 +59,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "повествование, рассказ",
     "frequency": 1,
     "contextPhrase": "...ἀνατάξασθαι διήγησιν περὶ...",
-    "contextRu": "повествование, рассказ",
+    "contextRu": "...составлять повествования о...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -72,7 +72,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "вполне исполняю, удостоверяю",
     "frequency": 5,
     "contextPhrase": "...περὶ τῶν πεπληροφορημένων...",
-    "contextRu": "вполне исполняю, удостоверяю",
+    "contextRu": "...о совершенно известных...",
     "partOfSpeech": "verb"
   },
   {
@@ -83,7 +83,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "дело, вещь",
     "frequency": 11,
     "contextPhrase": "...ἐν ἡμῖν πραγμάτων",
-    "contextRu": "дело, вещь",
+    "contextRu": "...между нами событиях",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -96,7 +96,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "очевидец",
     "frequency": 1,
     "contextPhrase": "...οἱ ἀπ᾽ ἀρχῆς αὐτόπται...",
-    "contextRu": "очевидец",
+    "contextRu": "...бывшие с самого начала очевидцами...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -109,7 +109,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "слуга, помощник",
     "frequency": 20,
     "contextPhrase": "...καὶ ὑπηρέται γενόμενοι τοῦ λόγου",
-    "contextRu": "слуга, помощник",
+    "contextRu": "...и служителями Слова",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -122,7 +122,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "следую рядом, тщательно исследую",
     "frequency": 4,
     "contextPhrase": "...παρηκολουθηκότι ἄνωθεν πᾶσιν...",
-    "contextRu": "следую рядом, тщательно исследую",
+    "contextRu": "...по тщательном исследовании всего сначала...",
     "partOfSpeech": "verb"
   },
   {
@@ -133,7 +133,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "свыше, снова",
     "frequency": 13,
     "contextPhrase": "...παρηκολουθηκότι ἄνωθεν πᾶσιν...",
-    "contextRu": "свыше, снова",
+    "contextRu": "...по тщательном исследовании всего сначала...",
     "partOfSpeech": "adverb"
   },
   {
@@ -144,7 +144,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "точно, тщательно",
     "frequency": 9,
     "contextPhrase": "...πᾶσιν ἀκριβῶς καθεξῆς σοι γράψαι...",
-    "contextRu": "точно, тщательно",
+    "contextRu": "...по порядку описать тебе всё тщательно...",
     "partOfSpeech": "noun"
   },
   {
@@ -155,7 +155,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "по порядку, последовательно",
     "frequency": 5,
     "contextPhrase": "...ἀκριβῶς καθεξῆς σοι γράψαι...",
-    "contextRu": "по порядку, последовательно",
+    "contextRu": "...по порядку описать тебе тщательно...",
     "partOfSpeech": "noun"
   },
   {
@@ -166,7 +166,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "достопочтеннейший, знатнейший",
     "frequency": 4,
     "contextPhrase": "...κράτιστε Θεόφιλε",
-    "contextRu": "достопочтеннейший, знатнейший",
+    "contextRu": "...достопочтенный Феофил",
     "partOfSpeech": "adjective"
   },
   {
@@ -177,7 +177,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я узнаю, познаю",
     "frequency": 44,
     "contextPhrase": "ἵνα ἐπιγνῷς περὶ ὧν...",
-    "contextRu": "я узнаю, познаю",
+    "contextRu": "чтобы ты узнал твёрдое основание того, в чём...",
     "partOfSpeech": "verb"
   },
   {
@@ -188,7 +188,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "наставляю, учу",
     "frequency": 8,
     "contextPhrase": "...περὶ ὧν κατηχήθης λόγων...",
-    "contextRu": "наставляю, учу",
+    "contextRu": "...того учения, в котором был наставлен...",
     "partOfSpeech": "verb"
   },
   {
@@ -199,7 +199,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "достоверность, надежность, безопасность",
     "frequency": 3,
     "contextPhrase": "...τὴν ἀσφάλειαν",
-    "contextRu": "достоверность, надежность, безопасность",
+    "contextRu": "...твёрдое основание",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -212,7 +212,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "чреда, священническая смена",
     "frequency": 2,
     "contextPhrase": "...ἐξ ἐφημερίας Ἀβιά...",
-    "contextRu": "чреда, священническая смена",
+    "contextRu": "...из Авиевой чреды...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -225,7 +225,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "пред, в присутствии",
     "frequency": 5,
     "contextPhrase": "...δίκαιοι ἀμφότεροι ἐναντίον τοῦ θεοῦ...",
-    "contextRu": "пред, в присутствии",
+    "contextRu": "...оба они были праведны пред Богом...",
     "partOfSpeech": "preposition"
   },
   {
@@ -236,7 +236,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "праведное деяние, заповедь",
     "frequency": 10,
     "contextPhrase": "...ἐν πάσαις ταῖς ἐντολαῖς καὶ δικαιώμασιν...",
-    "contextRu": "праведное деяние, заповедь",
+    "contextRu": "...по всем заповедям и уставам...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -249,7 +249,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "непорочный, безупречный",
     "frequency": 5,
     "contextPhrase": "...τοῦ κυρίου ἄμεμπτοι",
-    "contextRu": "непорочный, безупречный",
+    "contextRu": "...Господним беспорочно",
     "partOfSpeech": "adjective"
   },
   {
@@ -260,7 +260,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "так как, поскольку",
     "frequency": 6,
     "contextPhrase": "...καθότι ἦν ἡ Ἐλισάβετ στεῖρα...",
-    "contextRu": "так как, поскольку",
+    "contextRu": "...ибо Елисавета была неплодна...",
     "partOfSpeech": "conjunction"
   },
   {
@@ -271,7 +271,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "бесплодный",
     "frequency": 4,
     "contextPhrase": "...ἦν ἡ Ἐλισάβετ στεῖρα...",
-    "contextRu": "бесплодный",
+    "contextRu": "...Елисавета была неплодна...",
     "partOfSpeech": "adjective"
   },
   {
@@ -282,7 +282,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "продвигаюсь вперед, состариваюсь",
     "frequency": 5,
     "contextPhrase": "...ἀμφότεροι προβεβηκότες ἐν ταῖς ἡμέραις...",
-    "contextRu": "продвигаюсь вперед, состариваюсь",
+    "contextRu": "...оба были уже в летах преклонных...",
     "partOfSpeech": "verb"
   },
   {
@@ -293,7 +293,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "священнодействую, служу священником",
     "frequency": 1,
     "contextPhrase": "...ἐν τῷ ἱερατεύειν αὐτὸν...",
-    "contextRu": "священнодействую, служу священником",
+    "contextRu": "...когда он в порядке своей чреды служил...",
     "partOfSpeech": "verb"
   },
   {
@@ -304,7 +304,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "порядок, очередь, чин",
     "frequency": 9,
     "contextPhrase": "...ἐν τῇ τάξει τῆς ἐφημερίας αὐτοῦ...",
-    "contextRu": "порядок, очередь, чин",
+    "contextRu": "...в порядке своей чреды...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -317,7 +317,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "пред, перед",
     "frequency": 1,
     "contextPhrase": "...ἔναντι τοῦ θεοῦ",
-    "contextRu": "пред, перед",
+    "contextRu": "...пред Богом",
     "partOfSpeech": "preposition"
   },
   {
@@ -328,7 +328,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "обычай",
     "frequency": 12,
     "contextPhrase": "κατὰ τὸ ἔθος τῆς ἱερατείας...",
-    "contextRu": "обычай",
+    "contextRu": "по обычаю священства...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -341,7 +341,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "священство, священническое служение",
     "frequency": 2,
     "contextPhrase": "κατὰ τὸ ἔθος τῆς ἱερατείας...",
-    "contextRu": "священство, священническое служение",
+    "contextRu": "по обычаю священства...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -354,7 +354,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "получаю по жребию",
     "frequency": 4,
     "contextPhrase": "...ἔλαχε τοῦ θυμιᾶσαι...",
-    "contextRu": "получаю по жребию",
+    "contextRu": "...досталось ему по жребию покадить...",
     "partOfSpeech": "verb"
   },
   {
@@ -365,7 +365,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "воскуряю фимиам, кадю",
     "frequency": 1,
     "contextPhrase": "...ἔλαχε τοῦ θυμιᾶσαι...",
-    "contextRu": "воскуряю фимиам, кадю",
+    "contextRu": "...досталось ему по жребию покадить...",
     "partOfSpeech": "verb"
   },
   {
@@ -376,7 +376,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "храм",
     "frequency": 45,
     "contextPhrase": "...εἰσελθὼν εἰς τὸν ναὸν τοῦ κυρίου",
-    "contextRu": "храм",
+    "contextRu": "...войдя в храм Господень",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -389,7 +389,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "фимиам, каждение",
     "frequency": 6,
     "contextPhrase": "...τῇ ὥρᾳ τοῦ θυμιάματος",
-    "contextRu": "фимиам, каждение",
+    "contextRu": "...во время каждения",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -402,7 +402,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "жертвенник, алтарь",
     "frequency": 23,
     "contextPhrase": "...ἐκ δεξιῶν τοῦ θυσιαστηρίου...",
-    "contextRu": "жертвенник, алтарь",
+    "contextRu": "...по правую сторону жертвенника...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -415,7 +415,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я тревожу",
     "frequency": 18,
     "contextPhrase": "καὶ ἐταράχθη Ζαχαρίας ἰδών...",
-    "contextRu": "я тревожу",
+    "contextRu": "Захария, увидев его, смутился...",
     "partOfSpeech": "verb"
   },
   {
@@ -426,7 +426,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я нападаю, падаю на",
     "frequency": 13,
     "contextPhrase": "...καὶ φόβος ἐπέπεσεν ἐπ᾽ αὐτόν",
-    "contextRu": "я нападаю, падаю на",
+    "contextRu": "...и страх напал на него",
     "partOfSpeech": "verb"
   },
   {
@@ -437,7 +437,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "внимаю, выслушиваю, слышу",
     "frequency": 5,
     "contextPhrase": "...διότι εἰσηκούσθη ἡ δέησίς σου...",
-    "contextRu": "внимаю, выслушиваю, слышу",
+    "contextRu": "...ибо услышана молитва твоя...",
     "partOfSpeech": "verb"
   },
   {
@@ -448,7 +448,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "просьба, прошение, молитва",
     "frequency": 18,
     "contextPhrase": "...εἰσηκούσθη ἡ δέησίς σου...",
-    "contextRu": "просьба, прошение, молитва",
+    "contextRu": "...услышана молитва твоя...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -461,7 +461,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "ликование, восторг, радость",
     "frequency": 5,
     "contextPhrase": "καὶ ἔσται χαρά σοι καὶ ἀγαλλίασις...",
-    "contextRu": "ликование, восторг, радость",
+    "contextRu": "и будет тебе радость и веселие...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -474,7 +474,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "рождение, происхождение",
     "frequency": 3,
     "contextPhrase": "...καὶ πολλοὶ ἐπὶ τῇ γενέσει αὐτοῦ...",
-    "contextRu": "рождение, происхождение",
+    "contextRu": "...и многие о рождении его возрадуются...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -487,7 +487,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сикера, крепкий напиток",
     "frequency": 1,
     "contextPhrase": "...καὶ οἶνον καὶ σίκερα οὐ μὴ πίῃ...",
-    "contextRu": "сикера, крепкий напиток",
+    "contextRu": "...не будет пить вина и сикера...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -500,7 +500,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "живот",
     "frequency": 22,
     "contextPhrase": "...ἔτι ἐκ κοιλίας μητρὸς αὐτοῦ",
-    "contextRu": "живот",
+    "contextRu": "...от чрева матери своей",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -513,7 +513,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я поворачиваю, возвращаюсь",
     "frequency": 36,
     "contextPhrase": "...πολλοὺς τῶν υἱῶν Ἰσραὴλ ἐπιστρέψει...",
-    "contextRu": "я поворачиваю, возвращаюсь",
+    "contextRu": "и многих из сынов Израилевых обратит...",
     "partOfSpeech": "verb"
   },
   {
@@ -524,7 +524,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я иду впереди, предшествую",
     "frequency": 10,
     "contextPhrase": "καὶ αὐτὸς προελεύσεται ἐνώπιον αὐτοῦ...",
-    "contextRu": "я иду впереди, предшествую",
+    "contextRu": "и предыдет пред Ним в духе и силе...",
     "partOfSpeech": "verb"
   },
   {
@@ -535,7 +535,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "непокорный, непослушный",
     "frequency": 6,
     "contextPhrase": "...καὶ ἀπειθεῖς ἐν φρονήσει δικαίων...",
-    "contextRu": "непокорный, непослушный",
+    "contextRu": "...возвратить сердца отцов детям...",
     "partOfSpeech": "adjective"
   },
   {
@@ -546,7 +546,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "образ мыслей, мудрость, рассудительность",
     "frequency": 2,
     "contextPhrase": "...ἐν φρονήσει δικαίων...",
-    "contextRu": "образ мыслей, мудрость, рассудительность",
+    "contextRu": "...и непокоривым образ мыслей праведников...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -559,7 +559,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я приготовляю",
     "frequency": 11,
     "contextPhrase": "...ἑτοιμάσαι κυρίῳ λαὸν κατεσκευασμένον",
-    "contextRu": "я приготовляю",
+    "contextRu": "...образ мыслей праведников...",
     "partOfSpeech": "verb"
   },
   {
@@ -570,7 +570,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "старец, пожилой человек",
     "frequency": 3,
     "contextPhrase": "...ἐγὼ γάρ εἰμι πρεσβύτης...",
-    "contextRu": "старец, пожилой человек",
+    "contextRu": "...представить Господу народ приготовленный",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -583,7 +583,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я присутствую, стою рядом",
     "frequency": 41,
     "contextPhrase": "...ὁ παρεστηκὼς ἐνώπιον τοῦ θεοῦ...",
-    "contextRu": "я присутствую, стою рядом",
+    "contextRu": "по чему я узнаю это?",
     "partOfSpeech": "verb"
   },
   {
@@ -594,7 +594,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я молчу",
     "frequency": 10,
     "contextPhrase": "καὶ ἰδοὺ ἔσῃ σιωπῶν...",
-    "contextRu": "я молчу",
+    "contextRu": "...и послан говорить с тобою...",
     "partOfSpeech": "verb"
   },
   {
@@ -605,7 +605,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я ожидаю",
     "frequency": 16,
     "contextPhrase": "καὶ ἦν ὁ λαὸς προσδοκῶν τὸν Ζαχαρίαν...",
-    "contextRu": "я ожидаю",
+    "contextRu": "...и благовестить тебе сие",
     "partOfSpeech": "verb"
   },
   {
@@ -616,7 +616,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "медлю, задерживаюсь",
     "frequency": 5,
     "contextPhrase": "...ἐν τῷ χρονίζειν ἐν τῷ ναῷ αὐτόν",
-    "contextRu": "медлю, задерживаюсь",
+    "contextRu": "и вот, ты будешь молчать и не сможешь говорить...",
     "partOfSpeech": "verb"
   },
   {
@@ -627,7 +627,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "видение, явление",
     "frequency": 4,
     "contextPhrase": "...ὅτι ὀπτασίαν ἑώρακεν ἐν τῷ ναῷ...",
-    "contextRu": "видение, явление",
+    "contextRu": "...что он видел видение в храме...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -640,7 +640,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "подаю знаки, киваю",
     "frequency": 1,
     "contextPhrase": "...καὶ αὐτὸς ἦν διανεύων αὐτοῖς...",
-    "contextRu": "подаю знаки, киваю",
+    "contextRu": "...и он объяснялся с ними знаками...",
     "partOfSpeech": "verb"
   },
   {
@@ -651,7 +651,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "пребываю, остаюсь",
     "frequency": 5,
     "contextPhrase": "...καὶ διέμενεν κωφός",
-    "contextRu": "пребываю, остаюсь",
+    "contextRu": "...и оставался нем",
     "partOfSpeech": "verb"
   },
   {
@@ -662,7 +662,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "немой, глухой",
     "frequency": 14,
     "contextPhrase": "...καὶ διέμενεν κωφός",
-    "contextRu": "немой, глухой",
+    "contextRu": "...и оставался нем",
     "partOfSpeech": "noun"
   },
   {
@@ -673,7 +673,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "служение, служба",
     "frequency": 6,
     "contextPhrase": "...αἱ ἡμέραι τῆς λειτουργίας αὐτοῦ...",
-    "contextRu": "служение, служба",
+    "contextRu": "...дни службы его...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -686,7 +686,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я беру, зачинаю",
     "frequency": 16,
     "contextPhrase": "...συνέλαβεν Ἐλισάβετ ἡ γυνὴ αὐτοῦ...",
-    "contextRu": "я беру, зачинаю",
+    "contextRu": "...зачала Елисавета, жена его...",
     "partOfSpeech": "verb"
   },
   {
@@ -697,7 +697,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "укрываю, прячу",
     "frequency": 1,
     "contextPhrase": "καὶ περιέκρυβεν ἑαυτὴν μῆνας πέντε...",
-    "contextRu": "укрываю, прячу",
+    "contextRu": "и таилась пять месяцев...",
     "partOfSpeech": "verb"
   },
   {
@@ -708,7 +708,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "призрел, посмотрел",
     "frequency": 2,
     "contextPhrase": "...ἐν ἡμέραις αἷς ἐπεῖδεν...",
-    "contextRu": "призрел, посмотрел",
+    "contextRu": "...во дни сии, в которые призрел Господь...",
     "partOfSpeech": "noun"
   },
   {
@@ -719,7 +719,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я удаляю, отнимаю",
     "frequency": 10,
     "contextPhrase": "...ἀφελεῖν ὄνειδός μου...",
-    "contextRu": "я удаляю, отнимаю",
+    "contextRu": "...снять поношение моё...",
     "partOfSpeech": "verb"
   },
   {
@@ -730,7 +730,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "поношение, бесчестие, укор",
     "frequency": 1,
     "contextPhrase": "...ἀφελεῖν ὄνειδός μου ἐν ἀνθρώποις",
-    "contextRu": "поношение, бесчестие, укор",
+    "contextRu": "...снять поношение моё между людьми",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -743,7 +743,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "шестой",
     "frequency": 14,
     "contextPhrase": "Ἐν δὲ τῷ μηνὶ τῷ ἕκτῳ...",
-    "contextRu": "шестой",
+    "contextRu": "В шестой же месяц...",
     "partOfSpeech": "adjective"
   },
   {
@@ -754,7 +754,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "дева",
     "frequency": 15,
     "contextPhrase": "πρὸς παρθένον ἐμνηστευμένην...",
-    "contextRu": "дева",
+    "contextRu": "к Деве, обручённой...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -767,7 +767,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "обручаю",
     "frequency": 3,
     "contextPhrase": "...ἐμνηστευμένην ἀνδρὶ...",
-    "contextRu": "обручаю",
+    "contextRu": "...обручённой мужу...",
     "partOfSpeech": "verb"
   },
   {
@@ -778,7 +778,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "наделяю благодатью, облагодатствую",
     "frequency": 2,
     "contextPhrase": "...χαῖρε κεχαριτωμένη...",
-    "contextRu": "наделяю благодатью, облагодатствую",
+    "contextRu": "...радуйся, Благодатная!...",
     "partOfSpeech": "verb"
   },
   {
@@ -789,7 +789,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сильно смущаю",
     "frequency": 1,
     "contextPhrase": "ἡ δὲ ἐπὶ τῷ λόγῳ διεταράχθη...",
-    "contextRu": "сильно смущаю",
+    "contextRu": "Она же от слов его смутилась...",
     "partOfSpeech": "verb"
   },
   {
@@ -800,7 +800,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я спорю, рассуждаю",
     "frequency": 16,
     "contextPhrase": "...καὶ διελογίζετο ποταπὸς εἴη...",
-    "contextRu": "я спорю, рассуждаю",
+    "contextRu": "...и размышляла, что бы это было...",
     "partOfSpeech": "verb"
   },
   {
@@ -811,7 +811,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "какой, каков",
     "frequency": 7,
     "contextPhrase": "...ποταπὸς εἴη ὁ ἀσπασμὸς...",
-    "contextRu": "какой, каков",
+    "contextRu": "...каково это приветствие...",
     "partOfSpeech": "noun"
   },
   {
@@ -822,7 +822,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "приветствие",
     "frequency": 10,
     "contextPhrase": "...ὁ ἀσπασμὸς οὗτος",
-    "contextRu": "приветствие",
+    "contextRu": "...приветствие сие",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -835,7 +835,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "утроба, чрево",
     "frequency": 9,
     "contextPhrase": "καὶ ἰδοὺ συλλήμψῃ ἐν γαστρὶ...",
-    "contextRu": "утроба, чрево",
+    "contextRu": "и вот, зачнёшь во чреве...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -848,7 +848,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я рождаю",
     "frequency": 18,
     "contextPhrase": "...καὶ τέξῃ υἱόν...",
-    "contextRu": "я рождаю",
+    "contextRu": "...и родишь Сына...",
     "partOfSpeech": "verb"
   },
   {
@@ -859,7 +859,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "высший",
     "frequency": 13,
     "contextPhrase": "...καὶ υἱὸς ὑψίστου κληθήσεται...",
-    "contextRu": "высший",
+    "contextRu": "...и наречётся Сыном Всевышнего...",
     "partOfSpeech": "adjective"
   },
   {
@@ -870,7 +870,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я царствую",
     "frequency": 21,
     "contextPhrase": "καὶ βασιλεύσει ἐπὶ τὸν οἶκον Ἰακὼβ...",
-    "contextRu": "я царствую",
+    "contextRu": "и будет царствовать над домом Иакова...",
     "partOfSpeech": "verb"
   },
   {
@@ -881,7 +881,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "когда, с тех пор как, поскольку",
     "frequency": 25,
     "contextPhrase": "...ἐπεὶ ἄνδρα οὐ γινώσκω",
-    "contextRu": "когда, с тех пор как, поскольку",
+    "contextRu": "...когда Я мужа не знаю?",
     "partOfSpeech": "conjunction"
   },
   {
@@ -892,7 +892,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "прихожу, схожу, наступаю",
     "frequency": 9,
     "contextPhrase": "Πνεῦμα ἅγιον ἐπελεύσεται ἐπὶ σέ...",
-    "contextRu": "прихожу, схожу, наступаю",
+    "contextRu": "Дух Святой сойдёт на Тебя...",
     "partOfSpeech": "verb"
   },
   {
@@ -903,7 +903,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "осеняю, покрываю тенью",
     "frequency": 5,
     "contextPhrase": "...καὶ δύναμις ὑψίστου ἐπισκιάσει σοι...",
-    "contextRu": "осеняю, покрываю тенью",
+    "contextRu": "...и сила Всевышнего осенит Тебя...",
     "partOfSpeech": "verb"
   },
   {
@@ -914,7 +914,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "родственный; сущ.: родственник",
     "frequency": 10,
     "contextPhrase": "καὶ ἰδοὺ Ἐλισάβετ ἡ συγγενίς σου...",
-    "contextRu": "родственный; сущ.: родственник",
+    "contextRu": "Вот и Елисавета, родственница Твоя...",
     "partOfSpeech": "adjective"
   },
   {
@@ -925,7 +925,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "старость",
     "frequency": 1,
     "contextPhrase": "...ἐν γήρει αὐτῆς...",
-    "contextRu": "старость",
+    "contextRu": "...в старости своей...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -938,7 +938,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "бессилен, невозможен",
     "frequency": 2,
     "contextPhrase": "ὅτι οὐκ ἀδυνατήσει παρὰ τοῦ θεοῦ πᾶν ῥῆμα",
-    "contextRu": "бессилен, невозможен",
+    "contextRu": "ибо у Бога не останется бессильным никакое слово",
     "partOfSpeech": "verb"
   },
   {
@@ -949,7 +949,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "раба, служанка",
     "frequency": 3,
     "contextPhrase": "Ἰδοὺ ἡ δούλη κυρίου...",
-    "contextRu": "раба, служанка",
+    "contextRu": "Се, Раба Господня...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -962,7 +962,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "нагорный, гористый",
     "frequency": 2,
     "contextPhrase": "...εἰς τὴν ὀρεινὴν μετὰ σπουδῆς...",
-    "contextRu": "нагорный, гористый",
+    "contextRu": "Встав же Мария во дни сии...",
     "partOfSpeech": "noun"
   },
   {
@@ -973,7 +973,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "усердие, поспешность",
     "frequency": 12,
     "contextPhrase": "...μετὰ σπουδῆς εἰς πόλιν Ἰούδα",
-    "contextRu": "усердие, поспешность",
+    "contextRu": "...с поспешностью пошла в город Иудин",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -986,7 +986,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "взыгрываю, скачу",
     "frequency": 3,
     "contextPhrase": "...ἐσκίρτησεν τὸ βρέφος ἐν τῇ κοιλίᾳ...",
-    "contextRu": "взыгрываю, скачу",
+    "contextRu": "...взыграл младенец во чреве...",
     "partOfSpeech": "verb"
   },
   {
@@ -997,7 +997,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "младенец",
     "frequency": 8,
     "contextPhrase": "...ἐσκίρτησεν τὸ βρέφος ἐν τῇ κοιλίᾳ...",
-    "contextRu": "младенец",
+    "contextRu": "...взыграл младенец во чреве...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1010,7 +1010,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я наполняю",
     "frequency": 24,
     "contextPhrase": "καὶ ἐπλήσθη πνεύματος ἁγίου...",
-    "contextRu": "я наполняю",
+    "contextRu": "и исполнилась Святого Духа...",
     "partOfSpeech": "verb"
   },
   {
@@ -1021,7 +1021,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "восклицаю громко",
     "frequency": 1,
     "contextPhrase": "καὶ ἀνεφώνησεν κραυγῇ μεγάλῃ...",
-    "contextRu": "восклицаю громко",
+    "contextRu": "и воскликнула громким голосом...",
     "partOfSpeech": "verb"
   },
   {
@@ -1032,7 +1032,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "крик, вопль",
     "frequency": 6,
     "contextPhrase": "...καὶ ἀνεφώνησεν κραυγῇ μεγάλῃ...",
-    "contextRu": "крик, вопль",
+    "contextRu": "...и воскликнула громким голосом...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1045,7 +1045,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я благословляю",
     "frequency": 42,
     "contextPhrase": "Εὐλογημένη σὺ ἐν γυναιξίν...",
-    "contextRu": "я благословляю",
+    "contextRu": "Благословенна Ты между жёнами...",
     "partOfSpeech": "verb"
   },
   {
@@ -1056,7 +1056,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "откуда?",
     "frequency": 29,
     "contextPhrase": "καὶ πόθεν μοι τοῦτο...",
-    "contextRu": "откуда?",
+    "contextRu": "И откуда это мне...",
     "partOfSpeech": "adverb"
   },
   {
@@ -1067,7 +1067,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "исполнение, свершение",
     "frequency": 2,
     "contextPhrase": "...ὅτι ἔσται τελείωσις τοῖς λελαλημένοις...",
-    "contextRu": "исполнение, свершение",
+    "contextRu": "...что совершится сказанное Ей от Господа",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1080,7 +1080,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "возвеличиваю, прославляю",
     "frequency": 8,
     "contextPhrase": "Μεγαλύνει ἡ ψυχή μου τὸν κύριον...",
-    "contextRu": "возвеличиваю, прославляю",
+    "contextRu": "Величит душа Моя Господа...",
     "partOfSpeech": "verb"
   },
   {
@@ -1091,7 +1091,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я веселюсь",
     "frequency": 11,
     "contextPhrase": "καὶ ἠγαλλίασεν τὸ πνεῦμά μου...",
-    "contextRu": "я веселюсь",
+    "contextRu": "и возрадовался дух Мой...",
     "partOfSpeech": "verb"
   },
   {
@@ -1102,7 +1102,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "Спаситель",
     "frequency": 24,
     "contextPhrase": "...ἐπὶ τῷ θεῷ τῷ σωτῆρί μου...",
-    "contextRu": "Спаситель",
+    "contextRu": "...о Боге, Спасителе Моём...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -1115,7 +1115,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "призираю, смотрю с заботой",
     "frequency": 3,
     "contextPhrase": "...ὅτι ἐπέβλεψεν ἐπὶ τὴν ταπείνωσιν...",
-    "contextRu": "призираю, смотрю с заботой",
+    "contextRu": "...что призрел Он на смирение...",
     "partOfSpeech": "verb"
   },
   {
@@ -1126,7 +1126,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "смирение, уничижение",
     "frequency": 4,
     "contextPhrase": "...ἐπὶ τὴν ταπείνωσιν τῆς δούλης αὐτοῦ...",
-    "contextRu": "смирение, уничижение",
+    "contextRu": "...на смирение Рабы Своей...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1139,7 +1139,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "ублажаю, называю блаженным",
     "frequency": 2,
     "contextPhrase": "...μακαριοῦσίν με πᾶσαι αἱ γενεαί",
-    "contextRu": "ублажаю, называю блаженным",
+    "contextRu": "...будут ублажать Меня все роды",
     "partOfSpeech": "verb"
   },
   {
@@ -1150,7 +1150,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "великий; ср. р. мн. ч.: великие дела",
     "frequency": 2,
     "contextPhrase": "...ἐποίησέν μοι μεγάλα (μεγαλεῖα) ὁ δυνατός...",
-    "contextRu": "великий; ср. р. мн. ч.: великие дела",
+    "contextRu": "...сотворил Мне величие Сильный...",
     "partOfSpeech": "adjective"
   },
   {
@@ -1161,7 +1161,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сильный, могущий",
     "frequency": 32,
     "contextPhrase": "...ὁ δυνατός, καὶ ἅγιον τὸ ὄνομα αὐτοῦ",
-    "contextRu": "сильный, могущий",
+    "contextRu": "...Сильный, и свято имя Его",
     "partOfSpeech": "noun"
   },
   {
@@ -1172,7 +1172,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сожаление, милость",
     "frequency": 27,
     "contextPhrase": "καὶ τὸ ἔλεος αὐτοῦ εἰς γενεὰς...",
-    "contextRu": "сожаление, милость",
+    "contextRu": "и милость Его в роды родов...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1185,7 +1185,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "мышца, рука",
     "frequency": 3,
     "contextPhrase": "Ἐποίησεν κράτος ἐν βραχίονι αὐτοῦ...",
-    "contextRu": "мышца, рука",
+    "contextRu": "Явил силу мышцы Своей...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -1198,7 +1198,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "рассеиваю, расточаю",
     "frequency": 9,
     "contextPhrase": "διεσκόρπισεν ὑπερηφάνους...",
-    "contextRu": "рассеиваю, расточаю",
+    "contextRu": "рассеял надменных...",
     "partOfSpeech": "verb"
   },
   {
@@ -1209,7 +1209,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "гордый, надменный",
     "frequency": 5,
     "contextPhrase": "...διεσκόρπισεν ὑπερηφάνους διανοίᾳ...",
-    "contextRu": "гордый, надменный",
+    "contextRu": "...рассеял надменных помышлениями...",
     "partOfSpeech": "adjective"
   },
   {
@@ -1220,7 +1220,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "понимание, мысль, рассудок",
     "frequency": 12,
     "contextPhrase": "...διανοίᾳ καρδίας αὐτῶν",
-    "contextRu": "понимание, мысль, рассудок",
+    "contextRu": "...помышлениями сердца их",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1233,7 +1233,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "низлагаю, свергаю",
     "frequency": 9,
     "contextPhrase": "καθεῖλεν δυνάστας ἀπὸ θρόνων...",
-    "contextRu": "низлагаю, свергаю",
+    "contextRu": "низложил сильных с престолов...",
     "partOfSpeech": "verb"
   },
   {
@@ -1244,7 +1244,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "властелин, сильный, вельможа",
     "frequency": 3,
     "contextPhrase": "καθεῖλεν δυνάστας ἀπὸ θρόνων...",
-    "contextRu": "властелин, сильный, вельможа",
+    "contextRu": "низложил сильных с престолов...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -1257,7 +1257,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я поднимаюсь, возношусь",
     "frequency": 20,
     "contextPhrase": "...καὶ ὕψωσεν ταπεινούς",
-    "contextRu": "я поднимаюсь, возношусь",
+    "contextRu": "...и вознёс смиренных",
     "partOfSpeech": "verb"
   },
   {
@@ -1268,7 +1268,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "смиренный, униженный",
     "frequency": 8,
     "contextPhrase": "...καὶ ὕψωσεν ταπεινούς",
-    "contextRu": "смиренный, униженный",
+    "contextRu": "...и вознёс смиренных",
     "partOfSpeech": "noun"
   },
   {
@@ -1279,7 +1279,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я голоден",
     "frequency": 23,
     "contextPhrase": "πεινῶντας ἐνέπλησεν ἀγαθῶν...",
-    "contextRu": "я голоден",
+    "contextRu": "алчущих исполнил благ...",
     "partOfSpeech": "verb"
   },
   {
@@ -1290,7 +1290,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "насыщаю, наполняю",
     "frequency": 5,
     "contextPhrase": "πεινῶντας ἐνέπλησεν ἀγαθῶν...",
-    "contextRu": "насыщаю, наполняю",
+    "contextRu": "алчущих исполнил благ...",
     "partOfSpeech": "verb"
   },
   {
@@ -1301,7 +1301,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я богатею",
     "frequency": 12,
     "contextPhrase": "...καὶ πλουτοῦντας ἐξαπέστειλεν κενούς",
-    "contextRu": "я богатею",
+    "contextRu": "...и богатящихся отпустил ни с чем",
     "partOfSpeech": "verb"
   },
   {
@@ -1312,7 +1312,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я высылаю",
     "frequency": 13,
     "contextPhrase": "...καὶ πλουτοῦντας ἐξαπέστειλεν κενούς",
-    "contextRu": "я высылаю",
+    "contextRu": "...и богатящихся отпустил ни с чем",
     "partOfSpeech": "verb"
   },
   {
@@ -1323,7 +1323,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "пустой, суетный",
     "frequency": 18,
     "contextPhrase": "...ἐξαπέστειλεν κενούς",
-    "contextRu": "пустой, суетный",
+    "contextRu": "...отпустил ни с чем (пустыми)",
     "partOfSpeech": "noun"
   },
   {
@@ -1334,7 +1334,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "поддерживаю, помогаю",
     "frequency": 3,
     "contextPhrase": "ἀντελάβετο Ἰσραὴλ παιδὸς αὐτοῦ...",
-    "contextRu": "поддерживаю, помогаю",
+    "contextRu": "воспринял Израиля, отрока Своего...",
     "partOfSpeech": "verb"
   },
   {
@@ -1345,7 +1345,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я помню",
     "frequency": 23,
     "contextPhrase": "...μνησθῆναι ἐλέους",
-    "contextRu": "я помню",
+    "contextRu": "...воспомянув милость",
     "partOfSpeech": "verb"
   },
   {
@@ -1356,7 +1356,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "семя",
     "frequency": 43,
     "contextPhrase": "...τῷ Ἀβραὰμ καὶ τῷ σπέρματι αὐτοῦ...",
-    "contextRu": "семя",
+    "contextRu": "...к Аврааму и семени его...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1369,7 +1369,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я возвращаюсь",
     "frequency": 35,
     "contextPhrase": "...καὶ ὑπέστρεψεν εἰς τὸν οἶκον αὐτῆς",
-    "contextRu": "я возвращаюсь",
+    "contextRu": "Пребыла же Мария с нею около трёх месяцев...",
     "partOfSpeech": "verb"
   },
   {
@@ -1380,7 +1380,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сосед, окрестный житель",
     "frequency": 1,
     "contextPhrase": "καὶ ἤκουσαν οἱ περίοικοι καὶ οἱ συγγενεῖς...",
-    "contextRu": "сосед, окрестный житель",
+    "contextRu": "...что возвеличил Господь милость Свою...",
     "partOfSpeech": "adjective"
   },
   {
@@ -1391,7 +1391,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "родственный; сущ.: родственник",
     "frequency": 11,
     "contextPhrase": "...οἱ περίοικοι καὶ οἱ συγγενεῖς αὐτῆς...",
-    "contextRu": "родственный; сущ.: родственник",
+    "contextRu": "...соседи и родственники её...",
     "partOfSpeech": "adjective"
   },
   {
@@ -1402,7 +1402,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сорадуюсь",
     "frequency": 7,
     "contextPhrase": "...καὶ συνέχαιρον αὐτῇ",
-    "contextRu": "сорадуюсь",
+    "contextRu": "...и радовались с нею",
     "partOfSpeech": "verb"
   },
   {
@@ -1413,7 +1413,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "восьмой",
     "frequency": 9,
     "contextPhrase": "...ἐν τῇ ἡμέρᾳ τῇ ὀγδόῃ...",
-    "contextRu": "восьмой",
+    "contextRu": "...в восьмой день...",
     "partOfSpeech": "adjective"
   },
   {
@@ -1424,7 +1424,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я обрезываю",
     "frequency": 17,
     "contextPhrase": "...ἦλθον περιτεμεῖν τὸ παιδίον...",
-    "contextRu": "я обрезываю",
+    "contextRu": "...пришли обрезать младенца...",
     "partOfSpeech": "verb"
   },
   {
@@ -1435,7 +1435,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "подаю знаки, киваю",
     "frequency": 1,
     "contextPhrase": "ἐνένευον δὲ τῷ πατρὶ αὐτοῦ...",
-    "contextRu": "подаю знаки, киваю",
+    "contextRu": "и спрашивали знаками у отца его...",
     "partOfSpeech": "verb"
   },
   {
@@ -1446,7 +1446,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "дощечка (для письма)",
     "frequency": 1,
     "contextPhrase": "καὶ αἰτήσας πινακίδιον ἔγραψεν...",
-    "contextRu": "дощечка (для письма)",
+    "contextRu": "он потребовал дощечку и написал...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1459,7 +1459,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "обсуждаю, разглашаю повсюду",
     "frequency": 2,
     "contextPhrase": "...διελαλεῖτο πάντα τὰ ῥήματα ταῦτα",
-    "contextRu": "обсуждаю, разглашаю повсюду",
+    "contextRu": "...рассказывали обо всём этом",
     "partOfSpeech": "verb"
   },
   {
@@ -1470,7 +1470,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "благословенный",
     "frequency": 8,
     "contextPhrase": "Εὐλογητὸς κύριος ὁ θεὸς τοῦ Ἰσραήλ...",
-    "contextRu": "благословенный",
+    "contextRu": "Благословен Господь Бог Израилев...",
     "partOfSpeech": "noun"
   },
   {
@@ -1481,7 +1481,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я призираю, забочусь",
     "frequency": 11,
     "contextPhrase": "...ὅτι ἐπεσκέψατο καὶ ἐποίησεν λύτρωσιν...",
-    "contextRu": "я призираю, забочусь",
+    "contextRu": "...что посетил и сотворил избавление...",
     "partOfSpeech": "verb"
   },
   {
@@ -1492,7 +1492,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "искупление, избавление",
     "frequency": 3,
     "contextPhrase": "...καὶ ἐποίησεν λύτρωσιν τῷ λαῷ αὐτοῦ",
-    "contextRu": "искупление, избавление",
+    "contextRu": "...и сотворил избавление народу Своему",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1505,7 +1505,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "рог",
     "frequency": 11,
     "contextPhrase": "καὶ ἤγειρεν κέρας σωτηρίας ἡμῖν...",
-    "contextRu": "рог",
+    "contextRu": "и воздвиг рог спасения нам...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1518,7 +1518,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "спасение",
     "frequency": 46,
     "contextPhrase": "...κέρας σωτηρίας ἡμῖν...",
-    "contextRu": "спасение",
+    "contextRu": "...рог спасения нам...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1531,7 +1531,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я ненавижу",
     "frequency": 40,
     "contextPhrase": "...καὶ ἐκ χειρὸς πάντων τῶν μισούντων ἡμᾶς",
-    "contextRu": "я ненавижу",
+    "contextRu": "...и от руки всех ненавидящих нас",
     "partOfSpeech": "verb"
   },
   {
@@ -1542,7 +1542,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "завет",
     "frequency": 33,
     "contextPhrase": "...καὶ μνησθῆναι διαθήκης ἁγίας αὐτοῦ",
-    "contextRu": "завет",
+    "contextRu": "...и помянуть святой завет Свой",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1555,7 +1555,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "клятва",
     "frequency": 10,
     "contextPhrase": "ὅρκον ὃν ὤμοσεν πρὸς Ἀβραὰμ...",
-    "contextRu": "клятва",
+    "contextRu": "клятву, которою клялся Он Аврааму...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -1568,7 +1568,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я клянусь, даю клятву",
     "frequency": 26,
     "contextPhrase": "...ὃν ὤμοσεν πρὸς Ἀβραὰμ τὸν πατέρα ἡμῶν...",
-    "contextRu": "я клянусь, даю клятву",
+    "contextRu": "...которою клялся Аврааму, отцу нашему...",
     "partOfSpeech": "verb"
   },
   {
@@ -1579,7 +1579,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "безбоязненно, смело",
     "frequency": 4,
     "contextPhrase": "...ῥυσθέντας ἀφόβως λατρεύειν αὐτῷ",
-    "contextRu": "безбоязненно, смело",
+    "contextRu": "...по избавлении небоязненно служить Ему",
     "partOfSpeech": "adverb"
   },
   {
@@ -1590,7 +1590,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я избавляю",
     "frequency": 17,
     "contextPhrase": "...ἐκ χειρὸς ἐχθρῶν ῥυσθέντας...",
-    "contextRu": "я избавляю",
+    "contextRu": "...по избавлении от руки врагов...",
     "partOfSpeech": "verb"
   },
   {
@@ -1601,7 +1601,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "я служу, поклоняюсь",
     "frequency": 21,
     "contextPhrase": "...ἀφόβως λατρεύειν αὐτῷ",
-    "contextRu": "я служу, поклоняюсь",
+    "contextRu": "...небоязненно служить Ему",
     "partOfSpeech": "verb"
   },
   {
@@ -1612,7 +1612,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "святость, благочестие",
     "frequency": 2,
     "contextPhrase": "ἐν ὁσιότητι καὶ δικαιοσύνῃ...",
-    "contextRu": "святость, благочестие",
+    "contextRu": "в святости и правде пред Ним...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1625,7 +1625,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "иду впереди, предшествую",
     "frequency": 2,
     "contextPhrase": "...προπορεύσῃ γὰρ ἐνώπιον κυρίου...",
-    "contextRu": "иду впереди, предшествую",
+    "contextRu": "...ибо предыдешь пред лицом Господа...",
     "partOfSpeech": "verb"
   },
   {
@@ -1636,7 +1636,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "знание",
     "frequency": 29,
     "contextPhrase": "τοῦ δοῦναι γνῶσιν σωτηρίας τῷ λαῷ αὐτοῦ...",
-    "contextRu": "знание",
+    "contextRu": "дать уразуметь народу Его спасение...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1649,7 +1649,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "отпущение, прощение",
     "frequency": 17,
     "contextPhrase": "...ἐν ἀφέσει ἁμαρτιῶν αὐτῶν",
-    "contextRu": "отпущение, прощение",
+    "contextRu": "...в прощении грехов их",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1662,7 +1662,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "сострадание; внутренности",
     "frequency": 11,
     "contextPhrase": "διὰ σπλάγχνα ἐλέους θεοῦ ἡμῶν...",
-    "contextRu": "сострадание; внутренности",
+    "contextRu": "по благоутробному милосердию Бога нашего...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1675,7 +1675,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "восход, восток",
     "frequency": 10,
     "contextPhrase": "...ἐπισκέψεται ἡμᾶς ἀνατολὴ ἐξ ὕψους",
-    "contextRu": "восход, восток",
+    "contextRu": "...посетит нас Восток свыше",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1688,7 +1688,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "являю, свечу, озаряю",
     "frequency": 4,
     "contextPhrase": "ἐπιφᾶναι τοῖς ἐν σκότει καὶ σκιᾷ θανάτου...",
-    "contextRu": "являю, свечу, озаряю",
+    "contextRu": "просветить сидящих во тьме и тени смертной...",
     "partOfSpeech": "verb"
   },
   {
@@ -1699,7 +1699,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "тьма",
     "frequency": 31,
     "contextPhrase": "...τοῖς ἐν σκότει καὶ σκιᾷ θανάτου καθημένοις...",
-    "contextRu": "тьма",
+    "contextRu": "...сидящих во тьме и тени смертной...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1712,7 +1712,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "тень",
     "frequency": 7,
     "contextPhrase": "...καὶ σκιᾷ θανάτου καθημένοις...",
-    "contextRu": "тень",
+    "contextRu": "...и тени смертной...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1725,7 +1725,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "направляю, выпрямляю путь",
     "frequency": 3,
     "contextPhrase": "...τοῦ κατευθῦναι τοὺς πόδας ἡμῶν...",
-    "contextRu": "направляю, выпрямляю путь",
+    "contextRu": "...направить ноги наши на путь мира",
     "partOfSpeech": "verb"
   },
   {
@@ -1736,7 +1736,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "укрепляюсь, становлюсь сильным",
     "frequency": 4,
     "contextPhrase": "...καὶ ἐκραταιοῦτο πνεύματι...",
-    "contextRu": "укрепляюсь, становлюсь сильным",
+    "contextRu": "...и укреплялся духом...",
     "partOfSpeech": "verb"
   },
   {
@@ -1747,7 +1747,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "пустыня",
     "frequency": 48,
     "contextPhrase": "...καὶ ἦν ἐν ταῖς ἐρήμοις...",
-    "contextRu": "пустыня",
+    "contextRu": "...и был в пустынях...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1760,7 +1760,7 @@ export const LUKE_CHAPTER_1_WORDS_RAW: LukeRawWord[] = [
     "translation": "явление, вступление в служение",
     "frequency": 1,
     "contextPhrase": "...ἕως ἡμέρας ἀναδείξεως αὐτοῦ πρὸς τὸν Ἰσραήλ",
-    "contextRu": "явление, вступление в служение",
+    "contextRu": "...до дня явления своего Израилю",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1776,7 +1776,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "указ, постановление",
     "frequency": 5,
     "contextPhrase": "...ἐξῆλθεν δόγμα παρὰ Καίσαρος Αὐγούστου...",
-    "contextRu": "указ, постановление",
+    "contextRu": "...вышло повеление от кесаря Августа...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1789,7 +1789,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "вношу в список, переписываю",
     "frequency": 4,
     "contextPhrase": "...ἀπογράφεσθαι πᾶσαν τὴν οἰκουμένην",
-    "contextRu": "вношу в список, переписываю",
+    "contextRu": "...сделать перепись по всей вселенной",
     "partOfSpeech": "verb"
   },
   {
@@ -1800,7 +1800,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "мир, (обитаемая) вселенная",
     "frequency": 15,
     "contextPhrase": "...πᾶσαν τὴν οἰκουμένην",
-    "contextRu": "мир, (обитаемая) вселенная",
+    "contextRu": "...по всей обитаемой земле (вселенной)",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1813,7 +1813,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "перепись, регистрация",
     "frequency": 2,
     "contextPhrase": "αὕτη ἀπογραφὴ πρώτη ἐγένετο...",
-    "contextRu": "перепись, регистрация",
+    "contextRu": "эта перепись была первая...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1826,7 +1826,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "правлю, являюсь наместником",
     "frequency": 2,
     "contextPhrase": "...ἡγεμονεύοντος τῆς Συρίας Κυρηνίου",
-    "contextRu": "правлю, являюсь наместником",
+    "contextRu": "...в правление Квириния Сириею",
     "partOfSpeech": "verb"
   },
   {
@@ -1837,7 +1837,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "род, племя, семья",
     "frequency": 3,
     "contextPhrase": "...διὰ τὸ εἶναι αὐτὸν ἐξ οἴκου καὶ πατριᾶς Δαυίδ",
-    "contextRu": "род, племя, семья",
+    "contextRu": "и пошли все записываться на перепись...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1850,7 +1850,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "обручаю",
     "frequency": 3,
     "contextPhrase": "...τῇ ἐμνηστευμένῃ αὐτῷ...",
-    "contextRu": "обручаю",
+    "contextRu": "...обручённою ему женою...",
     "partOfSpeech": "verb"
   },
   {
@@ -1861,7 +1861,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "беременная",
     "frequency": 1,
     "contextPhrase": "...οὔσῃ ἐγκύῳ",
-    "contextRu": "беременная",
+    "contextRu": "...которая была беременна",
     "partOfSpeech": "adjective"
   },
   {
@@ -1872,7 +1872,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я рождаю",
     "frequency": 18,
     "contextPhrase": "...ἐπλήσθησαν αἱ ἡμέραι τοῦ τεκεῖν αὐτήν",
-    "contextRu": "я рождаю",
+    "contextRu": "...наступило время родить Ей",
     "partOfSpeech": "verb"
   },
   {
@@ -1883,7 +1883,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "первенец, перворожденный",
     "frequency": 8,
     "contextPhrase": "καὶ ἔτεκεν τὸν υἱὸν αὐτῆς τὸν πρωτότοκον...",
-    "contextRu": "первенец, перворожденный",
+    "contextRu": "и родила Сына своего Первенца...",
     "partOfSpeech": "adjective"
   },
   {
@@ -1894,7 +1894,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "пеленаю, обвиваю пеленами",
     "frequency": 2,
     "contextPhrase": "...καὶ ἐσπαργάνωσεν αὐτόν...",
-    "contextRu": "пеленаю, обвиваю пеленами",
+    "contextRu": "...и спеленала Его...",
     "partOfSpeech": "verb"
   },
   {
@@ -1905,7 +1905,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "возлагаю, укладываю",
     "frequency": 6,
     "contextPhrase": "...καὶ ἀνέκλινεν αὐτὸν ἐν φάτνῃ...",
-    "contextRu": "возлагаю, укладываю",
+    "contextRu": "...и положила Его в ясли...",
     "partOfSpeech": "verb"
   },
   {
@@ -1916,7 +1916,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "ясли, кормушка",
     "frequency": 4,
     "contextPhrase": "...καὶ ἀνέκλινεν αὐτὸν ἐν φάτνῃ...",
-    "contextRu": "ясли, кормушка",
+    "contextRu": "...и положила Его в ясли...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1929,7 +1929,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "гостиница, постоялый двор, комната",
     "frequency": 3,
     "contextPhrase": "...διότι οὐκ ἦν αὐτοῖς τόπος ἐν τῷ καταλύματι",
-    "contextRu": "гостиница, постоялый двор, комната",
+    "contextRu": "...потому что не было им места в гостинице",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -1942,7 +1942,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "пастух, пастырь",
     "frequency": 18,
     "contextPhrase": "Καὶ ποιμένες ἦσαν ἐν τῇ χώρᾳ...",
-    "contextRu": "пастух, пастырь",
+    "contextRu": "В той стране были пастухи...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -1955,7 +1955,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "живу в поле, ночую под открытым небом",
     "frequency": 1,
     "contextPhrase": "...ἦσαν ἐν τῇ χώρᾳ τῇ αὐτῇ ἀγραυλοῦντες...",
-    "contextRu": "живу в поле, ночую под открытым небом",
+    "contextRu": "...были на поле в той стране...",
     "partOfSpeech": "verb"
   },
   {
@@ -1966,7 +1966,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я охраняю, сторожу",
     "frequency": 31,
     "contextPhrase": "...καὶ φυλάσσοντες φυλακὰς τῆς νυκτὸς...",
-    "contextRu": "я охраняю, сторожу",
+    "contextRu": "...содержали ночную стражу...",
     "partOfSpeech": "verb"
   },
   {
@@ -1977,7 +1977,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "темница, стража",
     "frequency": 47,
     "contextPhrase": "...φυλάσσοντες φυλακὰς τῆς νυκτὸς...",
-    "contextRu": "темница, стража",
+    "contextRu": "...содержали ночную стражу...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -1990,7 +1990,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "стадо",
     "frequency": 5,
     "contextPhrase": "...ἐπὶ τὴν ποίμνην αὐτῶν",
-    "contextRu": "стадо",
+    "contextRu": "...у стада своего",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2003,7 +2003,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я предстою, встречаю",
     "frequency": 21,
     "contextPhrase": "καὶ ἄγγελος κυρίου ἐπέστη αὐτοῖς...",
-    "contextRu": "я предстою, встречаю",
+    "contextRu": "предстал им Ангел Господень...",
     "partOfSpeech": "verb"
   },
   {
@@ -2014,7 +2014,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "озаряю кругом, сияю вокруг",
     "frequency": 2,
     "contextPhrase": "...καὶ δόξα κυρίου περιέλαμψεν αὐτούς...",
-    "contextRu": "озаряю кругом, сияю вокруг",
+    "contextRu": "...и слава Господня осияла их...",
     "partOfSpeech": "verb"
   },
   {
@@ -2025,7 +2025,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "Спаситель",
     "frequency": 24,
     "contextPhrase": "ὅτι ἐτέχθη ὑμῖν σήμερον σωτὴρ...",
-    "contextRu": "Спаситель",
+    "contextRu": "ибо ныне родился вам Спаситель...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -2038,7 +2038,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "младенец",
     "frequency": 8,
     "contextPhrase": "...εὑρήσετε βρέφος ἐσπαργανωμένον...",
-    "contextRu": "младенец",
+    "contextRu": "...найдёте Младенца в пеленах...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -2051,7 +2051,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "внезапно, вдруг",
     "frequency": 5,
     "contextPhrase": "καὶ ἐξαίφνης ἐγένετο σὺν τῷ ἀγγέλῳ...",
-    "contextRu": "внезапно, вдруг",
+    "contextRu": "и внезапно явилось с Ангелом...",
     "partOfSpeech": "adverb"
   },
   {
@@ -2062,7 +2062,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "толпа",
     "frequency": 31,
     "contextPhrase": "...πλῆθος στρατιᾶς οὐρανίου...",
-    "contextRu": "толпа",
+    "contextRu": "...многочисленное воинство небесное...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -2075,7 +2075,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "воинство",
     "frequency": 2,
     "contextPhrase": "...πλῆθος στρατιᾶς οὐρανίου...",
-    "contextRu": "воинство",
+    "contextRu": "...многочисленное воинство небесное...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2088,7 +2088,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "хвалю, прославляю",
     "frequency": 8,
     "contextPhrase": "...αἰνούντων τὸν θεὸν καὶ λεγόντων",
-    "contextRu": "хвалю, прославляю",
+    "contextRu": "...славящее Бога и взывающее",
     "partOfSpeech": "verb"
   },
   {
@@ -2099,7 +2099,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "высший",
     "frequency": 13,
     "contextPhrase": "Δόξα ἐν ὑψίστοις θεῷ...",
-    "contextRu": "высший",
+    "contextRu": "Слава в вышних Богу...",
     "partOfSpeech": "adjective"
   },
   {
@@ -2110,7 +2110,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "благоволение, добрая воля",
     "frequency": 9,
     "contextPhrase": "...ἐν ἀνθρώποις εὐδοκίας",
-    "contextRu": "благоволение, добрая воля",
+    "contextRu": "...в человеках благоволение",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2123,7 +2123,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я прохожу, иду сквозь",
     "frequency": 43,
     "contextPhrase": "Διέλθωμεν δὴ ἕως Βηθλέεμ...",
-    "contextRu": "я прохожу, иду сквозь",
+    "contextRu": "Пойдём в Вифлеем...",
     "partOfSpeech": "verb"
   },
   {
@@ -2134,7 +2134,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "делаю известным",
     "frequency": 25,
     "contextPhrase": "...ὃ ὁ κύριος ἐγνώρισεν ἡμῖν",
-    "contextRu": "делаю известным",
+    "contextRu": "...о чём возвестил нам Господь",
     "partOfSpeech": "verb"
   },
   {
@@ -2145,7 +2145,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "спешу, поспешаю",
     "frequency": 6,
     "contextPhrase": "καὶ ἦλθαν σπεύσαντες...",
-    "contextRu": "спешу, поспешаю",
+    "contextRu": "и, поспешив, пришли...",
     "partOfSpeech": "verb"
   },
   {
@@ -2156,7 +2156,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "отыскиваю, нахожу",
     "frequency": 2,
     "contextPhrase": "...καὶ ἀνεῦραν τήν τε Μαριὰμ...",
-    "contextRu": "отыскиваю, нахожу",
+    "contextRu": "...и нашли Марию и Иосифа...",
     "partOfSpeech": "verb"
   },
   {
@@ -2167,7 +2167,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я изумляюсь, удивляюсь",
     "frequency": 43,
     "contextPhrase": "καὶ πάντες οἱ ἀκούσαντες ἐθαύμασαν...",
-    "contextRu": "я изумляюсь, удивляюсь",
+    "contextRu": "и все слышавшие дивились...",
     "partOfSpeech": "verb"
   },
   {
@@ -2178,7 +2178,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "сохраняю, сберегаю",
     "frequency": 3,
     "contextPhrase": "ἡ δὲ Μαριὰμ πάντα συνετήρει τὰ ῥήματα ταῦτα...",
-    "contextRu": "сохраняю, сберегаю",
+    "contextRu": "А Мария сохраняла все слова сии...",
     "partOfSpeech": "verb"
   },
   {
@@ -2189,7 +2189,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "слагаю, сопоставляю, обдумываю",
     "frequency": 6,
     "contextPhrase": "...συμβάλλουσα ἐν τῇ καρδίᾳ αὐτῆς",
-    "contextRu": "слагаю, сопоставляю, обдумываю",
+    "contextRu": "...слагая в сердце Своём",
     "partOfSpeech": "verb"
   },
   {
@@ -2200,7 +2200,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я возвращаюсь",
     "frequency": 35,
     "contextPhrase": "καὶ ὑπέστρεψαν οἱ ποιμένες...",
-    "contextRu": "я возвращаюсь",
+    "contextRu": "и возвратились пастухи, славя...",
     "partOfSpeech": "verb"
   },
   {
@@ -2211,7 +2211,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "восемь",
     "frequency": 9,
     "contextPhrase": "Καὶ ὅτε ἐπλήσθησαν ἡμέραι ὀκτὼ...",
-    "contextRu": "восемь",
+    "contextRu": "По прошествии восьми дней...",
     "partOfSpeech": "noun"
   },
   {
@@ -2222,7 +2222,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я обрезываю",
     "frequency": 17,
     "contextPhrase": "...τοῦ περιτεμεῖν αὐτόν...",
-    "contextRu": "я обрезываю",
+    "contextRu": "...когда надлежало обрезать Его...",
     "partOfSpeech": "verb"
   },
   {
@@ -2233,7 +2233,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я беру, зачинаю",
     "frequency": 16,
     "contextPhrase": "...πρὸ τοῦ συλλημφθῆναι αὐτὸν ἐν τῇ κοιλίᾳ",
-    "contextRu": "я беру, зачинаю",
+    "contextRu": "А когда исполнились дни очищения...",
     "partOfSpeech": "verb"
   },
   {
@@ -2244,7 +2244,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "очищение",
     "frequency": 7,
     "contextPhrase": "αἱ ἡμέραι τοῦ καθαρισμοῦ αὐτῶν...",
-    "contextRu": "очищение",
+    "contextRu": "...принесли Его в Иерусалим...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -2257,7 +2257,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я возвожу",
     "frequency": 24,
     "contextPhrase": "...ἀνήγαγον αὐτὸν εἰς Ἱεροσόλυμα...",
-    "contextRu": "я возвожу",
+    "contextRu": "...представить пред Господа",
     "partOfSpeech": "verb"
   },
   {
@@ -2268,7 +2268,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я присутствую, стою рядом",
     "frequency": 41,
     "contextPhrase": "...παραστῆσαι τῷ κυρίῳ",
-    "contextRu": "я присутствую, стою рядом",
+    "contextRu": "Всякий первенец мужеского пола, разверзающий ложесна...",
     "partOfSpeech": "verb"
   },
   {
@@ -2279,7 +2279,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "разверзаю, открываю",
     "frequency": 8,
     "contextPhrase": "Πᾶν ἄρσεν διανοῖγον μήτραν...",
-    "contextRu": "разверзаю, открываю",
+    "contextRu": "...разверзающий ложесна...",
     "partOfSpeech": "verb"
   },
   {
@@ -2290,7 +2290,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "мужской пол, мужеский",
     "frequency": 9,
     "contextPhrase": "Πᾶν ἄρσεν διανοῖγον μήτραν...",
-    "contextRu": "мужской пол, мужеский",
+    "contextRu": "...посвящённым Господу наречётся",
     "partOfSpeech": "adjective"
   },
   {
@@ -2301,7 +2301,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "утроба, ложесна",
     "frequency": 2,
     "contextPhrase": "...διανοῖγον μήτραν ἅγιον τῷ κυρίῳ κληθήσεται",
-    "contextRu": "утроба, ложесна",
+    "contextRu": "...пару горлиц или двух птенцов голубиных",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2314,7 +2314,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "жертва",
     "frequency": 28,
     "contextPhrase": "...καὶ τοῦ δοῦναι θυσίαν...",
-    "contextRu": "жертва",
+    "contextRu": "...пару горлиц...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2327,7 +2327,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "пара, чета",
     "frequency": 2,
     "contextPhrase": "...ζεῦγος τρυγόνων...",
-    "contextRu": "пара, чета",
+    "contextRu": "...или двух птенцов голубиных",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -2340,7 +2340,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "горлица",
     "frequency": 1,
     "contextPhrase": "...ζεῦγος τρυγόνων...",
-    "contextRu": "горлица",
+    "contextRu": "...человек этот был праведен и благочестив...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2353,7 +2353,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "птенец",
     "frequency": 1,
     "contextPhrase": "...ἢ δύο νοσσοὺς περιστερῶν",
-    "contextRu": "птенец",
+    "contextRu": "...чающий утешения Израилева...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -2366,7 +2366,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "голубь",
     "frequency": 10,
     "contextPhrase": "...δύο νοσσοὺς περιστερῶν",
-    "contextRu": "голубь",
+    "contextRu": "...утешения Израилева...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2379,7 +2379,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "благочестивый, богобоязненный",
     "frequency": 4,
     "contextPhrase": "...ἄνθρωπος οὗτος δίκαιος καὶ εὐλαβής...",
-    "contextRu": "благочестивый, богобоязненный",
+    "contextRu": "ему было предсказано Духом Святым...",
     "partOfSpeech": "adjective"
   },
   {
@@ -2390,7 +2390,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я ожидаю, принимаю",
     "frequency": 14,
     "contextPhrase": "...προσδεχόμενος παράκλησιν τοῦ Ἰσραήλ...",
-    "contextRu": "я ожидаю, принимаю",
+    "contextRu": "...по законному обычаю...",
     "partOfSpeech": "verb"
   },
   {
@@ -2401,7 +2401,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "увещевание, утешение",
     "frequency": 29,
     "contextPhrase": "...προσδεχόμενος παράκλησιν τοῦ Ἰσραήλ...",
-    "contextRu": "увещевание, утешение",
+    "contextRu": "он взял Его на руки...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2414,7 +2414,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "получаю откровение от Бога",
     "frequency": 9,
     "contextPhrase": "καὶ ἦν αὐτῷ κεχρηματισμένον ὑπὸ τοῦ πνεύματος...",
-    "contextRu": "получаю откровение от Бога",
+    "contextRu": "...на руки (в объятия)...",
     "partOfSpeech": "verb"
   },
   {
@@ -2425,7 +2425,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "приучаю; сущ.: обычай",
     "frequency": 1,
     "contextPhrase": "...κατὰ τὸ εἰθισμένον τοῦ νόμου...",
-    "contextRu": "приучаю; сущ.: обычай",
+    "contextRu": "Ныне отпускаешь раба Твоего, Владыко...",
     "partOfSpeech": "verb"
   },
   {
@@ -2436,7 +2436,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "руки, объятия",
     "frequency": 1,
     "contextPhrase": "...εἰς τὰς ἀγκάλας...",
-    "contextRu": "руки, объятия",
+    "contextRu": "...Владыко, по слову Твоему, с миром",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2449,7 +2449,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я благословляю",
     "frequency": 42,
     "contextPhrase": "...καὶ εὐλόγησεν τὸν θεὸν...",
-    "contextRu": "я благословляю",
+    "contextRu": "ибо видели очи мои спасение Твоё",
     "partOfSpeech": "verb"
   },
   {
@@ -2460,7 +2460,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "господин, владыка",
     "frequency": 10,
     "contextPhrase": "...δέσποτα, κατὰ τὸ ῥῆμά σου ἐν εἰρήνῃ",
-    "contextRu": "господин, владыка",
+    "contextRu": "...которое Ты уготовал пред лицом всех народов",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -2473,7 +2473,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "спасение",
     "frequency": 4,
     "contextPhrase": "ὅτι εἶδον οἱ ὀφθαлμοί μου τὸ σωτήριόν σου",
-    "contextRu": "спасение",
+    "contextRu": "свет к просвещению язычников...",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -2486,7 +2486,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я подготавливаю",
     "frequency": 40,
     "contextPhrase": "ὃ ἡτοίμασας κατὰ πρόσωπον πάντων...",
-    "contextRu": "я подготавливаю",
+    "contextRu": "...и славу народа Твоего Израиля",
     "partOfSpeech": "verb"
   },
   {
@@ -2497,7 +2497,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "откровение",
     "frequency": 18,
     "contextPhrase": "φῶς εἰς ἀποκάλυψιν ἐθνῶν...",
-    "contextRu": "откровение",
+    "contextRu": "...дивились сказанному о Нём",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2510,7 +2510,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я лежу, нахожусь",
     "frequency": 24,
     "contextPhrase": "Ἰδοὺ οὗτος κεῖται εἰς πτῶσιν καὶ ἀνάστασιν...",
-    "contextRu": "я лежу, нахожусь",
+    "contextRu": "...се, лежит Сей на падение...",
     "partOfSpeech": "noun"
   },
   {
@@ -2521,7 +2521,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "падение",
     "frequency": 2,
     "contextPhrase": "...εἰς πτῶσιν καὶ ἀνάστασιν πολλῶν...",
-    "contextRu": "падение",
+    "contextRu": "...на падение и на восстание многих...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2534,7 +2534,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "воскресение",
     "frequency": 42,
     "contextPhrase": "...καὶ ἀνάστασιν πολλῶν ἐν τῷ Ἰσραὴλ...",
-    "contextRu": "воскресение",
+    "contextRu": "...и в предмет пререканий",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2547,7 +2547,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "противоречу, спорю",
     "frequency": 11,
     "contextPhrase": "...καὶ εἰς σημεῖον ἀντιλεγόμενον",
-    "contextRu": "противоречу, спорю",
+    "contextRu": "...в предмет споров и пререканий",
     "partOfSpeech": "verb"
   },
   {
@@ -2558,7 +2558,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "меч, сабля",
     "frequency": 7,
     "contextPhrase": "καὶ σοῦ [δὲ] αὐτῆς τὴν ψυχὴν διελεύσεται ῥομφαία...",
-    "contextRu": "меч, сабля",
+    "contextRu": "и Тебе Самой оружие пройдёт душу...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2571,7 +2571,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я открываю",
     "frequency": 26,
     "contextPhrase": "...ὅπως ἂν ἀποκαλυφθῶσιν ἐκ πολλῶν καρδιῶν...",
-    "contextRu": "я открываю",
+    "contextRu": "...оружие (меч) пройдёт душу...",
     "partOfSpeech": "verb"
   },
   {
@@ -2582,7 +2582,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "рассуждение, сомнение",
     "frequency": 14,
     "contextPhrase": "...διαλογισμοί",
-    "contextRu": "рассуждение, сомнение",
+    "contextRu": "...да откроются помышления многих сердец",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -2595,7 +2595,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "пророчица",
     "frequency": 2,
     "contextPhrase": "Καὶ ἦν Ἄννα προφῆτις...",
-    "contextRu": "пророчица",
+    "contextRu": "Тут была также Анна пророчица...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2608,7 +2608,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "племя, колено",
     "frequency": 31,
     "contextPhrase": "...ἐκ φυλῆς Ἀσήρ...",
-    "contextRu": "племя, колено",
+    "contextRu": "...дочь Фануилова, от колена Асирова...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2621,7 +2621,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "продвигаюсь вперед, преклонных лет",
     "frequency": 5,
     "contextPhrase": "...αὕτη προβεβηκυῖα ἐν ἡμέραις πολλαῖς...",
-    "contextRu": "продвигаюсь вперед, преклонных лет",
+    "contextRu": "...от колена Асирова...",
     "partOfSpeech": "verb"
   },
   {
@@ -2632,7 +2632,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "девство",
     "frequency": 1,
     "contextPhrase": "...ζήσασα μετὰ ἀνδρὸς ἔτη ἑπτὰ ἀπὸ τῆς παρθενίας αὐτῆς",
-    "contextRu": "девство",
+    "contextRu": "...достигшая глубокой старости...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2645,7 +2645,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "вдова",
     "frequency": 26,
     "contextPhrase": "καὶ αὐτὴ χήρα ἕως ἐτῶν ὀγδοήκοντα τεσσάρων...",
-    "contextRu": "вдова",
+    "contextRu": "...прожив с мужем семь лет...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2658,7 +2658,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я ухожу, удаляюсь",
     "frequency": 14,
     "contextPhrase": "...ἣ οὐκ ἀφίστατο τοῦ ἱεροῦ...",
-    "contextRu": "я ухожу, удаляюсь",
+    "contextRu": "...от девства своего",
     "partOfSpeech": "verb"
   },
   {
@@ -2669,7 +2669,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "пост",
     "frequency": 8,
     "contextPhrase": "...νηστείαις καὶ δεήσεσιν λατρεύουσα...",
-    "contextRu": "пост",
+    "contextRu": "...вдова лет восьмидесяти четырёх...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2682,7 +2682,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "просьба, прошение, молитва",
     "frequency": 18,
     "contextPhrase": "...νηστείαις καὶ δεήσεσιν λατρεύουσα...",
-    "contextRu": "просьба, прошение, молитва",
+    "contextRu": "...не отходила от храма...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2695,7 +2695,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я служу, поклоняюсь",
     "frequency": 21,
     "contextPhrase": "...καὶ δεήσεσιν λατρεύουσα νύκτα καὶ ἡμέραν",
-    "contextRu": "я служу, поклоняюсь",
+    "contextRu": "...постом и молитвою служа Богу день и ночь",
     "partOfSpeech": "verb"
   },
   {
@@ -2706,7 +2706,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "славлю, воздаю хвалу",
     "frequency": 1,
     "contextPhrase": "...ἀνθωμολογεῖτο τῷ θεῷ...",
-    "contextRu": "славлю, воздаю хвалу",
+    "contextRu": "...славила Господа...",
     "partOfSpeech": "verb"
   },
   {
@@ -2717,7 +2717,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "искупление, избавление",
     "frequency": 3,
     "contextPhrase": "...προσδεχομένοις λύτρωσιν Ἱερουσαλήμ",
-    "contextRu": "искупление, избавление",
+    "contextRu": "...ожидавшим избавления в Иерусалиме",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2730,7 +2730,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я заканчиваю, совершаю",
     "frequency": 28,
     "contextPhrase": "Καὶ ὡς ἐτέλεσαν πάντα τὰ κατὰ τὸν νόμον...",
-    "contextRu": "я заканчиваю, совершаю",
+    "contextRu": "И когда они совершили всё по закону...",
     "partOfSpeech": "verb"
   },
   {
@@ -2741,7 +2741,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я выращиваю, возрастаю",
     "frequency": 23,
     "contextPhrase": "Τὸ δὲ παιδίον ηὔξανεν...",
-    "contextRu": "я выращиваю, возрастаю",
+    "contextRu": "Младенец же возрастал...",
     "partOfSpeech": "verb"
   },
   {
@@ -2752,7 +2752,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "укрепляюсь, становлюсь сильным",
     "frequency": 4,
     "contextPhrase": "...καὶ ἐκραταιοῦτο πληρούμενον σοφίᾳ...",
-    "contextRu": "укрепляюсь, становлюсь сильным",
+    "contextRu": "...и укреплялся духом, исполняясь премудрости...",
     "partOfSpeech": "verb"
   },
   {
@@ -2763,7 +2763,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "родитель",
     "frequency": 20,
     "contextPhrase": "Καὶ ἐπορεύοντο οἱ γονεῖς αὐτοῦ κατ᾽ ἔτος...",
-    "contextRu": "родитель",
+    "contextRu": "Каждый год родители Его ходили...",
     "partOfSpeech": "noun",
     "gender": "masculine",
     "article": "ὁ"
@@ -2776,7 +2776,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "праздник",
     "frequency": 27,
     "contextPhrase": "...εἰς Ἱερουσαλὴμ τῇ ἑορτῇ τοῦ πάσχα",
-    "contextRu": "праздник",
+    "contextRu": "...в Иерусалим на праздник Пасхи",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2789,7 +2789,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "нескл.: пасха",
     "frequency": 29,
     "contextPhrase": "...τῇ ἑορτῇ τοῦ πάσχα",
-    "contextRu": "нескл.: пасха",
+    "contextRu": "...на праздник Пасхи",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -2802,7 +2802,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "обычай",
     "frequency": 12,
     "contextPhrase": "...κατὰ τὸ ἔθος τῆς ἑορτῆς",
-    "contextRu": "обычай",
+    "contextRu": "...по обычаю праздника",
     "partOfSpeech": "noun",
     "gender": "neuter",
     "article": "τό"
@@ -2815,7 +2815,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я исполняю, делаю совершенным",
     "frequency": 23,
     "contextPhrase": "καὶ τελειωσάντων τὰς ἡμέρας...",
-    "contextRu": "я исполняю, делаю совершенным",
+    "contextRu": "когда же, по окончании дней праздника...",
     "partOfSpeech": "verb"
   },
   {
@@ -2826,7 +2826,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я переношу, терплю; остаюсь",
     "frequency": 18,
     "contextPhrase": "...ὑπέμεινεν Ἰησοῦς ὁ παῖς ἐν Ἱερουσαλήμ...",
-    "contextRu": "я переношу, терплю; остаюсь",
+    "contextRu": "...остался Отрок Иисус в Иерусалиме...",
     "partOfSpeech": "verb"
   },
   {
@@ -2837,7 +2837,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я предполагаю",
     "frequency": 15,
     "contextPhrase": "νομίσαντες δὲ αὐτὸν εἶναι ἐν τῇ συνοδίᾳ...",
-    "contextRu": "я предполагаю",
+    "contextRu": "думали же, что Он идёт с другими...",
     "partOfSpeech": "verb"
   },
   {
@@ -2848,7 +2848,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "караван, попутчики",
     "frequency": 1,
     "contextPhrase": "...εἶναι ἐν τῇ συνοδίᾳ...",
-    "contextRu": "караван, попутчики",
+    "contextRu": "...идёт с попутчиками (с караваном)...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2861,7 +2861,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "разыскиваю, тщательно ищу",
     "frequency": 3,
     "contextPhrase": "...καὶ ἀνεζήτουν αὐτὸν ἐν τοῖς συγγενεῦσιν...",
-    "contextRu": "разыскиваю, тщательно ищу",
+    "contextRu": "...стали искать Его между родственниками...",
     "partOfSpeech": "verb"
   },
   {
@@ -2872,7 +2872,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "родственный; сущ.: родственник",
     "frequency": 11,
     "contextPhrase": "...ἐν τοῖς συγγενεῦσιν καὶ τοῖς γνωστοῖς",
-    "contextRu": "родственный; сущ.: родственник",
+    "contextRu": "...между родственниками и знакомыми",
     "partOfSpeech": "adjective"
   },
   {
@@ -2883,7 +2883,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "известный",
     "frequency": 15,
     "contextPhrase": "...καὶ τοῖς γνωστοῖς",
-    "contextRu": "известный",
+    "contextRu": "...и между знакомыми",
     "partOfSpeech": "noun"
   },
   {
@@ -2894,7 +2894,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "сижу",
     "frequency": 7,
     "contextPhrase": "...εὗρον αὐτὸν ἐν τῷ ἱερῷ καθεζόμενον...",
-    "contextRu": "сижу",
+    "contextRu": "...нашли Его в храме, сидящего посреди учителей...",
     "partOfSpeech": "verb"
   },
   {
@@ -2905,7 +2905,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я удивляюсь, поражаюсь",
     "frequency": 17,
     "contextPhrase": "ἐξίσταντο δὲ πάντες οἱ ἀκούοντες αὐτοῦ...",
-    "contextRu": "я удивляюсь, поражаюсь",
+    "contextRu": "все слушавшие Его дивились...",
     "partOfSpeech": "verb"
   },
   {
@@ -2916,7 +2916,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "разум, понимание",
     "frequency": 7,
     "contextPhrase": "...ἐπὶ τῇ συνέσει καὶ ταῖς ἀποκρίσεσιν αὐτοῦ",
-    "contextRu": "разум, понимание",
+    "contextRu": "...разуму и ответам Его",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2929,7 +2929,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "ответ",
     "frequency": 4,
     "contextPhrase": "...καὶ ταῖς ἀποκρίσεσιν αὐτοῦ",
-    "contextRu": "ответ",
+    "contextRu": "...и ответам Его",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
@@ -2942,7 +2942,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "удивляюсь, поражаюсь",
     "frequency": 13,
     "contextPhrase": "καὶ ἰδόντες αὐτὸν ἐξεπλάγησαν...",
-    "contextRu": "удивляюсь, поражаюсь",
+    "contextRu": "и, увидев Его, изумились...",
     "partOfSpeech": "verb"
   },
   {
@@ -2953,7 +2953,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "мучаюсь, страдаю",
     "frequency": 4,
     "contextPhrase": "...ὁ πατήρ σου κἀγὼ ὀδυνώμενοι ἐζητοῦμέν σε",
-    "contextRu": "мучаюсь, страдаю",
+    "contextRu": "...отец Твой и Я с великою скорбью искали Тебя",
     "partOfSpeech": "verb"
   },
   {
@@ -2964,7 +2964,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я понимаю",
     "frequency": 26,
     "contextPhrase": "καὶ αὐτοὶ οὐ συνῆκαν τὸ ῥῆμα...",
-    "contextRu": "я понимаю",
+    "contextRu": "но они не поняли сказанных Им слов",
     "partOfSpeech": "verb"
   },
   {
@@ -2975,7 +2975,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "я подчиняю",
     "frequency": 38,
     "contextPhrase": "...καὶ ἦν ὑποτασσόμενος αὐτοῖς",
-    "contextRu": "я подчиняю",
+    "contextRu": "...и был в повиновении у них",
     "partOfSpeech": "verb"
   },
   {
@@ -2986,7 +2986,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "сохраняю, соблюдаю",
     "frequency": 2,
     "contextPhrase": "...ἡ μήτηρ αὐτοῦ διετήρει πάντα τὰ ῥήματα...",
-    "contextRu": "сохраняю, соблюдаю",
+    "contextRu": "...Матерь Его сохраняла все слова сии...",
     "partOfSpeech": "verb"
   },
   {
@@ -2997,7 +2997,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "преуспеваю, продвигаюсь вперед",
     "frequency": 6,
     "contextPhrase": "Καὶ Ἰησοῦς προέκοπτεν [ἐν τῇ] σοφίᾳ...",
-    "contextRu": "преуспеваю, продвигаюсь вперед",
+    "contextRu": "Иисус же преуспевал в премудрости...",
     "partOfSpeech": "verb"
   },
   {
@@ -3008,7 +3008,7 @@ export const LUKE_CHAPTER_2_WORDS_RAW: LukeRawWord[] = [
     "translation": "возраст, рост",
     "frequency": 8,
     "contextPhrase": "...καὶ ἡλικίᾳ καὶ χάριτι παρὰ θεῷ...",
-    "contextRu": "возраст, рост",
+    "contextRu": "...и возрасте и в любви у Бога...",
     "partOfSpeech": "noun",
     "gender": "feminine",
     "article": "ἡ"
