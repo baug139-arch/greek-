@@ -36,6 +36,7 @@ import { getMnemonicForWord } from '../utils/mnemonics';
 import { EditableMnemonic } from "./EditableMnemonic";
 import { checkAnswerFlexible } from "../utils/textUtils";
 import { GreekKeyboard } from './GreekKeyboard';
+import { SRS_3_STAGES, formatIntervalCountdown } from '../utils/srsEngine';
 
 const GREEK_DISTRACTOR_CHARS = ['α', 'ε', 'ι', 'ο', 'υ', 'ν', 'ς', 'τ', 'ρ', 'λ', 'μ', 'κ', 'π', 'σ', 'η', 'ω'];
 
@@ -89,6 +90,7 @@ interface DuolingoEngineProps {
   unmasteredWords?: GreekWord[];
   customMnemonics?: Record<string, string>;
   completedChunkRounds?: Record<string, number>;
+  completedChunkTimes?: Record<string, number>;
   onUpdateMnemonic?: (wordId: string, mnemonic: string) => void;
   onComplete: (
     scorePercent: number, 
@@ -142,6 +144,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   unmasteredWords = [],
   customMnemonics,
   completedChunkRounds,
+  completedChunkTimes,
   onUpdateMnemonic,
   onComplete,
   onExit,
@@ -183,6 +186,29 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   }, [initialStageIndex]);
 
   const currentChunkRound = selectedStageOverride !== null ? selectedStageOverride : defaultChunkRound;
+
+  // Check if current session is an interim warmup (started before cooldown interval elapsed)
+  const isWarmupSession = useMemo(() => {
+    if (!sectionId || currentChunkIndex === undefined) return false;
+    const chunkKey = `${sectionId}_${currentChunkIndex}`;
+    const rawRound = completedChunkRounds?.[chunkKey] ?? 0;
+    if (rawRound === 0 || rawRound >= 3) return false;
+    const lastTime = completedChunkTimes?.[chunkKey];
+    if (!lastTime) return false;
+    const stageConfig = SRS_3_STAGES[rawRound - 1] || SRS_3_STAGES[0];
+    const elapsed = Date.now() - lastTime;
+    return elapsed < stageConfig.intervalMs;
+  }, [sectionId, currentChunkIndex, completedChunkRounds, completedChunkTimes]);
+
+  const warmupRemainingText = useMemo(() => {
+    if (!isWarmupSession || !sectionId || currentChunkIndex === undefined) return '';
+    const chunkKey = `${sectionId}_${currentChunkIndex}`;
+    const rawRound = completedChunkRounds?.[chunkKey] ?? 1;
+    const lastTime = completedChunkTimes?.[chunkKey] || Date.now();
+    const stageConfig = SRS_3_STAGES[rawRound - 1] || SRS_3_STAGES[0];
+    const remainingMs = Math.max(0, stageConfig.intervalMs - (Date.now() - lastTime));
+    return formatIntervalCountdown(remainingMs);
+  }, [isWarmupSession, sectionId, currentChunkIndex, completedChunkRounds, completedChunkTimes]);
   // Track words carrying over for reinforcement in next chunks
   const pendingReviewWordsRef = useRef<GreekWord[]>(unmasteredWords || []);
 
@@ -1306,34 +1332,46 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             </div>
           </div>
 
-          {/* Strict SRS Spaced Repetition Notification Card (Option A) */}
-          <div className="border border-[#A2C7A8] bg-[#F0F4F1] p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 sm:space-y-2">
-            <div className="flex items-center gap-2 text-xs font-sans font-bold text-[#2D4A32]">
-              <Brain className="w-4 h-4 text-[#2D4A32] shrink-0" />
-              {currentChunkRound === 0 ? (
-                <span>⏳ 2-й этап закрепит эти слова через 45 минут</span>
-              ) : currentChunkRound === 1 ? (
-                <span>⏳ 3-й этап (Экспресс-контроль) откроется через 24 часа</span>
-              ) : (
-                <span>✅ Слова перешли в долговременную память (Статус: Выучено)</span>
-              )}
+          {/* Spaced repetition interval note / Warmup note */}
+          {isWarmupSession ? (
+            <div className="border border-amber-300 bg-amber-50 p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 sm:space-y-2 shadow-2xs">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-amber-900">
+                <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>⏱ Внезачетная разминка завершена</span>
+              </div>
+              <p className="text-[11px] font-sans text-amber-950/85 leading-relaxed">
+                Вы отлично освежили слова в памяти! По методике интервального повторения, официальный зачетный переход на следующий этап откроется через <strong>{warmupRemainingText}</strong>.
+              </p>
             </div>
-            <p className="text-[11px] font-sans text-[#3A4A3E] leading-relaxed">
-              {currentChunkRound === 0 ? (
-                <>
-                  По методике интервального повторения Эббингауза, мозгу требуется время для закрепления. Эта порция переведена в режим ожидания. <strong>Повторение станет доступно в кабинете через 45 минут.</strong> Сейчас вы можете сделать паузу или начать учить следующую порцию новых слов.
-                </>
-              ) : currentChunkRound === 1 ? (
-                <>
-                  Интервальный контроль пройден! Финальное повторение откроется завтра в кабинете студента.
-                </>
-              ) : (
-                <>
-                  Все 3 этапа интервального повторения успешно пройдены. Слова зафиксированы в долговременной памяти.
-                </>
-              )}
-            </p>
-          </div>
+          ) : (
+            <div className="border border-[#A2C7A8] bg-[#F0F4F1] p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 sm:space-y-2">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-[#2D4A32]">
+                <Brain className="w-4 h-4 text-[#2D4A32] shrink-0" />
+                {currentChunkRound === 0 ? (
+                  <span>⏳ 2-й этап закрепит эти слова через 45 минут</span>
+                ) : currentChunkRound === 1 ? (
+                  <span>⏳ 3-й этап (Экспресс-контроль) откроется через 24 часа</span>
+                ) : (
+                  <span>✅ Слова перешли в долговременную память (Статус: Выучено)</span>
+                )}
+              </div>
+              <p className="text-[11px] font-sans text-[#3A4A3E] leading-relaxed">
+                {currentChunkRound === 0 ? (
+                  <>
+                    По методике интервального повторения Эббингауза, мозгу требуется время для закрепления. Эта порция переведена в режим ожидания. <strong>Повторение станет доступно в кабинете через 45 минут.</strong> Сейчас вы можете сделать паузу или начать учить следующую порцию новых слов.
+                  </>
+                ) : currentChunkRound === 1 ? (
+                  <>
+                    Интервальный контроль пройден! Финальное повторение откроется завтра в кабинете студента.
+                  </>
+                ) : (
+                  <>
+                    Все 3 этапа интервального повторения успешно пройдены. Слова зафиксированы в долговременной памяти.
+                  </>
+                )}
+              </p>
+            </div>
+          )}
 
           {/* Learned Words in this chunk preview */}
           <div className="border border-[#E5E1DA] bg-white p-3 sm:p-4 text-left mb-4 sm:mb-5">
@@ -1475,15 +1513,27 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           </div>
 
           {/* Spaced repetition interval note */}
-          <div className="border border-[#A2C7A8] bg-[#F0F4F1] p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-sans font-bold text-[#2D4A32]">
-              <Brain className="w-4 h-4 text-[#2D4A32] shrink-0" />
-              <span>Интервальный контроль (Ebbinghaus Spaced Repetition)</span>
+          {isWarmupSession ? (
+            <div className="border border-amber-300 bg-amber-50 p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 shadow-2xs">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-amber-900">
+                <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>⏱ Внезачетная разминка завершена</span>
+              </div>
+              <p className="text-[11px] font-sans text-amber-950/85 leading-relaxed">
+                Вы отлично освежили слова в памяти! Полноценное зачетное повторение откроется в кабинете через <strong>{warmupRemainingText}</strong>, когда истечет интервал закрепления.
+              </p>
             </div>
-            <p className="text-[11px] font-sans text-[#3A4A3E] leading-relaxed">
-              1-й этап завершен. Для перехода на следующий этап памяти вернитесь в кабинет — через 45 минут откроется 2-й этап закрепления для повторения материала.
-            </p>
-          </div>
+          ) : (
+            <div className="border border-[#A2C7A8] bg-[#F0F4F1] p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-[#2D4A32]">
+                <Brain className="w-4 h-4 text-[#2D4A32] shrink-0" />
+                <span>Интервальный контроль (Ebbinghaus Spaced Repetition)</span>
+              </div>
+              <p className="text-[11px] font-sans text-[#3A4A3E] leading-relaxed">
+                Этап завершен. Следующее зачетное повторение станет доступно в личном кабинете после необходимой для закрепления памяти паузы.
+              </p>
+            </div>
+          )}
 
           {/* Mistakes Review */}
           <div className="text-left mb-4 sm:mb-5">
@@ -1604,6 +1654,19 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             </button>
 
           </div>
+
+          {/* Interim Warmup Status Banner */}
+          {isWarmupSession && (
+            <div className="bg-amber-50/90 border border-amber-200/80 text-amber-900 text-[10px] sm:text-xs px-2.5 py-1 rounded-sm flex items-center justify-between gap-2 shadow-2xs">
+              <div className="flex items-center gap-1.5 font-medium">
+                <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                <span>Внезачетная разминка (интервал закрепления ещё не истёк)</span>
+              </div>
+              <span className="font-bold text-amber-900 bg-amber-100/90 px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] whitespace-nowrap">
+                Зачёт через {warmupRemainingText}
+              </span>
+            </div>
+          )}
 
           {/* Bottom Row: Stage Selector (when mode is 'all'), Mode & Direction Selectors */}
           <div className={`items-center justify-between gap-1 sm:gap-2 font-sans pt-1 border-t border-[#E5E1DA]/50 ${

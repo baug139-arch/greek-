@@ -1060,24 +1060,56 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             const sectionKey = `john_${currentJohnBlock.chapterNumber}`;
             const completedChunkList = currentStudent.completedChunks?.[sectionKey] || [];
             
-            // Find next uncompleted chunk index (or 0 if all done)
+            // Find uncompleted, due, or cooldown chunks
+            let dueChunkIndex = -1;
+            let cooldownChunkIndex = -1;
+            let hasUncompletedChunk = false;
             let nextChunkIndex = 0;
+
             for (let i = 0; i < totalChapterChunks; i++) {
               if (!completedChunkList.includes(i)) {
-                nextChunkIndex = i;
-                break;
+                if (!hasUncompletedChunk) {
+                  nextChunkIndex = i;
+                  hasUncompletedChunk = true;
+                }
+              } else {
+                const s = getChunkSRSStatus(sectionKey, i, currentStudent, false, nowMs);
+                if (s.isDue && dueChunkIndex === -1) {
+                  dueChunkIndex = i;
+                }
+                if (s.inCooldown && cooldownChunkIndex === -1) {
+                  cooldownChunkIndex = i;
+                }
               }
             }
 
+            const activeActionChunk = hasUncompletedChunk
+              ? nextChunkIndex
+              : dueChunkIndex !== -1
+              ? dueChunkIndex
+              : cooldownChunkIndex !== -1
+              ? cooldownChunkIndex
+              : 0;
+
+            const activeSRS = getChunkSRSStatus(sectionKey, activeActionChunk, currentStudent, hasUncompletedChunk, nowMs);
+            const activeChunkStart = activeActionChunk * batchSize + 1;
+            const activeChunkEnd = Math.min(johnChapterWords.length, (activeActionChunk + 1) * batchSize);
+
+            let ctaText = `Повторить главу (все порции)`;
+            if (hasUncompletedChunk) {
+              ctaText = `Учить: Порция ${activeActionChunk + 1}/${totalChapterChunks} (${activeChunkStart}–${activeChunkEnd}) ➔`;
+            } else if (dueChunkIndex !== -1) {
+              ctaText = `🔔 Повторить: Порция ${activeActionChunk + 1}/${totalChapterChunks} (этап ${activeSRS.step}/3) ➔`;
+            } else if (cooldownChunkIndex !== -1) {
+              ctaText = `⏱ Разминка: Порция ${activeActionChunk + 1}/${totalChapterChunks} (зачёт через ${activeSRS.remainingText}) ➔`;
+            }
+
             // Find unmastered words strictly from ALREADY COMPLETED chunks of this section
-            const alreadyStudiedWords = johnChapterWords.slice(0, nextChunkIndex * batchSize);
+            const alreadyStudiedWords = johnChapterWords.slice(0, activeActionChunk * batchSize);
             const weakWordsFromPreviousChunks = alreadyStudiedWords.filter((w) => {
               const m = currentStudent.wordMastery[w.id];
               return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
             });
-
-            const nextChunkStart = nextChunkIndex * batchSize + 1;
-            const nextChunkEnd = Math.min(johnChapterWords.length, (nextChunkIndex + 1) * batchSize);
 
             return (
               <div className="space-y-4">
@@ -1089,25 +1121,21 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     currentStudent.wordMastery
                   )}
                   onQuickPractice={() => {
-                    const nextSRSStatus = getChunkSRSStatus(sectionKey, nextChunkIndex, currentStudent, true, nowMs);
-                    const nextStage = nextSRSStatus.step === 0 ? 0 : nextSRSStatus.step === 1 ? 1 : 2;
+                    const nextStage = activeSRS.step === 0 ? 0 : activeSRS.step === 1 ? 1 : 2;
+                    const titleSuffix = activeSRS.inCooldown ? ' (Внезачетная разминка)' : '';
                     onStartPractice(
-                      `${currentJohnBlock.chapterTitleRu} — Порция ${nextChunkIndex + 1}/${totalChapterChunks}`,
+                      `${currentJohnBlock.chapterTitleRu} — Порция ${activeActionChunk + 1}/${totalChapterChunks}${titleSuffix}`,
                       johnChapterWords,
                       BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
                       selectedTrainingMode,
                       selectedDirection,
                       sectionKey,
-                      nextChunkIndex,
+                      activeActionChunk,
                       weakWordsFromPreviousChunks,
                       nextStage
                     );
                   }}
-                  practiceButtonText={
-                    completedChunkList.length >= totalChapterChunks
-                      ? `Повторить главу (все порции)`
-                      : `Учить: Порция ${nextChunkIndex + 1}/${totalChapterChunks} (${nextChunkStart}–${nextChunkEnd}) ➔`
-                  }
+                  practiceButtonText={ctaText}
                 />
 
                 {/* Portions / Chunks Interactive Strip */}
@@ -1146,8 +1174,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                 return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
                               });
                               const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
+                              const titleSuffix = srsStatus.inCooldown ? ' (Внезачетная разминка)' : '';
                               onStartPractice(
-                                `${currentJohnBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd})`,
+                                `${currentJohnBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd})${titleSuffix}`,
                                 johnChapterWords,
                                 BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
                                 selectedTrainingMode,
@@ -1170,7 +1199,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                             {srsStatus.inCooldown && (
                               <span className="text-[9px] bg-[#E8DDCB] text-[#7A5A21] px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
                                 <Clock className="w-2.5 h-2.5" />
-                                {srsStatus.remainingText}
+                                {srsStatus.remainingText} (разминка)
                               </span>
                             )}
                             {srsStatus.isDue && (
@@ -1401,23 +1430,56 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             const sectionKey = `freq_${currentTier.id}`;
             const completedChunkList = currentStudent.completedChunks?.[sectionKey] || [];
 
+            // Find uncompleted, due, or cooldown chunks
+            let dueChunkIndex = -1;
+            let cooldownChunkIndex = -1;
+            let hasUncompletedChunk = false;
             let nextChunkIndex = 0;
+
             for (let i = 0; i < totalTierChunks; i++) {
               if (!completedChunkList.includes(i)) {
-                nextChunkIndex = i;
-                break;
+                if (!hasUncompletedChunk) {
+                  nextChunkIndex = i;
+                  hasUncompletedChunk = true;
+                }
+              } else {
+                const s = getChunkSRSStatus(sectionKey, i, currentStudent, false, nowMs);
+                if (s.isDue && dueChunkIndex === -1) {
+                  dueChunkIndex = i;
+                }
+                if (s.inCooldown && cooldownChunkIndex === -1) {
+                  cooldownChunkIndex = i;
+                }
               }
             }
 
+            const activeActionChunk = hasUncompletedChunk
+              ? nextChunkIndex
+              : dueChunkIndex !== -1
+              ? dueChunkIndex
+              : cooldownChunkIndex !== -1
+              ? cooldownChunkIndex
+              : 0;
+
+            const activeSRS = getChunkSRSStatus(sectionKey, activeActionChunk, currentStudent, hasUncompletedChunk, nowMs);
+            const activeChunkStart = activeActionChunk * batchSize + 1;
+            const activeChunkEnd = Math.min(tierWords.length, (activeActionChunk + 1) * batchSize);
+
+            let ctaText = `Повторить раздел (все порции)`;
+            if (hasUncompletedChunk) {
+              ctaText = `Учить: Порция ${activeActionChunk + 1}/${totalTierChunks} (${activeChunkStart}–${activeChunkEnd}) ➔`;
+            } else if (dueChunkIndex !== -1) {
+              ctaText = `🔔 Повторить: Порция ${activeActionChunk + 1}/${totalTierChunks} (этап ${activeSRS.step}/3) ➔`;
+            } else if (cooldownChunkIndex !== -1) {
+              ctaText = `⏱ Разминка: Порция ${activeActionChunk + 1}/${totalTierChunks} (зачёт через ${activeSRS.remainingText}) ➔`;
+            }
+
             // Find unmastered words strictly from ALREADY COMPLETED chunks
-            const alreadyStudiedWords = tierWords.slice(0, nextChunkIndex * batchSize);
+            const alreadyStudiedWords = tierWords.slice(0, activeActionChunk * batchSize);
             const weakWordsFromTier = alreadyStudiedWords.filter((w) => {
               const m = currentStudent.wordMastery[w.id];
               return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
             });
-
-            const nextChunkStart = nextChunkIndex * batchSize + 1;
-            const nextChunkEnd = Math.min(tierWords.length, (nextChunkIndex + 1) * batchSize);
 
             return (
               <div className="space-y-4">
@@ -1429,25 +1491,21 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     currentStudent.wordMastery
                   )}
                   onQuickPractice={() => {
-                    const nextSRSStatus = getChunkSRSStatus(sectionKey, nextChunkIndex, currentStudent, true, nowMs);
-                    const nextStage = nextSRSStatus.step === 0 ? 0 : nextSRSStatus.step === 1 ? 1 : 2;
+                    const nextStage = activeSRS.step === 0 ? 0 : activeSRS.step === 1 ? 1 : 2;
+                    const titleSuffix = activeSRS.inCooldown ? ' (Внезачетная разминка)' : '';
                     onStartPractice(
-                      `${currentTier.titleRu} — Порция ${nextChunkIndex + 1}/${totalTierChunks}`,
+                      `${currentTier.titleRu} — Порция ${activeActionChunk + 1}/${totalTierChunks}${titleSuffix}`,
                       tierWords,
                       BIBLICAL_PHRASES,
                       selectedTrainingMode,
                       selectedDirection,
                       sectionKey,
-                      nextChunkIndex,
+                      activeActionChunk,
                       weakWordsFromTier,
                       nextStage
                     );
                   }}
-                  practiceButtonText={
-                    completedChunkList.length >= totalTierChunks
-                      ? `Повторить раздел (все порции)`
-                      : `Учить: Порция ${nextChunkIndex + 1}/${totalTierChunks} (${nextChunkStart}–${nextChunkEnd}) ➔`
-                  }
+                  practiceButtonText={ctaText}
                 />
 
                 {/* Portions Strip */}
@@ -1486,8 +1544,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                 return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
                               });
                               const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
+                              const titleSuffix = srsStatus.inCooldown ? ' (Внезачетная разминка)' : '';
                               onStartPractice(
-                                `${currentTier.titleRu} — Порция ${cIdx + 1}/${totalTierChunks} (${cStart}–${cEnd})`,
+                                `${currentTier.titleRu} — Порция ${cIdx + 1}/${totalTierChunks} (${cStart}–${cEnd})${titleSuffix}`,
                                 tierWords,
                                 BIBLICAL_PHRASES,
                                 selectedTrainingMode,
@@ -1510,7 +1569,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                             {srsStatus.inCooldown && (
                               <span className="text-[9px] bg-[#E8DDCB] text-[#7A5A21] px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
                                 <Clock className="w-2.5 h-2.5" />
-                                {srsStatus.remainingText}
+                                {srsStatus.remainingText} (разминка)
                               </span>
                             )}
                             {srsStatus.isDue && (
@@ -1691,23 +1750,56 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             const sectionKey = `theme_${currentThematicInfo.id}`;
             const completedChunkList = currentStudent.completedChunks?.[sectionKey] || [];
 
+            // Find uncompleted, due, or cooldown chunks
+            let dueChunkIndex = -1;
+            let cooldownChunkIndex = -1;
+            let hasUncompletedChunk = false;
             let nextChunkIndex = 0;
+
             for (let i = 0; i < totalThemeChunks; i++) {
               if (!completedChunkList.includes(i)) {
-                nextChunkIndex = i;
-                break;
+                if (!hasUncompletedChunk) {
+                  nextChunkIndex = i;
+                  hasUncompletedChunk = true;
+                }
+              } else {
+                const s = getChunkSRSStatus(sectionKey, i, currentStudent, false, nowMs);
+                if (s.isDue && dueChunkIndex === -1) {
+                  dueChunkIndex = i;
+                }
+                if (s.inCooldown && cooldownChunkIndex === -1) {
+                  cooldownChunkIndex = i;
+                }
               }
             }
 
+            const activeActionChunk = hasUncompletedChunk
+              ? nextChunkIndex
+              : dueChunkIndex !== -1
+              ? dueChunkIndex
+              : cooldownChunkIndex !== -1
+              ? cooldownChunkIndex
+              : 0;
+
+            const activeSRS = getChunkSRSStatus(sectionKey, activeActionChunk, currentStudent, hasUncompletedChunk, nowMs);
+            const activeChunkStart = activeActionChunk * batchSize + 1;
+            const activeChunkEnd = Math.min(themWords.length, (activeActionChunk + 1) * batchSize);
+
+            let ctaText = `Повторить тему (все порции)`;
+            if (hasUncompletedChunk) {
+              ctaText = `Учить: Порция ${activeActionChunk + 1}/${totalThemeChunks} (${activeChunkStart}–${activeChunkEnd}) ➔`;
+            } else if (dueChunkIndex !== -1) {
+              ctaText = `🔔 Повторить: Порция ${activeActionChunk + 1}/${totalThemeChunks} (этап ${activeSRS.step}/3) ➔`;
+            } else if (cooldownChunkIndex !== -1) {
+              ctaText = `⏱ Разминка: Порция ${activeActionChunk + 1}/${totalThemeChunks} (зачёт через ${activeSRS.remainingText}) ➔`;
+            }
+
             // Find unmastered words strictly from ALREADY COMPLETED chunks
-            const alreadyStudiedWords = themWords.slice(0, nextChunkIndex * batchSize);
+            const alreadyStudiedWords = themWords.slice(0, activeActionChunk * batchSize);
             const weakWordsFromTheme = alreadyStudiedWords.filter((w) => {
               const m = currentStudent.wordMastery[w.id];
               return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
             });
-
-            const nextChunkStart = nextChunkIndex * batchSize + 1;
-            const nextChunkEnd = Math.min(themWords.length, (nextChunkIndex + 1) * batchSize);
 
             return (
               <div className="space-y-4">
@@ -1719,25 +1811,21 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     currentStudent.wordMastery
                   )}
                   onQuickPractice={() => {
-                    const nextSRSStatus = getChunkSRSStatus(sectionKey, nextChunkIndex, currentStudent, true, nowMs);
-                    const nextStage = nextSRSStatus.step === 0 ? 0 : nextSRSStatus.step === 1 ? 1 : 2;
+                    const nextStage = activeSRS.step === 0 ? 0 : activeSRS.step === 1 ? 1 : 2;
+                    const titleSuffix = activeSRS.inCooldown ? ' (Внезачетная разминка)' : '';
                     onStartPractice(
-                      `Тема: ${currentThematicInfo.nameRu} — Порция ${nextChunkIndex + 1}/${totalThemeChunks}`,
+                      `Тема: ${currentThematicInfo.nameRu} — Порция ${activeActionChunk + 1}/${totalThemeChunks}${titleSuffix}`,
                       themWords,
                       BIBLICAL_PHRASES,
                       selectedTrainingMode,
                       selectedDirection,
                       sectionKey,
-                      nextChunkIndex,
+                      activeActionChunk,
                       weakWordsFromTheme,
                       nextStage
                     );
                   }}
-                  practiceButtonText={
-                    completedChunkList.length >= totalThemeChunks
-                      ? `Повторить тему (все порции)`
-                      : `Учить: Порция ${nextChunkIndex + 1}/${totalThemeChunks} (${nextChunkStart}–${nextChunkEnd}) ➔`
-                  }
+                  practiceButtonText={ctaText}
                 />
 
                 {/* Portions Strip */}
@@ -1776,8 +1864,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                 return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
                               });
                               const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
+                              const titleSuffix = srsStatus.inCooldown ? ' (Внезачетная разминка)' : '';
                               onStartPractice(
-                                `Тема: ${currentThematicInfo.nameRu} — Порция ${cIdx + 1}/${totalThemeChunks} (${cStart}–${cEnd})`,
+                                `Тема: ${currentThematicInfo.nameRu} — Порция ${cIdx + 1}/${totalThemeChunks} (${cStart}–${cEnd})${titleSuffix}`,
                                 themWords,
                                 BIBLICAL_PHRASES,
                                 selectedTrainingMode,
@@ -1800,7 +1889,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                             {srsStatus.inCooldown && (
                               <span className="text-[9px] bg-[#E8DDCB] text-[#7A5A21] px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
                                 <Clock className="w-2.5 h-2.5" />
-                                {srsStatus.remainingText}
+                                {srsStatus.remainingText} (разминка)
                               </span>
                             )}
                             {srsStatus.isDue && (

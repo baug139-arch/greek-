@@ -48,7 +48,7 @@ import { AddStudentModal } from './components/AddStudentModal';
 import { AuthModal } from './components/AuthModal';
 import { InstallAppModal } from './components/InstallAppModal';
 import { WelcomeOnboardingModal } from './components/WelcomeOnboardingModal';
-import { updateWordSRS } from './utils/srsEngine';
+import { updateWordSRS, SRS_3_STAGES } from './utils/srsEngine';
 import { getWordsForCourse, getWordsForAssignment } from './utils/courseUtils';
 import { auth, onAuthStateChanged, signInWithGoogle, logOut, checkRedirectResult } from './firebase';
 import { 
@@ -928,28 +928,44 @@ export default function App() {
             ? currentChunkRounds[chunkKey] 
             : (st.completedChunks?.[sectionId]?.includes(chunkIndex) ? 1 : 0);
           
-          let newRound = prevRound;
+          const lastTime = currentChunkTimes[chunkKey];
           const practicedStage = roundCompleted !== undefined ? roundCompleted : prevRound;
 
-          if (practicedStage === 0) {
-            // 1-й этап: Полное заучивание -> переход на 2-й этап (45 мин)
-            if (scorePercent >= 60) {
-              newRound = Math.max(prevRound, 1);
-            }
-          } else if (practicedStage === 1) {
-            // 2-й этап: Закрепление 45 мин -> переход на 3-й этап (24 ч)
-            if (scorePercent >= 70) {
-              newRound = Math.max(prevRound, 2);
-            }
-          } else if (practicedStage >= 2) {
-            // 3-й этап: Экспресс-контроль -> статус "Выучено" (3-й этап закрыт)
-            if (scorePercent >= 70) {
-              newRound = Math.max(prevRound, 3);
+          // Check if this chunk is currently in cooldown (warmup mode)
+          let isWarmup = false;
+          if (prevRound >= 1 && lastTime) {
+            const stageConfig = SRS_3_STAGES[prevRound - 1] || SRS_3_STAGES[0];
+            const requiredMs = stageConfig?.intervalMs || 0;
+            const elapsed = Date.now() - lastTime;
+            if (elapsed < requiredMs) {
+              isWarmup = true;
             }
           }
 
-          currentChunkRounds[chunkKey] = newRound;
-          currentChunkTimes[chunkKey] = Date.now();
+          if (isWarmup) {
+            // Warmup mode: keep current stage and keep current timer countdown running
+          } else {
+            let newRound = prevRound;
+            if (practicedStage === 0) {
+              // 1-й этап: Полное заучивание -> переход на 2-й этап (45 мин)
+              if (scorePercent >= 60) {
+                newRound = Math.max(prevRound, 1);
+              }
+            } else if (practicedStage === 1) {
+              // 2-й этап: Закрепление 45 мин -> переход на 3-й этап (24 ч)
+              if (scorePercent >= 70) {
+                newRound = Math.max(prevRound, 2);
+              }
+            } else if (practicedStage >= 2) {
+              // 3-й этап: Экспресс-контроль -> статус "Выучено" (3-й этап закрыт)
+              if (scorePercent >= 70) {
+                newRound = Math.max(prevRound, 3);
+              }
+            }
+
+            currentChunkRounds[chunkKey] = newRound;
+            currentChunkTimes[chunkKey] = Date.now();
+          }
         }
 
         const updatedStudent: Student = {
@@ -2310,6 +2326,7 @@ export default function App() {
               unmasteredWords={activeSession.unmasteredWords}
               customMnemonics={currentStudent.customMnemonics}
               completedChunkRounds={currentStudent.completedChunkRounds}
+              completedChunkTimes={currentStudent.completedChunkTimes}
               onUpdateMnemonic={handleUpdateStudentMnemonic}
               onComplete={handleCompletePractice}
               onExit={() => setActiveSession(null)}
