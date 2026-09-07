@@ -294,17 +294,16 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             <button
               type="button"
               onClick={() => {
-                // Launch John 1 rare words practice immediately
-                const wordsToPractice = GREEK_VOCABULARY.filter(
-                  (w) => w.chapters.includes('john_1') && w.ntFrequency < 50
-                );
+                // Launch John 1 practice using canonical chapter vocabulary
+                const wordsToPractice = getJohnChapterWords(1);
+                const phrases = BIBLICAL_PHRASES.filter((p) => p.chapter === 'john_1');
                 onStartPractice(
-                  'Иоанна 1: Слова < 50 раз в НЗ', 
+                  'Евангелие от Иоанна: Глава 1', 
                   wordsToPractice, 
-                  BIBLICAL_PHRASES,
+                  phrases,
                   selectedTrainingMode,
                   selectedDirection,
-                  'john_1_rare',
+                  'john_1',
                   0,
                   []
                 );
