@@ -27,7 +27,9 @@ import {
   Clock,
   Brain,
   Play,
-  X
+  X,
+  AlertTriangle,
+  Lock
 } from 'lucide-react';
 import { GreekWord, ExerciseItem, ExerciseType, BiblicalPhrase, StudentSettings, TrainingMode, TrainingDirection } from '../types';
 import { speakErasmian, speakRussian, playSuccessChime, playErrorBuzz, playFanfare } from '../utils/audio';
@@ -211,6 +213,18 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     const remainingMs = Math.max(0, stageConfig.intervalMs - (Date.now() - lastTime));
     return formatIntervalCountdown(remainingMs);
   }, [isWarmupSession, sectionId, currentChunkIndex, completedChunkRounds, completedChunkTimes]);
+
+  // Check whether Stage 1 or Stage 2 are locked by cooldown or uncompleted prior stages
+  const chunkKey = sectionId && currentChunkIndex !== undefined ? `${sectionId}_${currentChunkIndex}` : null;
+  const rawChunkRound = chunkKey ? (completedChunkRounds?.[chunkKey] ?? 0) : 0;
+  const lastChunkTime = chunkKey ? (completedChunkTimes?.[chunkKey] ?? 0) : 0;
+  const nowForStages = Date.now();
+
+  const isStage1Cooldown = rawChunkRound === 1 && (nowForStages - lastChunkTime < SRS_3_STAGES[0].intervalMs);
+  const isStage1Locked = !isFullModule && chunkKey !== null && (rawChunkRound < 1 || isStage1Cooldown);
+
+  const isStage2Cooldown = rawChunkRound === 2 && (nowForStages - lastChunkTime < SRS_3_STAGES[1].intervalMs);
+  const isStage2Locked = !isFullModule && chunkKey !== null && (rawChunkRound < 2 || isStage2Cooldown);
   // Track words carrying over for reinforcement in next chunks
   const pendingReviewWordsRef = useRef<GreekWord[]>(unmasteredWords || []);
 
@@ -1331,8 +1345,18 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             </div>
           </div>
 
-          {/* Spaced repetition interval note / Warmup note */}
-          {isWarmupSession ? (
+          {/* Spaced repetition interval note / Warmup note / Failed threshold note */}
+          {scorePercent < 70 ? (
+            <div className="border border-amber-400 bg-amber-50/90 p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 sm:space-y-2 shadow-2xs">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-amber-900">
+                <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
+                <span>⚠️ Этап не сдан (точность {scorePercent}%, требуется ≥ 70%)</span>
+              </div>
+              <p className="text-[11px] font-sans text-amber-950/85 leading-relaxed">
+                По правилам интервального метода, зачетный переход на следующий этап и запуск таймера активируются только при точности не менее 70%. Таймер следующего этапа не запустился. Пожалуйста, повторите текущий этап для закрепления материала.
+              </p>
+            </div>
+          ) : isWarmupSession ? (
             <div className="border border-amber-300 bg-amber-50 p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 sm:space-y-2 shadow-2xs">
               <div className="flex items-center gap-2 text-xs font-sans font-bold text-amber-900">
                 <Clock className="w-4 h-4 text-amber-600 shrink-0" />
@@ -1511,8 +1535,18 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             </div>
           </div>
 
-          {/* Spaced repetition interval note */}
-          {isWarmupSession ? (
+          {/* Spaced repetition interval note / Warmup note / Failed threshold note */}
+          {finalScore < 70 ? (
+            <div className="border border-amber-400 bg-amber-50/90 p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 sm:space-y-2 shadow-2xs">
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-amber-900">
+                <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
+                <span>⚠️ Этап не сдан (точность {finalScore}%, требуется ≥ 70%)</span>
+              </div>
+              <p className="text-[11px] font-sans text-amber-950/85 leading-relaxed">
+                Для перехода на следующий интервал и зачета требуется точность не менее 70%. Таймер следующего этапа не запустился. Пожалуйста, повторите текущий этап для закрепления материала.
+              </p>
+            </div>
+          ) : isWarmupSession ? (
             <div className="border border-amber-300 bg-amber-50 p-3 sm:p-4 rounded-xs text-left mb-4 sm:mb-5 space-y-1.5 shadow-2xs">
               <div className="flex items-center gap-2 text-xs font-sans font-bold text-amber-900">
                 <Clock className="w-4 h-4 text-amber-600 shrink-0" />
@@ -1691,27 +1725,45 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSelectedStageOverride(1)}
-                  className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded font-bold transition-all cursor-pointer ${
-                    currentChunkRound === 1 
-                      ? 'bg-[#8C5E14] text-white shadow-2xs' 
-                      : 'text-[#5C5549] hover:text-[#1A1A1A] hover:bg-[#FAF8F5]'
+                  disabled={isStage1Locked}
+                  onClick={() => !isStage1Locked && setSelectedStageOverride(1)}
+                  className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded font-bold transition-all ${
+                    isStage1Locked
+                      ? 'opacity-40 text-[#8C7D6B] cursor-not-allowed bg-neutral-100'
+                      : currentChunkRound === 1 
+                      ? 'bg-[#8C5E14] text-white shadow-2xs cursor-pointer' 
+                      : 'text-[#5C5549] hover:text-[#1A1A1A] hover:bg-[#FAF8F5] cursor-pointer'
                   }`}
-                  title="2-й этап: Закрепление через 45 мин (Тест, Аудио, Письмо, Блиц)"
+                  title={
+                    isStage1Cooldown 
+                      ? '2-й этап заблокирован: интервал 45 мин ещё не истёк' 
+                      : isStage1Locked 
+                      ? '2-й этап заблокирован: сначала сдайте 1-й этап (≥ 70%)' 
+                      : '2-й этап: Закрепление через 45 мин (Тест, Аудио, Письмо, Блиц)'
+                  }
                 >
-                  2. 45 мин
+                  {isStage1Locked ? '🔒 2. 45 мин' : '2. 45 мин'}
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSelectedStageOverride(2)}
-                  className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded font-bold transition-all cursor-pointer ${
-                    currentChunkRound >= 2 
-                      ? 'bg-[#1E3A8A] text-white shadow-2xs' 
-                      : 'text-[#5C5549] hover:text-[#1A1A1A] hover:bg-[#FAF8F5]'
+                  disabled={isStage2Locked}
+                  onClick={() => !isStage2Locked && setSelectedStageOverride(2)}
+                  className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded font-bold transition-all ${
+                    isStage2Locked
+                      ? 'opacity-40 text-[#8C7D6B] cursor-not-allowed bg-neutral-100'
+                      : currentChunkRound >= 2 
+                      ? 'bg-[#1E3A8A] text-white shadow-2xs cursor-pointer' 
+                      : 'text-[#5C5549] hover:text-[#1A1A1A] hover:bg-[#FAF8F5] cursor-pointer'
                   }`}
-                  title="3-й этап: Экспресс-контроль (Быстрый тест, Письмо, Блиц)"
+                  title={
+                    isStage2Cooldown 
+                      ? '3-й этап заблокирован: интервал 24 ч ещё не истёк' 
+                      : isStage2Locked 
+                      ? '3-й этап заблокирован: сначала сдайте 2-й этап (≥ 70%)' 
+                      : '3-й этап: Экспресс-контроль (Быстрый тест, Письмо, Блиц)'
+                  }
                 >
-                  3. Экспресс
+                  {isStage2Locked ? '🔒 3. Экспресс' : '3. Экспресс'}
                 </button>
               </div>
             ) : <div />}

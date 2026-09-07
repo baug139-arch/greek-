@@ -283,10 +283,13 @@ export interface ChunkSRSStatus {
   isMastered: boolean; // Step >= 3 (100% Mastered)
   remainingMs: number;
   remainingText: string; // e.g. "32 мин", "14 ч", "2 д"
-  badgeText: string; // "⏱ 32 мин", "🔔 Повторить (1/3)", "✅ Выучено" etc.
+  badgeText: string; // "🔒 32 мин", "🔔 Повторить (1/3)", "✅ Выучено" etc.
   tooltipText: string;
   buttonClass: string;
   badgeClass: string;
+  currentUnlockedStage: number; // Stage index that can be retaken right now (0, 1, or 2)
+  nextLockedStage: number; // Stage index that is currently locked
+  cooldownLabel: string; // e.g. "45 мин" or "24 ч"
 }
 
 export function getChunkSRSStatus(
@@ -322,6 +325,9 @@ export function getChunkSRSStatus(
         ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold ring-2 ring-[#2D4A32]/30'
         : 'bg-white text-[#6B655C] border-[#E5E1DA] hover:border-[#1A1A1A]',
       badgeClass: 'bg-amber-400 text-[#1A1A1A]',
+      currentUnlockedStage: 0,
+      nextLockedStage: 1,
+      cooldownLabel: '45 мин',
     };
   }
 
@@ -340,6 +346,9 @@ export function getChunkSRSStatus(
       tooltipText: 'Пройдены все 3 ступени повторения (45 мин → 24 ч → 3 дня). Порция полностью усвоена!',
       buttonClass: 'bg-[#C5D9C8] text-[#2D4A32] border-[#2D4A32]/40 font-semibold',
       badgeClass: 'bg-[#2D4A32] text-white',
+      currentUnlockedStage: 2,
+      nextLockedStage: 3,
+      cooldownLabel: '',
     };
   }
 
@@ -361,10 +370,13 @@ export function getChunkSRSStatus(
       isMastered: false,
       remainingMs,
       remainingText,
-      badgeText: `⏱ ${remainingText}`,
-      tooltipText: `Ступень ${step}/3 (${currentStageConfig.label}). До следующего зачетного повторения осталось ${remainingText}. (Сейчас доступна разминка)`,
+      badgeText: `🔒 ${remainingText}`,
+      tooltipText: `Следующий ${step + 1}-й этап заблокирован на ${remainingText} (${currentStageConfig.label}). Нажмите, чтобы повторить пройденный этап.`,
       buttonClass: 'bg-[#FAF6F0] text-[#7A5A21] border-[#E8DDCB] hover:border-[#7A5A21]',
       badgeClass: 'bg-[#E8DDCB] text-[#7A5A21]',
+      currentUnlockedStage: Math.max(0, step - 1),
+      nextLockedStage: step,
+      cooldownLabel: currentStageConfig.label,
     };
   } else {
     // Cooldown passed -> Ready for next repetition step
@@ -381,6 +393,9 @@ export function getChunkSRSStatus(
       tooltipText: `Интервал ${currentStageConfig.label} прошёл! Нажмите для закрепления (переход на шаг ${step + 1}/3).`,
       buttonClass: 'bg-amber-50 text-amber-900 border-amber-400 font-bold ring-2 ring-amber-400/40 hover:bg-amber-100',
       badgeClass: 'bg-amber-500 text-white font-bold',
+      currentUnlockedStage: step,
+      nextLockedStage: step + 1,
+      cooldownLabel: currentStageConfig.label,
     };
   }
 }

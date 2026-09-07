@@ -920,12 +920,6 @@ export default function App() {
         const currentChunkRounds = { ...(st.completedChunkRounds || {}) };
         if (completedChunkInfo) {
           const { sectionId, chunkIndex } = completedChunkInfo;
-          const list = currentChunks[sectionId] ? [...currentChunks[sectionId]] : [];
-          if (!list.includes(chunkIndex)) {
-            list.push(chunkIndex);
-          }
-          currentChunks[sectionId] = list;
-          
           const chunkKey = `${sectionId}_${chunkIndex}`;
           const prevRound = currentChunkRounds[chunkKey] !== undefined 
             ? currentChunkRounds[chunkKey] 
@@ -934,7 +928,7 @@ export default function App() {
           const lastTime = currentChunkTimes[chunkKey];
           const practicedStage = roundCompleted !== undefined ? roundCompleted : prevRound;
 
-          // Check if this chunk is currently in cooldown (warmup mode)
+          // Check if this chunk is currently in cooldown (locked next stage)
           let isWarmup = false;
           if (prevRound >= 1 && lastTime) {
             const stageConfig = SRS_3_STAGES[prevRound - 1] || SRS_3_STAGES[0];
@@ -946,28 +940,41 @@ export default function App() {
           }
 
           if (isWarmup) {
-            // Warmup mode: keep current stage and keep current timer countdown running
+            // Repeating current/unlocked stage while in cooldown: keep timer countdown running, don't advance round
           } else {
             let newRound = prevRound;
+            let didPass = false;
+
+            // Strict threshold: scorePercent >= 70% required to pass ANY stage and unlock/start cooldown
             if (practicedStage === 0) {
-              // 1-й этап: Полное заучивание -> переход на 2-й этап (45 мин)
-              if (scorePercent >= 60) {
+              // 1-й этап: Полное заучивание -> переход на 2-й этап (запуск таймера на 45 мин)
+              if (scorePercent >= 70) {
                 newRound = Math.max(prevRound, 1);
+                didPass = true;
               }
             } else if (practicedStage === 1) {
-              // 2-й этап: Закрепление 45 мин -> переход на 3-й этап (24 ч)
+              // 2-й этап: Закрепление 45 мин -> переход на 3-й этап (запуск таймера на 24 ч)
               if (scorePercent >= 70) {
                 newRound = Math.max(prevRound, 2);
+                didPass = true;
               }
             } else if (practicedStage >= 2) {
-              // 3-й этап: Экспресс-контроль -> статус "Выучено" (3-й этап закрыт)
+              // 3-й этап: Экспресс-контроль -> статус "Выучено"
               if (scorePercent >= 70) {
                 newRound = Math.max(prevRound, 3);
+                didPass = true;
               }
             }
 
-            currentChunkRounds[chunkKey] = newRound;
-            currentChunkTimes[chunkKey] = Date.now();
+            if (didPass) {
+              currentChunkRounds[chunkKey] = newRound;
+              currentChunkTimes[chunkKey] = Date.now(); // Start cooldown timer for next stage!
+              const list = currentChunks[sectionId] ? [...currentChunks[sectionId]] : [];
+              if (!list.includes(chunkIndex)) {
+                list.push(chunkIndex);
+              }
+              currentChunks[sectionId] = list;
+            }
           }
         }
 

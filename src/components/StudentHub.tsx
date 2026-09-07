@@ -44,6 +44,7 @@ import { JOHN_GOSPEL_CHAPTERS, getJohnChapterWords } from '../data/johnGospelVoc
 import { getWordsForCourse, getWordsForAssignment, sampleRandomWords } from '../utils/courseUtils';
 import { ExamReviewModal } from './ExamReviewModal';
 import { FullModuleModal } from './FullModuleModal';
+import { ChunkCooldownModal } from './ChunkCooldownModal';
 import { speakErasmian, speakRussian } from '../utils/audio';
 import { getMnemonicForWord } from '../utils/mnemonics';
 import { WordMasteryBar } from './WordMasteryBar';
@@ -124,12 +125,27 @@ export const StudentHub: React.FC<StudentHubProps> = ({
     sectionKey: string;
   } | null>(null);
 
-  // Live timer tick for real-time countdown updates on portion chips
+  // Chunk Cooldown Modal state
+  const [chunkCooldownModal, setChunkCooldownModal] = useState<{
+    isOpen: boolean;
+    chunkTitle: string;
+    sectionName: string;
+    currentStage: number;
+    nextStage: number;
+    cooldownText: string;
+    cooldownLabel: string;
+    hasNextChunk: boolean;
+    nextChunkTitle?: string;
+    onRepeatCurrentStage: () => void;
+    onLearnNextChunk?: () => void;
+  } | null>(null);
+
+  // Live timer tick for real-time countdown updates on portion chips & modal
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   useEffect(() => {
     const timer = setInterval(() => {
       setNowMs(Date.now());
-    }, 10000);
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -1048,6 +1064,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             const totalChapterChunks = Math.ceil(johnChapterWords.length / batchSize);
             const sectionKey = `john_${currentJohnBlock.chapterNumber}`;
             const completedChunkList = currentStudent.completedChunks?.[sectionKey] || [];
+            const completedCount = completedChunkList.length;
             
             // Find uncompleted, due, or cooldown chunks
             let dueChunkIndex = -1;
@@ -1137,87 +1154,117 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                   practiceAllButtonText={`⚡ Весь модуль (${johnChapterWords.length})`}
                 />
 
-                {/* Portions / Chunks Interactive Strip */}
-                {totalChapterChunks > 1 && (
-                  <div className="border border-[#E5E1DA] p-3.5 bg-[#FAF8F5] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-sans uppercase tracking-widest text-[#8C7D6B] font-bold">
-                          Порции слов главы ({batchSize} слов в порции):
-                        </span>
-                        <span className="text-[10px] font-sans text-[#2D4A32] font-bold bg-[#C5D9C8] px-1.5 py-0.2">
-                          Пройдено: {completedChunkList.length} / {totalChapterChunks}
-                        </span>
-                      </div>
-                      <p className="text-[11px] font-sans text-[#6B655C]">
-                        3 ступени повторения: <span className="font-semibold text-[#1A1A1A]">45 мин</span> ➔ <span className="font-semibold text-[#1A1A1A]">24 ч (1 день)</span> ➔ <span className="font-semibold text-[#1A1A1A]">3 дня</span> ➔ ✅ Выучено
-                      </p>
-                    </div>
+                {/* Progress bar and portions grid */}
+                <div className="bg-[#FAF8F5] border border-[#E5E1DA] p-3 rounded-xs space-y-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <span className="text-xs font-sans text-[#6B655C]">
+                      Освоение порций ({completedCount}/{totalChapterChunks} завершено)
+                    </span>
+                    <span className="text-xs font-mono font-bold text-[#1A1A1A]">
+                      {totalChapterChunks > 0 ? Math.round((completedCount / totalChapterChunks) * 100) : 0}%
+                    </span>
+                  </div>
 
-                    <div className="flex flex-wrap gap-1.5 items-center">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setFullModuleModal({
-                            isOpen: true,
-                            title: currentJohnBlock.chapterTitleRu,
-                            words: johnChapterWords,
-                            phrases: BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
-                            sectionKey,
-                          });
-                        }}
-                        className="px-3 py-1.5 text-xs font-sans border-2 border-[#1A1A1A] bg-white hover:bg-[#FAF8F5] text-[#1A1A1A] font-bold transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs"
-                        title={`Повторить все ${johnChapterWords.length} слов главы в одном задании`}
-                      >
-                        <Zap className="w-3 h-3 text-amber-600 fill-amber-500" />
-                        <span>Все {johnChapterWords.length} слов</span>
-                      </button>
-                      {Array.from({ length: totalChapterChunks }).map((_, cIdx) => {
-                        const isDone = completedChunkList.includes(cIdx);
-                        const isNext = cIdx === nextChunkIndex && !isDone;
-                        const cStart = cIdx * batchSize + 1;
-                        const cEnd = Math.min(johnChapterWords.length, (cIdx + 1) * batchSize);
-                        const srsStatus = getChunkSRSStatus(sectionKey, cIdx, currentStudent, isNext, nowMs);
+                  {/* Portions chips list */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {Array.from({ length: totalChapterChunks }).map((_, cIdx) => {
+                      const cStart = cIdx * batchSize + 1;
+                      const cEnd = Math.min(johnChapterWords.length, (cIdx + 1) * batchSize);
+                      const isNext = cIdx === nextChunkIndex;
+                      const srsStatus = getChunkSRSStatus(sectionKey, cIdx, currentStudent, isNext, nowMs);
 
-                        return (
-                          <button
-                            key={cIdx}
-                            type="button"
-                            onClick={() => {
-                              const studiedSoFar = johnChapterWords.slice(0, cIdx * batchSize);
-                              const weakPrior = studiedSoFar.filter((w) => {
-                                const m = currentStudent.wordMastery[w.id];
-                                return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                      return (
+                        <button
+                          key={cIdx}
+                          type="button"
+                          onClick={() => {
+                            const studiedSoFar = johnChapterWords.slice(0, cIdx * batchSize);
+                            const weakPrior = studiedSoFar.filter((w) => {
+                              const m = currentStudent.wordMastery[w.id];
+                              return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                            });
+
+                            if (srsStatus.inCooldown) {
+                              const hasNextChunk = cIdx + 1 < totalChapterChunks;
+                              const nextChunkStart = (cIdx + 1) * batchSize + 1;
+                              const nextChunkEnd = Math.min((cIdx + 2) * batchSize, johnChapterWords.length);
+
+                              setChunkCooldownModal({
+                                isOpen: true,
+                                chunkTitle: `Порция ${cIdx + 1} (${cStart}–${cEnd})`,
+                                sectionName: currentJohnBlock.chapterTitleRu,
+                                currentStage: srsStatus.currentUnlockedStage,
+                                nextStage: srsStatus.nextLockedStage,
+                                cooldownText: srsStatus.badgeText.replace('🔒 ', ''),
+                                cooldownLabel: srsStatus.cooldownLabel,
+                                hasNextChunk,
+                                nextChunkTitle: hasNextChunk ? `порцию ${cIdx + 2} (${nextChunkStart}–${nextChunkEnd})` : undefined,
+                                onRepeatCurrentStage: () => {
+                                  setChunkCooldownModal(null);
+                                  onStartPractice(
+                                    `${currentJohnBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd}) [Повторение этапа ${srsStatus.currentUnlockedStage + 1}]`,
+                                    johnChapterWords,
+                                    BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
+                                    selectedTrainingMode,
+                                    selectedDirection,
+                                    sectionKey,
+                                    cIdx,
+                                    weakPrior,
+                                    srsStatus.currentUnlockedStage
+                                  );
+                                },
+                                onLearnNextChunk: hasNextChunk ? () => {
+                                  setChunkCooldownModal(null);
+                                  const nextIdx = cIdx + 1;
+                                  const nextStudiedSoFar = johnChapterWords.slice(0, nextIdx * batchSize);
+                                  const nextWeakPrior = nextStudiedSoFar.filter((w) => {
+                                    const m = currentStudent.wordMastery[w.id];
+                                    return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                                  });
+                                  onStartPractice(
+                                    `${currentJohnBlock.chapterTitleRu} — Порция ${nextIdx + 1}/${totalChapterChunks} (${nextChunkStart}–${nextChunkEnd})`,
+                                    johnChapterWords,
+                                    BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
+                                    selectedTrainingMode,
+                                    selectedDirection,
+                                    sectionKey,
+                                    nextIdx,
+                                    nextWeakPrior,
+                                    0
+                                  );
+                                } : undefined,
                               });
-                              const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
-                              const titleSuffix = srsStatus.inCooldown ? ' (Внезачетная разминка)' : '';
-                              onStartPractice(
-                                `${currentJohnBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd})${titleSuffix}`,
-                                johnChapterWords,
-                                BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
-                                selectedTrainingMode,
-                                selectedDirection,
-                                sectionKey,
-                                cIdx,
-                                weakPrior,
-                                targetStage
-                              );
-                            }}
-                            className={`px-3 py-1.5 text-xs font-sans border transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs ${srsStatus.buttonClass}`}
-                            title={srsStatus.tooltipText}
-                          >
-                            <span>Порция {cIdx + 1}</span>
-                            {srsStatus.isNext && (
-                              <span className="text-[9px] bg-amber-400 text-[#1A1A1A] px-1 py-0.2 font-bold rounded-xs">
-                                СЛЕД
-                              </span>
-                            )}
-                            {srsStatus.inCooldown && (
-                              <span className="text-[9px] bg-[#E8DDCB] text-[#7A5A21] px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
-                                <Clock className="w-2.5 h-2.5" />
-                                {srsStatus.remainingText} (разминка)
-                              </span>
-                            )}
+                              return;
+                            }
+
+                            const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
+                            onStartPractice(
+                              `${currentJohnBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd})`,
+                              johnChapterWords,
+                              BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
+                              selectedTrainingMode,
+                              selectedDirection,
+                              sectionKey,
+                              cIdx,
+                              weakPrior,
+                              targetStage
+                            );
+                          }}
+                          className={`px-3 py-1.5 text-xs font-sans border transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs ${srsStatus.buttonClass}`}
+                          title={srsStatus.tooltipText}
+                        >
+                          <span>Порция {cIdx + 1}</span>
+                          {srsStatus.isNext && (
+                            <span className="text-[9px] bg-amber-400 text-[#1A1A1A] px-1 py-0.2 font-bold rounded-xs">
+                              СЛЕД
+                            </span>
+                          )}
+                          {srsStatus.inCooldown && (
+                            <span className="text-[9px] bg-amber-100 border border-amber-300 text-amber-900 px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
+                              <Clock className="w-2.5 h-2.5 text-amber-700" />
+                              {srsStatus.badgeText}
+                            </span>
+                          )}
                             {srsStatus.isDue && (
                               <span className="text-[9px] bg-amber-500 text-white px-1.5 py-0.2 font-bold rounded-xs flex items-center gap-0.5 animate-pulse" title={srsStatus.tooltipText}>
                                 <Bell className="w-2.5 h-2.5" />
@@ -1235,8 +1282,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       })}
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
             );
           })()}
 
@@ -1507,10 +1553,68 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     currentStudent.wordMastery
                   )}
                   onQuickPractice={() => {
+                    const studiedSoFar = tierWords.slice(0, activeActionChunk * batchSize);
+                    const weakWordsFromTier = studiedSoFar.filter((w) => {
+                      const m = currentStudent.wordMastery[w.id];
+                      return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                    });
+
+                    if (activeSRS.inCooldown) {
+                      const hasNextChunk = activeActionChunk + 1 < totalTierChunks;
+                      const nextChunkStart = (activeActionChunk + 1) * batchSize + 1;
+                      const nextChunkEnd = Math.min((activeActionChunk + 2) * batchSize, tierWords.length);
+
+                      setChunkCooldownModal({
+                        isOpen: true,
+                        chunkTitle: `Порция ${activeActionChunk + 1} (${activeChunkStart}–${activeChunkEnd})`,
+                        sectionName: currentTier.titleRu,
+                        currentStage: activeSRS.currentUnlockedStage,
+                        nextStage: activeSRS.nextLockedStage,
+                        cooldownText: activeSRS.badgeText.replace('🔒 ', ''),
+                        cooldownLabel: activeSRS.cooldownLabel,
+                        hasNextChunk,
+                        nextChunkTitle: hasNextChunk ? `порцию ${activeActionChunk + 2} (${nextChunkStart}–${nextChunkEnd})` : undefined,
+                        onRepeatCurrentStage: () => {
+                          setChunkCooldownModal(null);
+                          onStartPractice(
+                            `${currentTier.titleRu} — Порция ${activeActionChunk + 1}/${totalTierChunks} (${activeChunkStart}–${activeChunkEnd}) [Повторение этапа ${activeSRS.currentUnlockedStage + 1}]`,
+                            tierWords,
+                            BIBLICAL_PHRASES,
+                            selectedTrainingMode,
+                            selectedDirection,
+                            sectionKey,
+                            activeActionChunk,
+                            weakWordsFromTier,
+                            activeSRS.currentUnlockedStage
+                          );
+                        },
+                        onLearnNextChunk: hasNextChunk ? () => {
+                          setChunkCooldownModal(null);
+                          const nextIdx = activeActionChunk + 1;
+                          const nextStudiedSoFar = tierWords.slice(0, nextIdx * batchSize);
+                          const nextWeakPrior = nextStudiedSoFar.filter((w) => {
+                            const m = currentStudent.wordMastery[w.id];
+                            return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                          });
+                          onStartPractice(
+                            `${currentTier.titleRu} — Порция ${nextIdx + 1}/${totalTierChunks} (${nextChunkStart}–${nextChunkEnd})`,
+                            tierWords,
+                            BIBLICAL_PHRASES,
+                            selectedTrainingMode,
+                            selectedDirection,
+                            sectionKey,
+                            nextIdx,
+                            nextWeakPrior,
+                            0
+                          );
+                        } : undefined,
+                      });
+                      return;
+                    }
+
                     const nextStage = activeSRS.step === 0 ? 0 : activeSRS.step === 1 ? 1 : 2;
-                    const titleSuffix = activeSRS.inCooldown ? ' (Внезачетная разминка)' : '';
                     onStartPractice(
-                      `${currentTier.titleRu} — Порция ${activeActionChunk + 1}/${totalTierChunks}${titleSuffix}`,
+                      `${currentTier.titleRu} — Порция ${activeActionChunk + 1}/${totalTierChunks}`,
                       tierWords,
                       BIBLICAL_PHRASES,
                       selectedTrainingMode,
@@ -1586,10 +1690,63 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                 const m = currentStudent.wordMastery[w.id];
                                 return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
                               });
+
+                              if (srsStatus.inCooldown) {
+                                const hasNextChunk = cIdx + 1 < totalTierChunks;
+                                const nextChunkStart = (cIdx + 1) * batchSize + 1;
+                                const nextChunkEnd = Math.min((cIdx + 2) * batchSize, tierWords.length);
+
+                                setChunkCooldownModal({
+                                  isOpen: true,
+                                  chunkTitle: `Порция ${cIdx + 1} (${cStart}–${cEnd})`,
+                                  sectionName: currentTier.titleRu,
+                                  currentStage: srsStatus.currentUnlockedStage,
+                                  nextStage: srsStatus.nextLockedStage,
+                                  cooldownText: srsStatus.badgeText.replace('🔒 ', ''),
+                                  cooldownLabel: srsStatus.cooldownLabel,
+                                  hasNextChunk,
+                                  nextChunkTitle: hasNextChunk ? `порцию ${cIdx + 2} (${nextChunkStart}–${nextChunkEnd})` : undefined,
+                                  onRepeatCurrentStage: () => {
+                                    setChunkCooldownModal(null);
+                                    onStartPractice(
+                                      `${currentTier.titleRu} — Порция ${cIdx + 1}/${totalTierChunks} (${cStart}–${cEnd}) [Повторение этапа ${srsStatus.currentUnlockedStage + 1}]`,
+                                      tierWords,
+                                      BIBLICAL_PHRASES,
+                                      selectedTrainingMode,
+                                      selectedDirection,
+                                      sectionKey,
+                                      cIdx,
+                                      weakPrior,
+                                      srsStatus.currentUnlockedStage
+                                    );
+                                  },
+                                  onLearnNextChunk: hasNextChunk ? () => {
+                                    setChunkCooldownModal(null);
+                                    const nextIdx = cIdx + 1;
+                                    const nextStudiedSoFar = tierWords.slice(0, nextIdx * batchSize);
+                                    const nextWeakPrior = nextStudiedSoFar.filter((w) => {
+                                      const m = currentStudent.wordMastery[w.id];
+                                      return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                                    });
+                                    onStartPractice(
+                                      `${currentTier.titleRu} — Порция ${nextIdx + 1}/${totalTierChunks} (${nextChunkStart}–${nextChunkEnd})`,
+                                      tierWords,
+                                      BIBLICAL_PHRASES,
+                                      selectedTrainingMode,
+                                      selectedDirection,
+                                      sectionKey,
+                                      nextIdx,
+                                      nextWeakPrior,
+                                      0
+                                    );
+                                  } : undefined,
+                                });
+                                return;
+                              }
+
                               const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
-                              const titleSuffix = srsStatus.inCooldown ? ' (Внезачетная разминка)' : '';
                               onStartPractice(
-                                `${currentTier.titleRu} — Порция ${cIdx + 1}/${totalTierChunks} (${cStart}–${cEnd})${titleSuffix}`,
+                                `${currentTier.titleRu} — Порция ${cIdx + 1}/${totalTierChunks} (${cStart}–${cEnd})`,
                                 tierWords,
                                 BIBLICAL_PHRASES,
                                 selectedTrainingMode,
@@ -1610,9 +1767,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                               </span>
                             )}
                             {srsStatus.inCooldown && (
-                              <span className="text-[9px] bg-[#E8DDCB] text-[#7A5A21] px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
-                                <Clock className="w-2.5 h-2.5" />
-                                {srsStatus.remainingText} (разминка)
+                              <span className="text-[9px] bg-amber-100 border border-amber-300 text-amber-900 px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
+                                <Clock className="w-2.5 h-2.5 text-amber-700" />
+                                {srsStatus.badgeText}
                               </span>
                             )}
                             {srsStatus.isDue && (
@@ -1854,10 +2011,68 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     currentStudent.wordMastery
                   )}
                   onQuickPractice={() => {
+                    const studiedSoFar = themWords.slice(0, activeActionChunk * batchSize);
+                    const weakWordsFromTheme = studiedSoFar.filter((w) => {
+                      const m = currentStudent.wordMastery[w.id];
+                      return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                    });
+
+                    if (activeSRS.inCooldown) {
+                      const hasNextChunk = activeActionChunk + 1 < totalThemeChunks;
+                      const nextChunkStart = (activeActionChunk + 1) * batchSize + 1;
+                      const nextChunkEnd = Math.min((activeActionChunk + 2) * batchSize, themWords.length);
+
+                      setChunkCooldownModal({
+                        isOpen: true,
+                        chunkTitle: `Порция ${activeActionChunk + 1} (${activeChunkStart}–${activeChunkEnd})`,
+                        sectionName: currentThematicInfo.nameRu,
+                        currentStage: activeSRS.currentUnlockedStage,
+                        nextStage: activeSRS.nextLockedStage,
+                        cooldownText: activeSRS.badgeText.replace('🔒 ', ''),
+                        cooldownLabel: activeSRS.cooldownLabel,
+                        hasNextChunk,
+                        nextChunkTitle: hasNextChunk ? `порцию ${activeActionChunk + 2} (${nextChunkStart}–${nextChunkEnd})` : undefined,
+                        onRepeatCurrentStage: () => {
+                          setChunkCooldownModal(null);
+                          onStartPractice(
+                            `Тема: ${currentThematicInfo.nameRu} — Порция ${activeActionChunk + 1}/${totalThemeChunks} (${activeChunkStart}–${activeChunkEnd}) [Повторение этапа ${activeSRS.currentUnlockedStage + 1}]`,
+                            themWords,
+                            BIBLICAL_PHRASES,
+                            selectedTrainingMode,
+                            selectedDirection,
+                            sectionKey,
+                            activeActionChunk,
+                            weakWordsFromTheme,
+                            activeSRS.currentUnlockedStage
+                          );
+                        },
+                        onLearnNextChunk: hasNextChunk ? () => {
+                          setChunkCooldownModal(null);
+                          const nextIdx = activeActionChunk + 1;
+                          const nextStudiedSoFar = themWords.slice(0, nextIdx * batchSize);
+                          const nextWeakPrior = nextStudiedSoFar.filter((w) => {
+                            const m = currentStudent.wordMastery[w.id];
+                            return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                          });
+                          onStartPractice(
+                            `Тема: ${currentThematicInfo.nameRu} — Порция ${nextIdx + 1}/${totalThemeChunks} (${nextChunkStart}–${nextChunkEnd})`,
+                            themWords,
+                            BIBLICAL_PHRASES,
+                            selectedTrainingMode,
+                            selectedDirection,
+                            sectionKey,
+                            nextIdx,
+                            nextWeakPrior,
+                            0
+                          );
+                        } : undefined,
+                      });
+                      return;
+                    }
+
                     const nextStage = activeSRS.step === 0 ? 0 : activeSRS.step === 1 ? 1 : 2;
-                    const titleSuffix = activeSRS.inCooldown ? ' (Внезачетная разминка)' : '';
                     onStartPractice(
-                      `Тема: ${currentThematicInfo.nameRu} — Порция ${activeActionChunk + 1}/${totalThemeChunks}${titleSuffix}`,
+                      `Тема: ${currentThematicInfo.nameRu} — Порция ${activeActionChunk + 1}/${totalThemeChunks}`,
                       themWords,
                       BIBLICAL_PHRASES,
                       selectedTrainingMode,
@@ -1933,10 +2148,63 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                 const m = currentStudent.wordMastery[w.id];
                                 return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
                               });
+
+                              if (srsStatus.inCooldown) {
+                                const hasNextChunk = cIdx + 1 < totalThemeChunks;
+                                const nextChunkStart = (cIdx + 1) * batchSize + 1;
+                                const nextChunkEnd = Math.min((cIdx + 2) * batchSize, themWords.length);
+
+                                setChunkCooldownModal({
+                                  isOpen: true,
+                                  chunkTitle: `Порция ${cIdx + 1} (${cStart}–${cEnd})`,
+                                  sectionName: currentThematicInfo.nameRu,
+                                  currentStage: srsStatus.currentUnlockedStage,
+                                  nextStage: srsStatus.nextLockedStage,
+                                  cooldownText: srsStatus.badgeText.replace('🔒 ', ''),
+                                  cooldownLabel: srsStatus.cooldownLabel,
+                                  hasNextChunk,
+                                  nextChunkTitle: hasNextChunk ? `порцию ${cIdx + 2} (${nextChunkStart}–${nextChunkEnd})` : undefined,
+                                  onRepeatCurrentStage: () => {
+                                    setChunkCooldownModal(null);
+                                    onStartPractice(
+                                      `Тема: ${currentThematicInfo.nameRu} — Порция ${cIdx + 1}/${totalThemeChunks} (${cStart}–${cEnd}) [Повторение этапа ${srsStatus.currentUnlockedStage + 1}]`,
+                                      themWords,
+                                      BIBLICAL_PHRASES,
+                                      selectedTrainingMode,
+                                      selectedDirection,
+                                      sectionKey,
+                                      cIdx,
+                                      weakPrior,
+                                      srsStatus.currentUnlockedStage
+                                    );
+                                  },
+                                  onLearnNextChunk: hasNextChunk ? () => {
+                                    setChunkCooldownModal(null);
+                                    const nextIdx = cIdx + 1;
+                                    const nextStudiedSoFar = themWords.slice(0, nextIdx * batchSize);
+                                    const nextWeakPrior = nextStudiedSoFar.filter((w) => {
+                                      const m = currentStudent.wordMastery[w.id];
+                                      return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                                    });
+                                    onStartPractice(
+                                      `Тема: ${currentThematicInfo.nameRu} — Порция ${nextIdx + 1}/${totalThemeChunks} (${nextChunkStart}–${nextChunkEnd})`,
+                                      themWords,
+                                      BIBLICAL_PHRASES,
+                                      selectedTrainingMode,
+                                      selectedDirection,
+                                      sectionKey,
+                                      nextIdx,
+                                      nextWeakPrior,
+                                      0
+                                    );
+                                  } : undefined,
+                                });
+                                return;
+                              }
+
                               const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
-                              const titleSuffix = srsStatus.inCooldown ? ' (Внезачетная разминка)' : '';
                               onStartPractice(
-                                `Тема: ${currentThematicInfo.nameRu} — Порция ${cIdx + 1}/${totalThemeChunks} (${cStart}–${cEnd})${titleSuffix}`,
+                                `Тема: ${currentThematicInfo.nameRu} — Порция ${cIdx + 1}/${totalThemeChunks} (${cStart}–${cEnd})`,
                                 themWords,
                                 BIBLICAL_PHRASES,
                                 selectedTrainingMode,
@@ -1957,9 +2225,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                               </span>
                             )}
                             {srsStatus.inCooldown && (
-                              <span className="text-[9px] bg-[#E8DDCB] text-[#7A5A21] px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
-                                <Clock className="w-2.5 h-2.5" />
-                                {srsStatus.remainingText} (разминка)
+                              <span className="text-[9px] bg-amber-100 border border-amber-300 text-amber-900 px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
+                                <Clock className="w-2.5 h-2.5 text-amber-700" />
+                                {srsStatus.badgeText}
                               </span>
                             )}
                             {srsStatus.isDue && (
@@ -2224,6 +2492,24 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               true
             );
           }}
+        />
+      )}
+
+      {/* Modal for Chunk Cooldown / Spaced Repetition Intermission */}
+      {chunkCooldownModal && chunkCooldownModal.isOpen && (
+        <ChunkCooldownModal
+          isOpen={chunkCooldownModal.isOpen}
+          chunkTitle={chunkCooldownModal.chunkTitle}
+          sectionName={chunkCooldownModal.sectionName}
+          currentStage={chunkCooldownModal.currentStage}
+          nextStage={chunkCooldownModal.nextStage}
+          cooldownText={chunkCooldownModal.cooldownText}
+          cooldownLabel={chunkCooldownModal.cooldownLabel}
+          hasNextChunk={chunkCooldownModal.hasNextChunk}
+          nextChunkTitle={chunkCooldownModal.nextChunkTitle}
+          onRepeatCurrentStage={chunkCooldownModal.onRepeatCurrentStage}
+          onLearnNextChunk={chunkCooldownModal.onLearnNextChunk}
+          onClose={() => setChunkCooldownModal(null)}
         />
       )}
 
