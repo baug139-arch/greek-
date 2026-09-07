@@ -2,11 +2,12 @@ import { GreekWord, TeacherCustomList, HomeworkAssignment, SelectedModuleInfo } 
 import { THEMATIC_GROUPS, GREEK_VOCABULARY } from '../data/greekVocabulary';
 import { ALL_FREQUENCY_TIERS, getWordsByTierId } from '../data/frequencyVocabulary';
 import { JOHN_GOSPEL_CHAPTERS, getJohnChapterWords } from '../data/johnGospelVocabulary';
+import { LUKE_GOSPEL_CHAPTERS, getLukeChapterWords } from '../data/lukeGospelVocabulary';
 
 export interface CourseOption {
   id: string;
   title: string;
-  category: 'john_gospel' | 'frequency' | 'thematic' | 'custom_list';
+  category: 'john_gospel' | 'luke_gospel' | 'frequency' | 'thematic' | 'custom_list';
   categoryTitle: string;
   mode: 'contextual_reader' | 'frequency' | 'thematic' | 'custom_list';
   targetId: string;
@@ -25,6 +26,19 @@ export function getAllAvailableCourses(customLists: TeacherCustomList[] = []): C
       categoryTitle: 'Евангелие от Иоанна (Главы 1–21)',
       mode: 'contextual_reader',
       targetId: `john_${ch.chapterNumber}`,
+      wordCount: ch.words.length,
+    });
+  });
+
+  // 1b. Luke Gospel Chapters (1-2)
+  LUKE_GOSPEL_CHAPTERS.forEach((ch) => {
+    courses.push({
+      id: `luke_${ch.chapterNumber}`,
+      title: `Луки ${ch.chapterNumber}: ${ch.chapterTitleRu}`,
+      category: 'luke_gospel',
+      categoryTitle: 'Евангелие от Луки (Главы 1–2)',
+      mode: 'contextual_reader',
+      targetId: `luke_${ch.chapterNumber}`,
       wordCount: ch.words.length,
     });
   });
@@ -78,13 +92,18 @@ export function getWordsForCourse(
   customLists: TeacherCustomList[] = []
 ): GreekWord[] {
   if (mode === 'contextual_reader') {
-    // targetId can be 'john_1' ... 'john_21'
-    const match = targetId.match(/john_(\d+)/);
-    if (match) {
-      const chapterNum = parseInt(match[1], 10);
+    // targetId can be 'john_1' ... 'john_21' or 'luke_1' ... 'luke_2'
+    const johnMatch = targetId.match(/john_(\d+)/);
+    if (johnMatch) {
+      const chapterNum = parseInt(johnMatch[1], 10);
       return getJohnChapterWords(chapterNum);
     }
-    // Fallback to chapter 1
+    const lukeMatch = targetId.match(/luke_(\d+)/);
+    if (lukeMatch) {
+      const chapterNum = parseInt(lukeMatch[1], 10);
+      return getLukeChapterWords(chapterNum);
+    }
+    // Fallback to John chapter 1
     return getJohnChapterWords(1);
   }
 

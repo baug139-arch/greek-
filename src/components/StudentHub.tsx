@@ -41,6 +41,7 @@ import {
 import { THEMATIC_GROUPS, CHAPTERS_DATA, GREEK_VOCABULARY, BIBLICAL_PHRASES } from '../data/greekVocabulary';
 import { ALL_FREQUENCY_TIERS, FREQUENCY_ALL_WORDS, getWordsByTierId } from '../data/frequencyVocabulary';
 import { JOHN_GOSPEL_CHAPTERS, getJohnChapterWords } from '../data/johnGospelVocabulary';
+import { LUKE_GOSPEL_CHAPTERS, getLukeChapterWords } from '../data/lukeGospelVocabulary';
 import { getWordsForCourse, getWordsForAssignment, sampleRandomWords } from '../utils/courseUtils';
 import { ExamReviewModal } from './ExamReviewModal';
 import { FullModuleModal } from './FullModuleModal';
@@ -102,9 +103,12 @@ export const StudentHub: React.FC<StudentHubProps> = ({
   const [selectedTrainingMode, setSelectedTrainingMode] = useState<TrainingMode>('all');
   const [selectedDirection, setSelectedDirection] = useState<TrainingDirection>('bidirectional');
 
-  // Mode: John Gospel Chapters 1-21
+  // Mode: Reading by Gospel Books & Chapters
+  const [selectedGospelBook, setSelectedGospelBook] = useState<'john' | 'luke'>('john');
   const [selectedJohnChapter, setSelectedJohnChapter] = useState<number>(1);
   const [johnSearch, setJohnSearch] = useState<string>('');
+  const [selectedLukeChapter, setSelectedLukeChapter] = useState<number>(1);
+  const [lukeSearch, setLukeSearch] = useState<string>('');
 
   // Mode 1: Frequency Filter (35 Tiers)
   const [selectedTierId, setSelectedTierId] = useState<string>(ALL_FREQUENCY_TIERS[0]?.id || 'tier_500_plus');
@@ -169,6 +173,17 @@ export const StudentHub: React.FC<StudentHubProps> = ({
           w.translationRu.toLowerCase().includes(johnSearch.toLowerCase())
       )
     : johnChapterWords;
+
+  const currentLukeBlock = LUKE_GOSPEL_CHAPTERS.find((ch) => ch.chapterNumber === selectedLukeChapter) || LUKE_GOSPEL_CHAPTERS[0];
+  const lukeChapterWords = getLukeChapterWords(selectedLukeChapter);
+  const filteredLukeWords = lukeSearch
+    ? lukeChapterWords.filter(
+        (w) =>
+          w.greek.toLowerCase().includes(lukeSearch.toLowerCase()) ||
+          w.translationRu.toLowerCase().includes(lukeSearch.toLowerCase()) ||
+          (w.transliterationRu && w.transliterationRu.toLowerCase().includes(lukeSearch.toLowerCase()))
+      )
+    : lukeChapterWords;
 
   const getThematicWords = () => {
     return GREEK_VOCABULARY.filter((w) => w.thematicGroup === selectedThematicId);
@@ -961,7 +976,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               : 'border-transparent text-[#6B655C] hover:text-[#1A1A1A]'
           }`}
         >
-          Заучивание для чтения (Иоанна 1–21)
+          Чтение по главам (Евангелия)
         </button>
 
         <button
@@ -1006,8 +1021,46 @@ export const StudentHub: React.FC<StudentHubProps> = ({
       {/* ========================================================================= */}
       {activeTab === 'reading_john' && (
         <div className="space-y-6">
-          {/* Chapter Selector Grid (1 to 21) */}
-          <div className="space-y-2">
+          {/* Gospel Book Switcher: John vs Luke */}
+          <div className="flex flex-wrap items-center gap-2 border-b border-[#E5E1DA] pb-3">
+            <button
+              type="button"
+              onClick={() => setSelectedGospelBook('john')}
+              className={`px-4 py-2 text-xs font-sans uppercase tracking-wider font-bold transition-all cursor-pointer rounded-xs flex items-center gap-2 ${
+                selectedGospelBook === 'john'
+                  ? 'bg-[#1A1A1A] text-white shadow-xs'
+                  : 'bg-white text-[#6B655C] border border-[#E5E1DA] hover:border-[#1A1A1A] hover:text-[#1A1A1A]'
+              }`}
+            >
+              <span>📖 Евангелие от Иоанна</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-xs ${selectedGospelBook === 'john' ? 'bg-white/20 text-white' : 'bg-[#F9F7F2] text-[#8C7D6B]'}`}>
+                1–21 гл.
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedGospelBook('luke')}
+              className={`px-4 py-2 text-xs font-sans uppercase tracking-wider font-bold transition-all cursor-pointer rounded-xs flex items-center gap-2 ${
+                selectedGospelBook === 'luke'
+                  ? 'bg-[#1A1A1A] text-white shadow-xs'
+                  : 'bg-white text-[#6B655C] border border-[#E5E1DA] hover:border-[#1A1A1A] hover:text-[#1A1A1A]'
+              }`}
+            >
+              <span>📖 Евангелие от Луки</span>
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-xs ${selectedGospelBook === 'luke' ? 'bg-white/20 text-white' : 'bg-[#F9F7F2] text-[#8C7D6B]'}`}>
+                1–2 гл.
+              </span>
+            </button>
+          </div>
+
+          {/* ========================================================================= */}
+          {/* GOSPEL OF JOHN (1-21) */}
+          {/* ========================================================================= */}
+          {selectedGospelBook === 'john' && (
+            <div className="space-y-6">
+              {/* Chapter Selector Grid (1 to 21) */}
+              <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C7D6B] font-bold">
                 Выберите главу Евангелия от Иоанна (1 – 21):
@@ -1419,6 +1472,426 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               </div>
             )}
           </div>
+        </div>
+      )}
+
+          {/* ========================================================================= */}
+          {/* GOSPEL OF LUKE (1-2) */}
+          {/* ========================================================================= */}
+          {selectedGospelBook === 'luke' && (
+            <div className="space-y-6">
+              {/* Chapter Selector Grid (1 to 2) */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#8C7D6B] font-bold">
+                    Выберите главу Евангелия от Луки (1 – 2):
+                  </span>
+                  <span className="text-xs font-sans text-[#6B655C]">
+                    Выбрана: {currentLukeBlock.chapterTitleRu}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2 pb-1">
+                  {LUKE_GOSPEL_CHAPTERS.map((block) => {
+                    const isSelected = selectedLukeChapter === block.chapterNumber;
+                    const hasWords = block.words.length > 0;
+                    const chapterWordIds = block.words.map((w) => w.id);
+                    const stats = calculateSectionMasteryStats(chapterWordIds, currentStudent.wordMastery);
+
+                    return (
+                      <button
+                        key={block.chapterId}
+                        type="button"
+                        onClick={() => {
+                          setSelectedLukeChapter(block.chapterNumber);
+                          setLukeSearch('');
+                        }}
+                        className={`py-2.5 px-3 text-center border transition-all cursor-pointer relative overflow-hidden ${
+                          isSelected
+                            ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
+                            : hasWords
+                            ? 'bg-[#FDFCFB] text-[#1A1A1A] border-[#1A1A1A]/40 hover:border-[#1A1A1A]'
+                            : 'bg-white text-[#8C7D6B] border-[#E5E1DA] hover:border-[#1A1A1A]'
+                        }`}
+                      >
+                        {hasWords && (
+                          <div
+                            className="absolute bottom-0 left-0 h-1 bg-emerald-500 transition-all"
+                            style={{ width: `${stats.averageMasteryPercent}%` }}
+                          />
+                        )}
+                        <div className="text-[10px] font-sans opacity-70">Лк</div>
+                        <div className="text-base font-serif font-bold">{block.chapterNumber} глава</div>
+                        <div className="text-[9px] font-sans opacity-75 mt-0.5">
+                          {hasWords ? `${block.words.length} слов • ${stats.averageMasteryPercent}%` : '—'}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Section Mastery Header for Selected Luke Chapter with Next Portion Smart Progress */}
+              {lukeChapterWords.length > 0 && (() => {
+                const batchSize = currentStudent.settings?.batchSize || 8;
+                const totalChapterChunks = Math.ceil(lukeChapterWords.length / batchSize);
+                const sectionKey = `luke_${currentLukeBlock.chapterNumber}`;
+                const completedChunkList = currentStudent.completedChunks?.[sectionKey] || [];
+                const completedCount = completedChunkList.length;
+
+                let dueChunkIndex = -1;
+                let cooldownChunkIndex = -1;
+                let hasUncompletedChunk = false;
+                let nextChunkIndex = 0;
+
+                for (let i = 0; i < totalChapterChunks; i++) {
+                  if (!completedChunkList.includes(i)) {
+                    if (!hasUncompletedChunk) {
+                      nextChunkIndex = i;
+                      hasUncompletedChunk = true;
+                    }
+                  } else {
+                    const s = getChunkSRSStatus(sectionKey, i, currentStudent, false, nowMs);
+                    if (s.isDue && dueChunkIndex === -1) {
+                      dueChunkIndex = i;
+                    }
+                    if (s.inCooldown && cooldownChunkIndex === -1) {
+                      cooldownChunkIndex = i;
+                    }
+                  }
+                }
+
+                const activeActionChunk = hasUncompletedChunk
+                  ? nextChunkIndex
+                  : dueChunkIndex !== -1
+                  ? dueChunkIndex
+                  : cooldownChunkIndex !== -1
+                  ? cooldownChunkIndex
+                  : 0;
+
+                const activeSRS = getChunkSRSStatus(sectionKey, activeActionChunk, currentStudent, hasUncompletedChunk, nowMs);
+                const activeChunkStart = activeActionChunk * batchSize + 1;
+                const activeChunkEnd = Math.min(lukeChapterWords.length, (activeActionChunk + 1) * batchSize);
+
+                let ctaText = `Повторить главу (все порции)`;
+                if (hasUncompletedChunk) {
+                  ctaText = `Учить: Порция ${activeActionChunk + 1}/${totalChapterChunks} (${activeChunkStart}–${activeChunkEnd}) ➔`;
+                } else if (dueChunkIndex !== -1) {
+                  ctaText = `🔔 Повторить: Порция ${activeActionChunk + 1}/${totalChapterChunks} (этап ${activeSRS.step}/3) ➔`;
+                } else if (cooldownChunkIndex !== -1) {
+                  ctaText = `⏱ Разминка: Порция ${activeActionChunk + 1}/${totalChapterChunks} (зачёт через ${activeSRS.remainingText}) ➔`;
+                }
+
+                const alreadyStudiedWords = lukeChapterWords.slice(0, activeActionChunk * batchSize);
+                const weakWordsFromPreviousChunks = alreadyStudiedWords.filter((w) => {
+                  const m = currentStudent.wordMastery[w.id];
+                  return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                });
+
+                return (
+                  <div className="space-y-4">
+                    <SectionMasteryHeader
+                      title={currentLukeBlock.chapterTitleRu}
+                      subtitle={currentLukeBlock.descriptionRu}
+                      stats={calculateSectionMasteryStats(
+                        lukeChapterWords.map((w) => w.id),
+                        currentStudent.wordMastery
+                      )}
+                      onQuickPractice={() => {
+                        const nextStage = activeSRS.step === 0 ? 0 : activeSRS.step === 1 ? 1 : 2;
+                        const titleSuffix = activeSRS.inCooldown ? ' (Внезачетная разминка)' : '';
+                        onStartPractice(
+                          `${currentLukeBlock.chapterTitleRu} — Порция ${activeActionChunk + 1}/${totalChapterChunks}${titleSuffix}`,
+                          lukeChapterWords,
+                          [],
+                          selectedTrainingMode,
+                          selectedDirection,
+                          sectionKey,
+                          activeActionChunk,
+                          weakWordsFromPreviousChunks,
+                          nextStage
+                        );
+                      }}
+                      practiceButtonText={ctaText}
+                      onPracticeAllModule={() => {
+                        setFullModuleModal({
+                          isOpen: true,
+                          title: currentLukeBlock.chapterTitleRu,
+                          words: lukeChapterWords,
+                          phrases: [],
+                          sectionKey,
+                        });
+                      }}
+                      practiceAllButtonText={`⚡ Весь модуль (${lukeChapterWords.length})`}
+                    />
+
+                    {/* Progress bar and portions grid */}
+                    <div className="bg-[#FAF8F5] border border-[#E5E1DA] p-3 rounded-xs space-y-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <span className="text-xs font-sans text-[#6B655C]">
+                          Освоение порций ({completedCount}/{totalChapterChunks} завершено)
+                        </span>
+                        <span className="text-xs font-mono font-bold text-[#1A1A1A]">
+                          {totalChapterChunks > 0 ? Math.round((completedCount / totalChapterChunks) * 100) : 0}%
+                        </span>
+                      </div>
+
+                      {/* Portions chips list */}
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {Array.from({ length: totalChapterChunks }).map((_, cIdx) => {
+                          const cStart = cIdx * batchSize + 1;
+                          const cEnd = Math.min(lukeChapterWords.length, (cIdx + 1) * batchSize);
+                          const isNext = cIdx === nextChunkIndex;
+                          const srsStatus = getChunkSRSStatus(sectionKey, cIdx, currentStudent, isNext, nowMs);
+
+                          return (
+                            <button
+                              key={cIdx}
+                              type="button"
+                              onClick={() => {
+                                const studiedSoFar = lukeChapterWords.slice(0, cIdx * batchSize);
+                                const weakPrior = studiedSoFar.filter((w) => {
+                                  const m = currentStudent.wordMastery[w.id];
+                                  return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                                });
+
+                                if (srsStatus.inCooldown) {
+                                  const hasNextChunk = cIdx + 1 < totalChapterChunks;
+                                  const nextChunkStart = (cIdx + 1) * batchSize + 1;
+                                  const nextChunkEnd = Math.min((cIdx + 2) * batchSize, lukeChapterWords.length);
+
+                                  setChunkCooldownModal({
+                                    isOpen: true,
+                                    chunkTitle: `Порция ${cIdx + 1} (${cStart}–${cEnd})`,
+                                    sectionName: currentLukeBlock.chapterTitleRu,
+                                    currentStage: srsStatus.currentUnlockedStage,
+                                    nextStage: srsStatus.nextLockedStage,
+                                    cooldownText: srsStatus.badgeText.replace('🔒 ', ''),
+                                    cooldownLabel: srsStatus.cooldownLabel,
+                                    hasNextChunk,
+                                    nextChunkTitle: hasNextChunk ? `порцию ${cIdx + 2} (${nextChunkStart}–${nextChunkEnd})` : undefined,
+                                    onRepeatCurrentStage: () => {
+                                      setChunkCooldownModal(null);
+                                      onStartPractice(
+                                        `${currentLukeBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd}) [Повторение этапа ${srsStatus.currentUnlockedStage + 1}]`,
+                                        lukeChapterWords,
+                                        [],
+                                        selectedTrainingMode,
+                                        selectedDirection,
+                                        sectionKey,
+                                        cIdx,
+                                        weakPrior,
+                                        srsStatus.currentUnlockedStage
+                                      );
+                                    },
+                                    onLearnNextChunk: hasNextChunk ? () => {
+                                      setChunkCooldownModal(null);
+                                      const nextIdx = cIdx + 1;
+                                      const nextStudiedSoFar = lukeChapterWords.slice(0, nextIdx * batchSize);
+                                      const nextWeakPrior = nextStudiedSoFar.filter((w) => {
+                                        const m = currentStudent.wordMastery[w.id];
+                                        return m && (m.consecutiveCorrect < 2 || m.factor < 2.0);
+                                      });
+                                      onStartPractice(
+                                        `${currentLukeBlock.chapterTitleRu} — Порция ${nextIdx + 1}/${totalChapterChunks} (${nextChunkStart}–${nextChunkEnd})`,
+                                        lukeChapterWords,
+                                        [],
+                                        selectedTrainingMode,
+                                        selectedDirection,
+                                        sectionKey,
+                                        nextIdx,
+                                        nextWeakPrior,
+                                        0
+                                      );
+                                    } : undefined,
+                                  });
+                                  return;
+                                }
+
+                                const targetStage = srsStatus.step === 0 ? 0 : srsStatus.step === 1 ? 1 : 2;
+                                onStartPractice(
+                                  `${currentLukeBlock.chapterTitleRu} — Порция ${cIdx + 1}/${totalChapterChunks} (${cStart}–${cEnd})`,
+                                  lukeChapterWords,
+                                  [],
+                                  selectedTrainingMode,
+                                  selectedDirection,
+                                  sectionKey,
+                                  cIdx,
+                                  weakPrior,
+                                  targetStage
+                                );
+                              }}
+                              className={`px-3 py-1.5 text-xs font-sans border transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs ${srsStatus.buttonClass}`}
+                              title={srsStatus.tooltipText}
+                            >
+                              <span>Порция {cIdx + 1}</span>
+                              {srsStatus.isNext && (
+                                <span className="text-[9px] bg-amber-400 text-[#1A1A1A] px-1 py-0.2 font-bold rounded-xs">
+                                  СЛЕД
+                                </span>
+                              )}
+                              {srsStatus.inCooldown && (
+                                <span className="text-[9px] bg-amber-100 border border-amber-300 text-amber-900 px-1 py-0.2 font-medium rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
+                                  <Clock className="w-2.5 h-2.5 text-amber-700" />
+                                  {srsStatus.badgeText}
+                                </span>
+                              )}
+                              {srsStatus.isDue && (
+                                <span className="text-[9px] bg-amber-500 text-white px-1.5 py-0.2 font-bold rounded-xs flex items-center gap-0.5 animate-pulse" title={srsStatus.tooltipText}>
+                                  <Bell className="w-2.5 h-2.5" />
+                                  Повторить ({srsStatus.step}/3)
+                                </span>
+                              )}
+                              {srsStatus.isMastered && (
+                                <span className="text-[9px] bg-[#2D4A32] text-white px-1 py-0.2 font-bold rounded-xs flex items-center gap-0.5" title={srsStatus.tooltipText}>
+                                  <CheckCircle className="w-2.5 h-2.5" />
+                                  Выучено
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Luke Chapter Word List Card */}
+              <div className="border border-[#E5E1DA] p-6 bg-white shadow-xs space-y-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[#E5E1DA] pb-4">
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-[10px] font-sans uppercase tracking-widest text-[#8C7D6B] font-bold">
+                        Евангелие от Луки
+                      </span>
+                      <span className="text-[11px] font-sans px-2 py-0.5 bg-[#E5E1DA] text-[#1A1A1A] font-bold">
+                        {currentLukeBlock.words.length} слов в блоке
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-serif text-[#1A1A1A] mt-1 font-bold">
+                      Словарь: {currentLukeBlock.chapterTitleRu}
+                    </h3>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <div className="relative w-full sm:w-48">
+                      <Search className="w-3.5 h-3.5 absolute left-2.5 top-3 text-[#8C7D6B]" />
+                      <input
+                        type="text"
+                        value={lukeSearch}
+                        onChange={(e) => setLukeSearch(e.target.value)}
+                        placeholder="Поиск в главе..."
+                        className="w-full pl-8 pr-3 py-2 border border-[#E5E1DA] bg-[#FDFCFB] text-xs font-sans"
+                      />
+                    </div>
+
+                    <button
+                      type="button"
+                      disabled={lukeChapterWords.length === 0}
+                      onClick={() => {
+                        onStartPractice(
+                          currentLukeBlock.chapterTitleRu,
+                          lukeChapterWords,
+                          [],
+                          selectedTrainingMode,
+                          selectedDirection,
+                          `luke_${currentLukeBlock.chapterNumber}`,
+                          0,
+                          []
+                        );
+                      }}
+                      className={`px-5 py-2.5 text-xs font-sans uppercase tracking-widest transition-colors flex items-center justify-center gap-2 whitespace-nowrap ${
+                        lukeChapterWords.length > 0
+                          ? 'bg-[#1A1A1A] text-white hover:bg-[#2C3E50] cursor-pointer'
+                          : 'bg-[#E5E1DA] text-[#8C7D6B] cursor-not-allowed'
+                      }`}
+                    >
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                      <span>Старт ({lukeChapterWords.length})</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Word cards list */}
+                {filteredLukeWords.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {filteredLukeWords.map((word) => {
+                      const mastery = currentStudent.wordMastery[word.id];
+                      return (
+                        <div
+                          key={word.id}
+                          className="p-3.5 bg-[#FDFCFB] border border-[#E5E1DA] hover:border-[#1A1A1A] transition-all flex flex-col justify-between space-y-3"
+                        >
+                          <div>
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <span className="font-serif text-xl font-bold text-[#1A1A1A]">
+                                  {word.greek}
+                                </span>
+                                <p className="text-[11px] font-sans text-[#8C7D6B] italic">
+                                  [{word.transliterationRu}]
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => speakErasmian(word.greek, 0.85)}
+                                className="p-1.5 border border-[#E5E1DA] hover:border-[#1A1A1A] hover:bg-white text-[#1A1A1A] transition-colors cursor-pointer"
+                                title="Эразмово произношение"
+                              >
+                                <Volume2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center justify-between mt-1.5">
+                              <p className="text-sm font-serif italic text-[#2C3E50]">
+                                {word.translationRu}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => speakRussian(word.translationRu, 1.0)}
+                                className="p-1 text-[#8C7D6B] hover:text-[#1A1A1A] hover:bg-[#F9F7F2] rounded transition-colors cursor-pointer opacity-0 group-hover:opacity-100"
+                                title="Произнести по-русски"
+                              >
+                                <Volume2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                            <EditableMnemonic 
+                              word={word} 
+                              customMnemonics={currentStudent.customMnemonics} 
+                              onUpdateMnemonic={onUpdateMnemonic}
+                            />
+                          </div>
+
+                          {/* Word Mastery Progress Bar for each word */}
+                          <div className="pt-2 border-t border-[#E5E1DA]/60 space-y-1.5">
+                            <WordMasteryBar mastery={mastery} />
+                            <div className="flex justify-between items-center text-[10px] font-sans text-[#6B655C]">
+                              <span className="bg-[#E5E1DA] px-1.5 py-0.2">{word.exampleVerse.reference}</span>
+                              <span className="font-bold text-[#1A1A1A]">{word.ntFrequency} раз в НЗ</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 border border-dashed border-[#E5E1DA] space-y-2">
+                    <p className="text-sm font-serif italic text-[#1A1A1A]">
+                      {lukeChapterWords.length === 0
+                        ? `Слова для главы «Луки ${selectedLukeChapter}» ещё не добавлены.`
+                        : `По запросу «${lukeSearch}» ничего не найдено.`}
+                    </p>
+                    {lukeChapterWords.length === 0 && (
+                      <p className="text-xs font-sans text-[#8C7D6B]">
+                        Вы можете предоставить список слов для этой главы, и они мгновенно появятся здесь.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
