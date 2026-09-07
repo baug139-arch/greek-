@@ -237,11 +237,11 @@ const BASE_MORPHOLOGY_DATABASE: MorphologyWord[] = [
     stem: 'λύ',
     ending: 'ετε',
     lemma: 'λύω',
-    translation: 'вы развязываете (През., 2 л. мн.ч.)',
+    translation: 'вы развязываете / развязывайте!',
     pos: 'verb',
     tense: 'pres',
     voice: 'act',
-    mood: 'ind',
+    mood: ['ind', 'impv'],
     person: '2',
     number: 'pl'
   },
@@ -402,7 +402,7 @@ const BASE_MORPHOLOGY_DATABASE: MorphologyWord[] = [
   { id: 'm_verb_lego_2', form: 'λέγεις', stem: 'λέγ', ending: 'εις', lemma: 'λέγω', translation: 'ты говоришь', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '2', number: 'sg' },
   { id: 'm_verb_lego_3', form: 'λέγει', stem: 'λέγ', ending: 'ει', lemma: 'λέγω', translation: 'он говорит', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '3', number: 'sg' },
   { id: 'm_verb_lego_4', form: 'λέγομεν', stem: 'λέγ', ending: 'ομεν', lemma: 'λέγω', translation: 'мы говорим', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '1', number: 'pl' },
-  { id: 'm_verb_lego_5', form: 'λέγετε', stem: 'λέγ', ending: 'ετε', lemma: 'λέγω', translation: 'вы говорите', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '2', number: 'pl' },
+  { id: 'm_verb_lego_5', form: 'λέγετε', stem: 'λέγ', ending: 'ετε', lemma: 'λέγω', translation: 'вы говорите / говорите!', pos: 'verb', tense: 'pres', voice: 'act', mood: ['ind', 'impv'], person: '2', number: 'pl' },
   { id: 'm_verb_lego_6', form: 'λέγουσιν', stem: 'λέγ', ending: 'ουσιν', lemma: 'λέγω', translation: 'они говорят', pos: 'verb', tense: 'pres', voice: 'act', mood: 'ind', person: '3', number: 'pl' },
 
   // PARTICIPLES

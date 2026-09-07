@@ -1212,7 +1212,7 @@ export const GREEK_VOCABULARY: GreekWord[] = ([
   {
     id: 'word_monogenes',
     greek: 'μονογενής',
-    lemma: 'μοноγενής, -ές',
+    lemma: 'μονογενής, -ές',
     transliterationRu: 'мо-но-гэ-нэ́̄с',
     erasmianIpa: 'mo.no.ɡe.nɛ̌ːs',
     partOfSpeech: 'adjective',

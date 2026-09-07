@@ -41,8 +41,8 @@ const GREEK_DISTRACTOR_CHARS = ['α', 'ε', 'ι', 'ο', 'υ', 'ν', 'ς', 'τ', 
 
 export function createLettersForWord(word: string): { id: string; char: string }[] {
   if (!word) return [];
-  // Remove punctuation and whitespace
-  const clean = word.replace(/[,\.;·!«»—\s]/g, '');
+  // Remove punctuation, hyphens, and whitespace
+  const clean = word.replace(/[,\.;·!«»—\s\-]/g, '');
   const characters = Array.from(clean);
   
   const hasUpperCase = characters.some(c => c !== c.toLowerCase());
@@ -306,8 +306,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           type: 'word_builder',
           word: w,
           promptRu: `Соберите слово по буквам: «${w.translationRu}»`,
-          correctAnswer: w.lemma || w.greek,
-          letters: createLettersForWord(w.lemma || w.greek),
+          correctAnswer: w.greek || w.lemma,
+          letters: createLettersForWord(w.greek || w.lemma),
           hint: `Греческое слово: [${w.transliterationRu}] — «${w.translationRu}»`,
         });
       });
@@ -486,8 +486,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             type: 'word_builder',
             word: w,
             promptRu: `3. Конструктор: соберите греческое слово: «${w.translationRu}»`,
-            correctAnswer: w.lemma || w.greek,
-            letters: createLettersForWord(w.lemma || w.greek),
+            correctAnswer: w.greek || w.lemma,
+            letters: createLettersForWord(w.greek || w.lemma),
             hint: `Греческое слово: [${w.transliterationRu}] — «${w.translationRu}»`,
           });
         });

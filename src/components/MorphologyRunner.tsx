@@ -163,13 +163,18 @@ const PERSON_NUMBERS = [
   { value: '3pl', label: '3-е лицо, мн.ч.' },
 ];
 
+const ALL_VOICES = [
+  ...VOICES,
+  { value: 'midpass', label: 'Медиально-страдательный' }
+];
+
 const CATEGORY_MAP: Record<string, { label: string, options: any[] }> = {
   pos: { label: 'Часть речи', options: POS_OPTIONS },
   case: { label: 'Падеж', options: NOUN_CASES },
   number: { label: 'Число', options: NUMBERS },
   gender: { label: 'Род', options: GENDERS },
   tense: { label: 'Время', options: TENSES },
-  voice: { label: 'Залог', options: VOICES },
+  voice: { label: 'Залог', options: ALL_VOICES },
   mood: { label: 'Наклонение', options: MOODS },
   person: { label: 'Лицо', options: PERSONS },
   personNumber: { label: 'Лицо и число', options: PERSON_NUMBERS }
@@ -302,12 +307,24 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
         const expected = variant[cat as keyof MorphologyWord];
         if (expected === undefined) return false;
         
-        if (cat === 'voice' && val === 'midpass') {
-          const match = (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
-          if (!match) return false;
-        } else {
-          const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
-          if (!match) return false;
+        if (cat === 'voice') {
+          if (val === 'midpass') {
+            const match = (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+            if (!match) return false;
+          } else if (val === 'mid' || val === 'pass') {
+            const isMedioTense = !variant.tense || ['pres', 'impf', 'perf', 'plup'].includes(variant.tense);
+            const expectedHasMidOrPass = expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass')));
+            if (isMedioTense && expectedHasMidOrPass) {
+              // Valid mediopassive match
+            } else {
+              const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
+              if (!match) return false;
+            }
+          } else {
+            const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
+            if (!match) return false;
+          }
+          continue;
         }
       }
       return true;
@@ -390,8 +407,17 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
          }
 
          const expected = variant[cat as keyof MorphologyWord];
-         if (cat === 'voice' && val === 'midpass') {
-           return (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+         if (cat === 'voice') {
+           if (val === 'midpass') {
+             return (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+           } else if (val === 'mid' || val === 'pass') {
+             const isMedioTense = !variant.tense || ['pres', 'impf', 'perf', 'plup'].includes(variant.tense);
+             const expectedHasMidOrPass = expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass')));
+             if (isMedioTense && expectedHasMidOrPass) return true;
+             return Array.isArray(expected) ? expected.includes(val) : expected === val;
+           } else {
+             return Array.isArray(expected) ? expected.includes(val) : expected === val;
+           }
          } else {
            return Array.isArray(expected) ? expected.includes(val) : expected === val;
          }
@@ -437,12 +463,24 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
         const expected = variant[cat as keyof MorphologyWord];
         if (expected === undefined) return false;
         
-        if (cat === 'voice' && val === 'midpass') {
-           const match = (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
-           if (!match) return false;
-        } else {
-           const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
-           if (!match) return false;
+        if (cat === 'voice') {
+          if (val === 'midpass') {
+             const match = (expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass'))));
+             if (!match) return false;
+          } else if (val === 'mid' || val === 'pass') {
+             const isMedioTense = !variant.tense || ['pres', 'impf', 'perf', 'plup'].includes(variant.tense);
+             const expectedHasMidOrPass = expected === 'mid' || expected === 'pass' || expected === 'midpass' || (Array.isArray(expected) && (expected.includes('mid') || expected.includes('pass')));
+             if (isMedioTense && expectedHasMidOrPass) {
+               // valid mediopassive
+             } else {
+               const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
+               if (!match) return false;
+             }
+          } else {
+             const match = Array.isArray(expected) ? expected.includes(val) : expected === val;
+             if (!match) return false;
+          }
+          continue;
         }
       }
       return true;
@@ -610,11 +648,15 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
     let options = meta.options;
 
     // If mediopassive applies, collapse to single "Медиально-страдательный" button
-    if (category === 'voice' && isMediopassive) {
-      options = [
-        { value: 'act', label: 'Действительный' },
-        { value: 'midpass', label: 'Медиально-страдательный' }
-      ];
+    if (category === 'voice') {
+      if (isMediopassive) {
+        options = [
+          { value: 'act', label: 'Действительный' },
+          { value: 'midpass', label: 'Медиально-страдательный' }
+        ];
+      } else {
+        options = VOICES;
+      }
     }
 
     return (
@@ -626,8 +668,14 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
             
             if (category === 'personNumber') {
                isCorrect = correctSelections['person'] === opt.value[0] && correctSelections['number'] === opt.value.substring(1);
-            } else if (category === 'voice' && opt.value === 'midpass') {
-               isCorrect = correctSelections['voice'] === 'mid' || correctSelections['voice'] === 'pass' || correctSelections['voice'] === 'midpass';
+            } else if (category === 'voice') {
+               if (opt.value === 'midpass') {
+                 isCorrect = correctSelections['voice'] === 'mid' || correctSelections['voice'] === 'pass' || correctSelections['voice'] === 'midpass';
+               } else if (opt.value === 'mid' || opt.value === 'pass') {
+                 isCorrect = correctSelections['voice'] === opt.value || (isMediopassive && correctSelections['voice'] === 'midpass');
+               } else {
+                 isCorrect = correctSelections['voice'] === opt.value;
+               }
             } else {
                isCorrect = correctSelections[category] === opt.value;
             }
@@ -672,7 +720,7 @@ export const MorphologyRunner: React.FC<MorphologyRunnerProps> = ({ words, onCom
             <div className="flex items-center gap-2 text-xs text-[#2D4A32] bg-[#E8F3EB] border border-[#C5D9C8] px-3 py-1.5 rounded-lg shadow-2xs animate-fade-in mt-1">
               <Check className="w-3.5 h-3.5 text-[#2D4A32] shrink-0" />
               <span>
-                Принято: <strong>{meta.options.find(o => o.value === correctSelections[category])?.label || correctSelections[category]}</strong>. 
+                Принято: <strong>{meta.options.find(o => o.value === correctSelections[category])?.label || (category === 'voice' && correctSelections[category] === 'midpass' ? 'Медиально-страдательный' : correctSelections[category])}</strong>. 
                 Также верно для этой формы: <strong>{categoryAlternatives[category].join(' или ')}</strong>.
               </span>
             </div>

@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Евангелие от Иоанна — Главы 1, 2 и 3</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 12mm 12mm 14mm 12mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        font-size: 8pt;
+        color: #8C7D6B;
+      }
+      @bottom-left {
+        content: "Койне • Евангелие от Иоанна — Словарь приложения";
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        font-size: 8pt;
+        color: #8C7D6B;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1a1a1a;
+      background-color: #ffffff;
+      line-height: 1.35;
+      font-size: 9pt;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .cover-header {
+      border-bottom: 2px solid #2b2520;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .cover-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 20pt;
+      font-weight: bold;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+
+    .cover-subtitle {
+      font-size: 10pt;
+      color: #635345;
+      margin-top: 3px;
+    }
+
+    .cover-badge {
+      font-size: 8.5pt;
+      background: #f4ede4;
+      color: #5c4731;
+      padding: 5px 12px;
+      border-radius: 4px;
+      border: 1px solid #dfd5c6;
+      font-weight: 600;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .summary-box {
+      background-color: #faf8f5;
+      border: 1px solid #e7ded3;
+      border-radius: 5px;
+      padding: 7px 12px;
+      margin-bottom: 16px;
+      font-size: 8.5pt;
+      color: #4a4036;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chapter-section {
+      margin-bottom: 20px;
+      page-break-inside: auto;
+    }
+
+    .chapter-header {
+      background: #2b2520;
+      color: #ffffff;
+      padding: 6px 10px;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      page-break-after: avoid;
+    }
+
+    .chapter-title {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 11.5pt;
+      font-weight: bold;
+      letter-spacing: 0.2px;
+    }
+
+    .chapter-count {
+      font-size: 8pt;
+      opacity: 0.95;
+      background: rgba(255,255,255,0.22);
+      padding: 2px 7px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .chapter-desc {
+      background: #fdfbf7;
+      border-left: 3px solid #8c7355;
+      border-right: 1px solid #eee5da;
+      border-bottom: 1px solid #eee5da;
+      padding: 5px 10px;
+      font-size: 8pt;
+      color: #635345;
+      margin-bottom: 2px;
+      font-style: italic;
+      page-break-after: avoid;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      page-break-inside: auto;
+    }
+
+    tr {
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+
+    th {
+      background-color: #f1ece4;
+      color: #3b3127;
+      font-weight: 700;
+      text-align: left;
+      padding: 5px 7px;
+      font-size: 7.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid #d5c8b8;
+    }
+
+    td {
+      padding: 5px 7px;
+      border-bottom: 1px solid #ebe5dc;
+      vertical-align: middle;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fcfbf9;
+    }
+
+    .col-num {
+      width: 24px;
+      color: #8c7d6b;
+      font-size: 7.5pt;
+      text-align: center;
+    }
+
+    .col-greek {
+      width: 140px;
+    }
+
+    .col-pron {
+      width: 95px;
+      color: #6d6254;
+      font-size: 8pt;
+    }
+
+    .col-verse {
+      width: 60px;
+      white-space: nowrap;
+    }
+
+    .col-trans {
+      font-weight: 600;
+      color: #111111;
+      width: 175px;
+    }
+
+    .col-context {
+      font-size: 8pt;
+      color: #4a4036;
+    }
+
+    .greek-word {
+      font-family: "Palatino Linotype", "Palatino", "Georgia", "Times New Roman", serif;
+      font-size: 11pt;
+      font-weight: bold;
+      color: #111111;
+      letter-spacing: 0.2px;
+    }
+
+    .greek-form-diff {
+      font-size: 7.5pt;
+      color: #7a6e60;
+      display: block;
+      font-style: italic;
+      margin-top: 1px;
+    }
+
+    .verse-badge {
+      display: inline-block;
+      font-size: 7.5pt;
+      font-weight: 700;
+      background: #eee7dd;
+      color: #443729;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .context-greek {
+      font-family: "Palatino Linotype", "Palatino", "Georgia", "Times New Roman", serif;
+      font-size: 8pt;
+      color: #2b2520;
+      font-style: normal;
+    }
+
+    .context-ru {
+      color: #736759;
+      font-size: 7.5pt;
+      margin-top: 1px;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      padding-top: 8px;
+      border-top: 1px solid #d5c8b8;
+      font-size: 7.5pt;
+      color: #8c7d6b;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cover-header">
+    <div>
+      <div class="cover-title">Евангелие от Иоанна — Главы 1, 2 и 3</div>
+      <div class="cover-subtitle">Словарь греческих слов с переводом и контекстом (100 ключевых слов)</div>
+    </div>
+    <div class="cover-badge">
+      3 главы<br>
+      <strong>100 слов</strong>
+    </div>
+  </div>
+
+  <div class="summary-box">
+    <div>
+      <strong>Словарь для заучивания:</strong> все слова с точным переводом и контекстом из текста Нового Завета.
+    </div>
+    <div>
+      <strong>Порядок:</strong> по главам и стихам
+    </div>
+  </div>
+
+  
+    <div class="chapter-section">
+      <div class="chapter-header">
+        <span class="chapter-title">Слова для Иоанна 1</span>
+        <span class="chapter-count">24 слов</span>
+      </div>
+      <div class="chapter-desc">24 ключевых слова для чтения первой главы Евангелия от Иоанна (Ин 1:1–51).</div>
+      <table>
+        <thead>
+          <tr>
+            <th class="col-num">№</th>
+            <th class="col-greek">Слово (Лемма)</th>
+            <th class="col-pron">Чтение</th>
+            <th class="col-verse">Стих</th>
+            <th class="col-trans">Перевод</th>
+            <th class="col-context">Контекст в стихе</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td class="col-num">1</td>
+              <td class="col-greek">
+                <span class="greek-word">σκοτία</span>
+                
+              </td>
+              <td class="col-pron">скоти́а</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:5</span>
+              </td>
+              <td class="col-trans">темнота</td>
+              <td class="col-context">
+                <div class="context-greek">τὸ φῶς ἐν τῇ σκοτίᾳ φαίνει</div>
+                       <div class="context-ru">Свет во тьме светит</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">2</td>
+              <td class="col-greek">
+                <span class="greek-word">καταλαμβάνω</span>
+                
+              </td>
+              <td class="col-pron">каталамба́но</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:5</span>
+              </td>
+              <td class="col-trans">овладеваю, постигаю</td>
+              <td class="col-context">
+                <div class="context-greek">ἡ σκοτία αὐτὸ οὐ κατέλαβεν</div>
+                       <div class="context-ru">Тьма его не объяла</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">3</td>
+              <td class="col-greek">
+                <span class="greek-word">φαίνω</span>
+                
+              </td>
+              <td class="col-pron">фа́йно</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:5</span>
+              </td>
+              <td class="col-trans">сияю, являю</td>
+              <td class="col-context">
+                <div class="context-greek">τὸ φῶς ἐν τῇ σκοτίᾳ φαίνει</div>
+                       <div class="context-ru">Свет во тьме светит</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">4</td>
+              <td class="col-greek">
+                <span class="greek-word">σκηνόω</span>
+                
+              </td>
+              <td class="col-pron">скэно́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:14</span>
+              </td>
+              <td class="col-trans">обитаю, раскидываю шатер</td>
+              <td class="col-context">
+                <div class="context-greek">ἐσκήνωσεν ἐν ἡμῖν</div>
+                       <div class="context-ru">Обитал (раскинул шатер) среди нас</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">5</td>
+              <td class="col-greek">
+                <span class="greek-word">μονογενής</span>
+                
+              </td>
+              <td class="col-pron">моногэнэ́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:14</span>
+              </td>
+              <td class="col-trans">единородный, единственный</td>
+              <td class="col-context">
+                <div class="context-greek">δόξαν ὡς μονογενοῦς παρὰ πατρός</div>
+                       <div class="context-ru">Славу как Единородного от Отца</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">6</td>
+              <td class="col-greek">
+                <span class="greek-word">πλήρωμα</span>
+                
+              </td>
+              <td class="col-pron">плэ́рома</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:16</span>
+              </td>
+              <td class="col-trans">полнота</td>
+              <td class="col-context">
+                <div class="context-greek">ἐκ τοῦ πληρώματος αὐτοῦ</div>
+                       <div class="context-ru">Из полноты Его</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">7</td>
+              <td class="col-greek">
+                <span class="greek-word">κόλπος</span>
+                
+              </td>
+              <td class="col-pron">ко́лпос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:18</span>
+              </td>
+              <td class="col-trans">недро, лоно, грудь</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ὢν εἰς τὸν κόλπον τοῦ πατρός</div>
+                       <div class="context-ru">Сущий в недре Отчем</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">8</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐξηγέομαι</span>
+                
+              </td>
+              <td class="col-pron">эксэгэ́омай</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:18</span>
+              </td>
+              <td class="col-trans">возвещаю, истолковываю, являю</td>
+              <td class="col-context">
+                <div class="context-greek">ἐκεῖνος ἐξηγήσατο</div>
+                       <div class="context-ru">Тот явил / истолковал</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">9</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀρνέομαι</span>
+                
+              </td>
+              <td class="col-pron">арнэ́омай</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:20</span>
+              </td>
+              <td class="col-trans">отрицаю, отрекаюсь</td>
+              <td class="col-context">
+                <div class="context-greek">ὡμολόγησεν καὶ οὐκ ἠρνήσατο</div>
+                       <div class="context-ru">Исповедал и не отрекся</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">10</td>
+              <td class="col-greek">
+                <span class="greek-word">ὁμολογέω</span>
+                
+              </td>
+              <td class="col-pron">хомологэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:20</span>
+              </td>
+              <td class="col-trans">признаю, исповедую</td>
+              <td class="col-context">
+                <div class="context-greek">ὡμολόγησεν ὅτι ἐγὼ οὐκ εἰμὶ ὁ Χριστός</div>
+                       <div class="context-ru">Признал: я не Христос</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">11</td>
+              <td class="col-greek">
+                <span class="greek-word">εὐθύνω</span>
+                
+              </td>
+              <td class="col-pron">эутхю́но</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:23</span>
+              </td>
+              <td class="col-trans">выпрямляю, делаю прямым</td>
+              <td class="col-context">
+                <div class="context-greek">εὐθύνατε τὴν ὁδὸν Κυρίου</div>
+                       <div class="context-ru">Исправьте путь Господу</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">12</td>
+              <td class="col-greek">
+                <span class="greek-word">ἔρημος</span>
+                
+              </td>
+              <td class="col-pron">э́рэмос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:23</span>
+              </td>
+              <td class="col-trans">пустыня</td>
+              <td class="col-context">
+                <div class="context-greek">φωνὴ βοῶντος ἐν τῇ ἐρήμῳ</div>
+                       <div class="context-ru">Глас вопиющего в пустыне</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">13</td>
+              <td class="col-greek">
+                <span class="greek-word">ἱμάς</span>
+                
+              </td>
+              <td class="col-pron">хима́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:27</span>
+              </td>
+              <td class="col-trans">ремень обуви</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ἱμὰς τοῦ ὑποδήματος</div>
+                       <div class="context-ru">Ремень обуви</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">14</td>
+              <td class="col-greek">
+                <span class="greek-word">ὑπόδημα</span>
+                
+              </td>
+              <td class="col-pron">хюпо́дэма</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:27</span>
+              </td>
+              <td class="col-trans">сандалия, обувь</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ἱμὰς τοῦ ὑποδήματος</div>
+                       <div class="context-ru">Ремень обуви</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">15</td>
+              <td class="col-greek">
+                <span class="greek-word">λύω</span>
+                
+              </td>
+              <td class="col-pron">лю́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:27</span>
+              </td>
+              <td class="col-trans">развязываю, освобождаю</td>
+              <td class="col-context">
+                <div class="context-greek">ἵνα λύσω αὐτοῦ τὸν ἱμάντα</div>
+                       <div class="context-ru">Развязать ремень у него</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">16</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐπαύριον</span>
+                
+              </td>
+              <td class="col-pron">эпа́урион</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:29</span>
+              </td>
+              <td class="col-trans">на следующий день, назавтра</td>
+              <td class="col-context">
+                <div class="context-greek">τῇ ἐπαύριον βλέπει τὸν Ἰησοῦν</div>
+                       <div class="context-ru">На следующий день видит Иисуса</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">17</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀρνίον</span>
+                
+              </td>
+              <td class="col-pron">арни́он</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:29</span>
+              </td>
+              <td class="col-trans">агнец</td>
+              <td class="col-context">
+                <div class="context-greek">ἴδε ὁ ἀμνὸς τοῦ θεοῦ</div>
+                       <div class="context-ru">Вот Агнец Божий</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">18</td>
+              <td class="col-greek">
+                <span class="greek-word">θεάομαι</span>
+                
+              </td>
+              <td class="col-pron">тхэа́омай</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:32</span>
+              </td>
+              <td class="col-trans">смотрю, созерцаю</td>
+              <td class="col-context">
+                <div class="context-greek">τεθέαμαι τὸ πνεῦμα καταβαῖνον</div>
+                       <div class="context-ru">Я видел Духа сходящего</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">19</td>
+              <td class="col-greek">
+                <span class="greek-word">περιστερά</span>
+                
+              </td>
+              <td class="col-pron">пэристэра́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:32</span>
+              </td>
+              <td class="col-trans">голубь</td>
+              <td class="col-context">
+                <div class="context-greek">ὡσεὶ περιστερὰν ἐξ οὐρανοῦ</div>
+                       <div class="context-ru">Как голубя с неба</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">20</td>
+              <td class="col-greek">
+                <span class="greek-word">ῥαββί</span>
+                
+              </td>
+              <td class="col-pron">рабби́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:38</span>
+              </td>
+              <td class="col-trans">учитель, равви</td>
+              <td class="col-context">
+                <div class="context-greek">Ῥαββί, ὃ λέγεται Διδάσκαλε</div>
+                       <div class="context-ru">Равви (что значит «Учитель»)</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">21</td>
+              <td class="col-greek">
+                <span class="greek-word">ἑρμηνεύω</span>
+                
+              </td>
+              <td class="col-pron">хэрмэнэ́уо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:38</span>
+              </td>
+              <td class="col-trans">перевожу, истолковываю</td>
+              <td class="col-context">
+                <div class="context-greek">ὃ λέγεται ἑρμηνευόμενον Διδάσκαλε</div>
+                       <div class="context-ru">Переводится как «Учитель»</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">22</td>
+              <td class="col-greek">
+                <span class="greek-word">μεθερμηνεύω</span>
+                
+              </td>
+              <td class="col-pron">мэтхэрмэнэ́уо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:41</span>
+              </td>
+              <td class="col-trans">переводится как</td>
+              <td class="col-context">
+                <div class="context-greek">ὅ ἐστιν μεθερμηνευόμενον Χριστός</div>
+                       <div class="context-ru">Переводится как «Христос»</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">23</td>
+              <td class="col-greek">
+                <span class="greek-word">δόλος</span>
+                
+              </td>
+              <td class="col-pron">до́лос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:47</span>
+              </td>
+              <td class="col-trans">лукавство, хитрость</td>
+              <td class="col-context">
+                <div class="context-greek">ἐν ᾧ δόλος οὐκ ἔστιν</div>
+                       <div class="context-ru">В котором нет лукавства</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">24</td>
+              <td class="col-greek">
+                <span class="greek-word">συκή</span>
+                
+              </td>
+              <td class="col-pron">сюкэ́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 1:48</span>
+              </td>
+              <td class="col-trans">смоковница</td>
+              <td class="col-context">
+                <div class="context-greek">ὄντα ὑπὸ τὴν συκῆν</div>
+                       <div class="context-ru">Бывшего под смоковницей</div>
+              </td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="chapter-section">
+      <div class="chapter-header">
+        <span class="chapter-title">Слова для Иоанна 2</span>
+        <span class="chapter-count">42 слов</span>
+      </div>
+      <div class="chapter-desc">42 ключевых слова для чтения второй главы Евангелия от Иоанна.</div>
+      <table>
+        <thead>
+          <tr>
+            <th class="col-num">№</th>
+            <th class="col-greek">Слово (Лемма)</th>
+            <th class="col-pron">Чтение</th>
+            <th class="col-verse">Стих</th>
+            <th class="col-trans">Перевод</th>
+            <th class="col-context">Контекст в стихе</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td class="col-num">1</td>
+              <td class="col-greek">
+                <span class="greek-word">τρίτος</span>
+                <span class="greek-form-diff">форма: τρίτῃ</span>
+              </td>
+              <td class="col-pron">три́тос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:1</span>
+              </td>
+              <td class="col-trans">третий</td>
+              <td class="col-context">
+                <div class="context-greek">τῇ ἡμέρᾳ τῇ τρίτῃ</div>
+                       <div class="context-ru">На третий день</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">2</td>
+              <td class="col-greek">
+                <span class="greek-word">γάμος</span>
+                
+              </td>
+              <td class="col-pron">га́мос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:1</span>
+              </td>
+              <td class="col-trans">брак, свадьба</td>
+              <td class="col-context">
+                <div class="context-greek">γάμος ἐγένετο ἐν Κανᾷ</div>
+                       <div class="context-ru">Был брак в Кане</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">3</td>
+              <td class="col-greek">
+                <span class="greek-word">ὑστερέω</span>
+                <span class="greek-form-diff">форма: ὑστερήσαντος</span>
+              </td>
+              <td class="col-pron">хюстэрэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:3</span>
+              </td>
+              <td class="col-trans">нуждаюсь, терплю недостаток, кончаюсь</td>
+              <td class="col-context">
+                <div class="context-greek">ὑστερήσαντος οἴνου</div>
+                       <div class="context-ru">Когда недоставало вина</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">4</td>
+              <td class="col-greek">
+                <span class="greek-word">οὔπω</span>
+                
+              </td>
+              <td class="col-pron">у́по</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:4</span>
+              </td>
+              <td class="col-trans">ещё не</td>
+              <td class="col-context">
+                <div class="context-greek">οὔπω ἥκει ἡ ὥρα μου</div>
+                       <div class="context-ru">Еще не пришел час Мой</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">5</td>
+              <td class="col-greek">
+                <span class="greek-word">ἥκω</span>
+                <span class="greek-form-diff">форма: ἥκει</span>
+              </td>
+              <td class="col-pron">хэ́ко</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:4</span>
+              </td>
+              <td class="col-trans">пришел, настал</td>
+              <td class="col-context">
+                <div class="context-greek">οὔπω ἥκει ἡ ὥρα μου</div>
+                       <div class="context-ru">Еще не пришел час Мой</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">6</td>
+              <td class="col-greek">
+                <span class="greek-word">διάκονος</span>
+                <span class="greek-form-diff">форма: διακόνοις</span>
+              </td>
+              <td class="col-pron">диа́конос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:5</span>
+              </td>
+              <td class="col-trans">слуга, служитель</td>
+              <td class="col-context">
+                <div class="context-greek">λέγει τοῖς διακόνοις</div>
+                       <div class="context-ru">Говорит слугам</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">7</td>
+              <td class="col-greek">
+                <span class="greek-word">λίθινος</span>
+                <span class="greek-form-diff">форма: λίθιναι</span>
+              </td>
+              <td class="col-pron">ли́тхинос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">каменный</td>
+              <td class="col-context">
+                <div class="context-greek">ὑδρίαι λίθιναι ἕξ</div>
+                       <div class="context-ru">Шесть каменных водоносов</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">8</td>
+              <td class="col-greek">
+                <span class="greek-word">ὑδρία</span>
+                <span class="greek-form-diff">форма: ὑδρίαι</span>
+              </td>
+              <td class="col-pron">хюдри́а</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">сосуд для воды, водонос</td>
+              <td class="col-context">
+                <div class="context-greek">ὑδρίαι λίθιναι ἕξ</div>
+                       <div class="context-ru">Шесть каменных водоносов</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">9</td>
+              <td class="col-greek">
+                <span class="greek-word">ἓξ</span>
+                
+              </td>
+              <td class="col-pron">хэ́кс</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">шесть</td>
+              <td class="col-context">
+                <div class="context-greek">ὑδρίαι λίθιναι ἕξ</div>
+                       <div class="context-ru">Шесть каменных водоносов</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">10</td>
+              <td class="col-greek">
+                <span class="greek-word">καθαρισμός</span>
+                <span class="greek-form-diff">форма: καθαρισμὸν</span>
+              </td>
+              <td class="col-pron">катхарисмо́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">очищение, обряд очищения</td>
+              <td class="col-context">
+                <div class="context-greek">κατὰ τὸν καθαρισμὸν τῶν Ἰουδαίων</div>
+                       <div class="context-ru">По обряду очищения иудейского</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">11</td>
+              <td class="col-greek">
+                <span class="greek-word">κεῖμαι</span>
+                <span class="greek-form-diff">форма: κείμεναι</span>
+              </td>
+              <td class="col-pron">кэ́ймай</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">лежу, нахожусь, стою</td>
+              <td class="col-context">
+                <div class="context-greek">κείμεναι κατὰ τὸν καθαρισμόν</div>
+                       <div class="context-ru">Стоявшие по обряду очищения</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">12</td>
+              <td class="col-greek">
+                <span class="greek-word">χωρέω</span>
+                <span class="greek-form-diff">форма: χωροῦσαι</span>
+              </td>
+              <td class="col-pron">хорэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">вмещаю, держу в себе</td>
+              <td class="col-context">
+                <div class="context-greek">χωροῦσαι μετρητὰς δύο ἢ τρεῖς</div>
+                       <div class="context-ru">Вмещавшие по две или по три меры</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">13</td>
+              <td class="col-greek">
+                <span class="greek-word">μετρητής</span>
+                <span class="greek-form-diff">форма: μετρητὰς</span>
+              </td>
+              <td class="col-pron">мэтрэтэ́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:6</span>
+              </td>
+              <td class="col-trans">метрет (мера объема ~39 л)</td>
+              <td class="col-context">
+                <div class="context-greek">μετρητὰς δύο ἢ τρεῖς</div>
+                       <div class="context-ru">Две или три меры</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">14</td>
+              <td class="col-greek">
+                <span class="greek-word">γεμίζω</span>
+                <span class="greek-form-diff">форма: γεμίσατε</span>
+              </td>
+              <td class="col-pron">гэми́здо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:7</span>
+              </td>
+              <td class="col-trans">наполняю</td>
+              <td class="col-context">
+                <div class="context-greek">γεμίσατε τὰς ὑδρίας ὕδατος</div>
+                       <div class="context-ru">Наполните сосуды водой</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">15</td>
+              <td class="col-greek">
+                <span class="greek-word">ἄνω</span>
+                <span class="greek-form-diff">форма: ἕως ἄνω</span>
+              </td>
+              <td class="col-pron">а́но</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:7</span>
+              </td>
+              <td class="col-trans">вверх; доверху</td>
+              <td class="col-context">
+                <div class="context-greek">ἐγέμισαν αὐτὰς ἕως ἄνω</div>
+                       <div class="context-ru">Наполнили их доверху</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">16</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀντλέω</span>
+                <span class="greek-form-diff">форма: ἀντλήσατε</span>
+              </td>
+              <td class="col-pron">антлэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:8</span>
+              </td>
+              <td class="col-trans">черпаю, наливаю</td>
+              <td class="col-context">
+                <div class="context-greek">ἀντλήσατε νῦν καὶ φέρετε</div>
+                       <div class="context-ru">Почерпните теперь и несите</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">17</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀρχιτρίκλινος</span>
+                <span class="greek-form-diff">форма: ἀρχιτρικλίνῳ</span>
+              </td>
+              <td class="col-pron">архитри́клинос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:8</span>
+              </td>
+              <td class="col-trans">распорядитель пира</td>
+              <td class="col-context">
+                <div class="context-greek">φέρετε τῷ ἀρχιτρικλίνῳ</div>
+                       <div class="context-ru">Несите распорядителю пира</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">18</td>
+              <td class="col-greek">
+                <span class="greek-word">γεύομαι</span>
+                <span class="greek-form-diff">форма: ἐγεύσατο</span>
+              </td>
+              <td class="col-pron">гэ́уомай</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:9</span>
+              </td>
+              <td class="col-trans">вкушаю, пробую на вкус</td>
+              <td class="col-context">
+                <div class="context-greek">ἐγεύσατο ὁ ἀρχιτρίκλινος τὸ ὕδωρ</div>
+                       <div class="context-ru">Распорядитель отведал воды</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">19</td>
+              <td class="col-greek">
+                <span class="greek-word">πόθεν</span>
+                
+              </td>
+              <td class="col-pron">по́тхэн</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:9</span>
+              </td>
+              <td class="col-trans">откуда?</td>
+              <td class="col-context">
+                <div class="context-greek">οὐκ ᾔδει πόθεν ἐστίν</div>
+                       <div class="context-ru">Не знал, откуда это</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">20</td>
+              <td class="col-greek">
+                <span class="greek-word">νυμφίος</span>
+                <span class="greek-form-diff">форма: νυμφίον</span>
+              </td>
+              <td class="col-pron">нюмфи́ос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:9</span>
+              </td>
+              <td class="col-trans">жених</td>
+              <td class="col-context">
+                <div class="context-greek">φωνεῖ τὸν νυμφίον</div>
+                       <div class="context-ru">Зовет жениха</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">21</td>
+              <td class="col-greek">
+                <span class="greek-word">μεθύσκω</span>
+                <span class="greek-form-diff">форма: μεθυσθῶσιν</span>
+              </td>
+              <td class="col-pron">мэтхю́ско</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:10</span>
+              </td>
+              <td class="col-trans">напиваюсь, упиваюсь</td>
+              <td class="col-context">
+                <div class="context-greek">ὅταν μεθυσθῶσιν τὸν ἐλάσσω</div>
+                       <div class="context-ru">Когда напиются, тогда худшее</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">22</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐλάσσων</span>
+                <span class="greek-form-diff">форма: ἐλάσσω</span>
+              </td>
+              <td class="col-pron">эла́ссон</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:10</span>
+              </td>
+              <td class="col-trans">худший, меньший</td>
+              <td class="col-context">
+                <div class="context-greek">τότε τὸν ἐλάσσω</div>
+                       <div class="context-ru">Тогда худшее [вино]</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">23</td>
+              <td class="col-greek">
+                <span class="greek-word">πάσχα</span>
+                
+              </td>
+              <td class="col-pron">па́сха</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:13</span>
+              </td>
+              <td class="col-trans">пасха</td>
+              <td class="col-context">
+                <div class="context-greek">ἐγγὺς ἦν τὸ πάσχα</div>
+                       <div class="context-ru">Близко была Пасха</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">24</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐγγύς</span>
+                
+              </td>
+              <td class="col-pron">энгю́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:13</span>
+              </td>
+              <td class="col-trans">близко</td>
+              <td class="col-context">
+                <div class="context-greek">ἐγγὺς ἦν τὸ πάσχα τῶν Ἰουδαίων</div>
+                       <div class="context-ru">Близко была Пасха Иудейская</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">25</td>
+              <td class="col-greek">
+                <span class="greek-word">βοῦς</span>
+                <span class="greek-form-diff">форма: βόας</span>
+              </td>
+              <td class="col-pron">бу́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:14</span>
+              </td>
+              <td class="col-trans">вол, бык, скот</td>
+              <td class="col-context">
+                <div class="context-greek">πωλοῦντας βόας καὶ πρόβατα</div>
+                       <div class="context-ru">Продающих волов и овец</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">26</td>
+              <td class="col-greek">
+                <span class="greek-word">πρόβατον</span>
+                <span class="greek-form-diff">форма: πρόβατα</span>
+              </td>
+              <td class="col-pron">про́батон</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:14</span>
+              </td>
+              <td class="col-trans">овца</td>
+              <td class="col-context">
+                <div class="context-greek">βόας καὶ πρόβατα καὶ περιστεράς</div>
+                       <div class="context-ru">Волов, овец и голубей</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">27</td>
+              <td class="col-greek">
+                <span class="greek-word">περιστερά</span>
+                <span class="greek-form-diff">форма: περιστεράς</span>
+              </td>
+              <td class="col-pron">пэристэра́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:14</span>
+              </td>
+              <td class="col-trans">голубь</td>
+              <td class="col-context">
+                <div class="context-greek">τοῖς τὰς περιστερὰς πωλοῦσιν</div>
+                       <div class="context-ru">Продающим голубей</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">28</td>
+              <td class="col-greek">
+                <span class="greek-word">κερματιστής</span>
+                <span class="greek-form-diff">форма: κερματιστὰς</span>
+              </td>
+              <td class="col-pron">кэрматистэ́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:14</span>
+              </td>
+              <td class="col-trans">меняла мелких денег</td>
+              <td class="col-context">
+                <div class="context-greek">τοὺς κερματιστὰς καθημένους</div>
+                       <div class="context-ru">Сидящих менял</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">29</td>
+              <td class="col-greek">
+                <span class="greek-word">φραγέλλιον</span>
+                
+              </td>
+              <td class="col-pron">фрагэ́ллион</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">бич, плеть</td>
+              <td class="col-context">
+                <div class="context-greek">ποιήσας φραγέλλιον ἐκ σχοινίων</div>
+                       <div class="context-ru">Сделав бич из веревок</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">30</td>
+              <td class="col-greek">
+                <span class="greek-word">σχοινίον</span>
+                <span class="greek-form-diff">форма: σχοινίων</span>
+              </td>
+              <td class="col-pron">схойни́он</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">веревка, шнур</td>
+              <td class="col-context">
+                <div class="context-greek">φραγέλλιον ἐκ σχοινίων</div>
+                       <div class="context-ru">Бич из веревок</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">31</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐκχέω</span>
+                <span class="greek-form-diff">форма: ἐξέχεεν</span>
+              </td>
+              <td class="col-pron">экхэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">изливаю, рассыпаю</td>
+              <td class="col-context">
+                <div class="context-greek">ἐξέχεεν τὸ κέρμα</div>
+                       <div class="context-ru">Рассыпал монеты</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">32</td>
+              <td class="col-greek">
+                <span class="greek-word">κέρμα</span>
+                
+              </td>
+              <td class="col-pron">кэ́рма</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">монета, мелкие деньги</td>
+              <td class="col-context">
+                <div class="context-greek">ἐξέχεεν τὸ κέρμα</div>
+                       <div class="context-ru">Рассыпал монеты</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">33</td>
+              <td class="col-greek">
+                <span class="greek-word">τράπεζα</span>
+                <span class="greek-form-diff">форма: τραπέζας</span>
+              </td>
+              <td class="col-pron">тра́пэзда</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">стол, трапеза</td>
+              <td class="col-context">
+                <div class="context-greek">τὰς τραπέζας ἀνέτρεψεν</div>
+                       <div class="context-ru">Столы опрокинул</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">34</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀνατρέπω</span>
+                <span class="greek-form-diff">форма: ἀνέτρεψεν</span>
+              </td>
+              <td class="col-pron">анатрэ́по</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">опрокидываю</td>
+              <td class="col-context">
+                <div class="context-greek">τὰς τραπέζας ἀνέτρεψεν</div>
+                       <div class="context-ru">Столы опрокинул</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">35</td>
+              <td class="col-greek">
+                <span class="greek-word">κολλυβιστής</span>
+                <span class="greek-form-diff">форма: κολλυβιστῶν</span>
+              </td>
+              <td class="col-pron">коллюбистэ́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:15</span>
+              </td>
+              <td class="col-trans">меняла денег</td>
+              <td class="col-context">
+                <div class="context-greek">τῶν κολλυβιστῶν ἐξέχεεν</div>
+                       <div class="context-ru">У менял рассыпал</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">36</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐμπόριον</span>
+                <span class="greek-form-diff">форма: ἐμπορίου</span>
+              </td>
+              <td class="col-pron">эмпо́рион</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:16</span>
+              </td>
+              <td class="col-trans">торговля, дом торговли</td>
+              <td class="col-context">
+                <div class="context-greek">μὴ ποιεῖτε οἶκον ἐμπορίου</div>
+                       <div class="context-ru">Не делайте дома торговли</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">37</td>
+              <td class="col-greek">
+                <span class="greek-word">μνημονεύω</span>
+                <span class="greek-form-diff">форма: ἐμνήσθησαν</span>
+              </td>
+              <td class="col-pron">мнэмонэ́уо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:17</span>
+              </td>
+              <td class="col-trans">помню, вспоминаю</td>
+              <td class="col-context">
+                <div class="context-greek">ἐμνήσθησαν οἱ μαθηταὶ αὐτοῦ</div>
+                       <div class="context-ru">Вспомнили ученики Его</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">38</td>
+              <td class="col-greek">
+                <span class="greek-word">ζῆλος</span>
+                
+              </td>
+              <td class="col-pron">здэ́лос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:17</span>
+              </td>
+              <td class="col-trans">ревность, рвение</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ζῆλος τοῦ οἴκου σου</div>
+                       <div class="context-ru">Ревность по доме Твоем</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">39</td>
+              <td class="col-greek">
+                <span class="greek-word">κατεσθίω</span>
+                <span class="greek-form-diff">форма: καταφάγεταί</span>
+              </td>
+              <td class="col-pron">катэстхи́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:17</span>
+              </td>
+              <td class="col-trans">съедаю, поглощаю</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ζῆλος τοῦ οἴκου σου καταφάγεταί με</div>
+                       <div class="context-ru">Ревность по доме Твоем снедает Меня</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">40</td>
+              <td class="col-greek">
+                <span class="greek-word">τεσσαράκοντα</span>
+                <span class="greek-form-diff">форма: τεσσεράκοντα</span>
+              </td>
+              <td class="col-pron">тэссара́конта</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:20</span>
+              </td>
+              <td class="col-trans">сорок</td>
+              <td class="col-context">
+                <div class="context-greek">τεσσεράκοντα καὶ ἓξ ἔτεσιν</div>
+                       <div class="context-ru">Сорок шесть лет</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">41</td>
+              <td class="col-greek">
+                <span class="greek-word">οἰκοδομέω</span>
+                <span class="greek-form-diff">форма: οἰκοδομήθη</span>
+              </td>
+              <td class="col-pron">ойкодомэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:20</span>
+              </td>
+              <td class="col-trans">строю, воздвигаю</td>
+              <td class="col-context">
+                <div class="context-greek">οἰκοδομήθη ὁ ναὸς οὗτος</div>
+                       <div class="context-ru">Строился храм сей</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">42</td>
+              <td class="col-greek">
+                <span class="greek-word">χρεία</span>
+                <span class="greek-form-diff">форма: χρείαν</span>
+              </td>
+              <td class="col-pron">хрэ́йа</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 2:25</span>
+              </td>
+              <td class="col-trans">нужда, потребность</td>
+              <td class="col-context">
+                <div class="context-greek">οὐ χρείαν εἶχεν</div>
+                       <div class="context-ru">Не имел нужды</div>
+              </td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="chapter-section">
+      <div class="chapter-header">
+        <span class="chapter-title">Слова для Иоанна 3</span>
+        <span class="chapter-count">34 слов</span>
+      </div>
+      <div class="chapter-desc">34 ключевых слова для чтения третьей главы Евангелия от Иоанна.</div>
+      <table>
+        <thead>
+          <tr>
+            <th class="col-num">№</th>
+            <th class="col-greek">Слово (Лемма)</th>
+            <th class="col-pron">Чтение</th>
+            <th class="col-verse">Стих</th>
+            <th class="col-trans">Перевод</th>
+            <th class="col-context">Контекст в стихе</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td class="col-num">1</td>
+              <td class="col-greek">
+                <span class="greek-word">ἄρχων</span>
+                
+              </td>
+              <td class="col-pron">а́рхон</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:1</span>
+              </td>
+              <td class="col-trans">правитель, начальник</td>
+              <td class="col-context">
+                <div class="context-greek">ἄρχων τῶν Ἰουδαίων</div>
+                       <div class="context-ru">Начальник иудейский</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">2</td>
+              <td class="col-greek">
+                <span class="greek-word">ῥαββί</span>
+                
+              </td>
+              <td class="col-pron">рабби́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:2</span>
+              </td>
+              <td class="col-trans">учитель, равви</td>
+              <td class="col-context">
+                <div class="context-greek">Ῥαββί, οἴδαμεν ὅτι ἀπὸ θεοῦ ἐλήλυθας</div>
+                       <div class="context-ru">Равви! мы знаем, что Ты учитель, пришедший от Бога</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">3</td>
+              <td class="col-greek">
+                <span class="greek-word">ἄνωθεν</span>
+                
+              </td>
+              <td class="col-pron">а́нотхэн</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:3</span>
+              </td>
+              <td class="col-trans">свыше, заново</td>
+              <td class="col-context">
+                <div class="context-greek">ἐὰν μή τις γεννηθῇ ἄνωθεν</div>
+                       <div class="context-ru">Если кто не родится свыше</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">4</td>
+              <td class="col-greek">
+                <span class="greek-word">γέρων</span>
+                
+              </td>
+              <td class="col-pron">гэ́рон</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:4</span>
+              </td>
+              <td class="col-trans">старик, старец</td>
+              <td class="col-context">
+                <div class="context-greek">πῶς δύναται ἄνθρωπος γεννηθῆναι γέρων ὤν</div>
+                       <div class="context-ru">Как может человек родиться, будучи стар?</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">5</td>
+              <td class="col-greek">
+                <span class="greek-word">κοιλία</span>
+                <span class="greek-form-diff">форма: κοιλίαν</span>
+              </td>
+              <td class="col-pron">койли́а</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:4</span>
+              </td>
+              <td class="col-trans">утроба, чрево</td>
+              <td class="col-context">
+                <div class="context-greek">εἰς τὴν κοιλίαν τῆς μητρὸς αὐτοῦ δεύτερον εἰσελθεῖν</div>
+                       <div class="context-ru">Второй раз войти в утробу матери своей</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">6</td>
+              <td class="col-greek">
+                <span class="greek-word">δεύτερος</span>
+                <span class="greek-form-diff">форма: δεύτερον</span>
+              </td>
+              <td class="col-pron">дэ́утэрос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:4</span>
+              </td>
+              <td class="col-trans">второй, во второй раз</td>
+              <td class="col-context">
+                <div class="context-greek">δεύτερον εἰσελθεῖν καὶ γεννηθῆναι</div>
+                       <div class="context-ru">Войти во второй раз и родиться</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">7</td>
+              <td class="col-greek">
+                <span class="greek-word">πνέω</span>
+                <span class="greek-form-diff">форма: πνεῖ</span>
+              </td>
+              <td class="col-pron">пнэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:8</span>
+              </td>
+              <td class="col-trans">дую, вею</td>
+              <td class="col-context">
+                <div class="context-greek">τὸ πνεῦμα ὅπου θέλει πνεῖ</div>
+                       <div class="context-ru">Дух дышит (веет), где хочет</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">8</td>
+              <td class="col-greek">
+                <span class="greek-word">ποῦ</span>
+                
+              </td>
+              <td class="col-pron">пу́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:8</span>
+              </td>
+              <td class="col-trans">где? куда?</td>
+              <td class="col-context">
+                <div class="context-greek">οὐκ οἶδας πόθεν ἔρχεται καὶ ποῦ ὑπάγει</div>
+                       <div class="context-ru">Не знаешь, откуда приходит и куда уходит</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">9</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐπίγειος</span>
+                <span class="greek-form-diff">форма: ἐπίγεια</span>
+              </td>
+              <td class="col-pron">эпи́гэйос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:12</span>
+              </td>
+              <td class="col-trans">земной</td>
+              <td class="col-context">
+                <div class="context-greek">εἰ τὰ ἐπίγεια εἶπον ὑμῖν</div>
+                       <div class="context-ru">Если Я сказал вам о земном</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">10</td>
+              <td class="col-greek">
+                <span class="greek-word">ὑψόω</span>
+                <span class="greek-form-diff">форма: ὑψῶσαι / ὑψωθῆναι</span>
+              </td>
+              <td class="col-pron">хюпсо́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:14</span>
+              </td>
+              <td class="col-trans">поднимаю, возношу</td>
+              <td class="col-context">
+                <div class="context-greek">οὕτως ὑψωθῆναι δεῖ τὸν υἱὸν τοῦ ἀνθρώπου</div>
+                       <div class="context-ru">Так должно вознесену быть Сыну Человеческому</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">11</td>
+              <td class="col-greek">
+                <span class="greek-word">ὄφις</span>
+                <span class="greek-form-diff">форма: ὄφιν</span>
+              </td>
+              <td class="col-pron">о́фис</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:14</span>
+              </td>
+              <td class="col-trans">змей</td>
+              <td class="col-context">
+                <div class="context-greek">καθὼς Μωϋσῆς ὕψωσεν τὸν ὄφιν</div>
+                       <div class="context-ru">Как Моисей вознес змию</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">12</td>
+              <td class="col-greek">
+                <span class="greek-word">ἔρημος</span>
+                <span class="greek-form-diff">форма: ἐρήμῳ</span>
+              </td>
+              <td class="col-pron">э́рэмос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:14</span>
+              </td>
+              <td class="col-trans">пустыня</td>
+              <td class="col-context">
+                <div class="context-greek">ἐν τῇ ἐρήμῳ</div>
+                       <div class="context-ru">В пустыне</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">13</td>
+              <td class="col-greek">
+                <span class="greek-word">μονογενής</span>
+                <span class="greek-form-diff">форма: μονογενῆ</span>
+              </td>
+              <td class="col-pron">моногэнэ́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:16</span>
+              </td>
+              <td class="col-trans">единородный, единственный</td>
+              <td class="col-context">
+                <div class="context-greek">τὸν υἱὸν αὐτοῦ τὸν μονογενῆ ἔδωκεν</div>
+                       <div class="context-ru">Отдал Сына Своего Единородного</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">14</td>
+              <td class="col-greek">
+                <span class="greek-word">κρίσις</span>
+                
+              </td>
+              <td class="col-pron">кри́сис</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:19</span>
+              </td>
+              <td class="col-trans">суд, осуждение</td>
+              <td class="col-context">
+                <div class="context-greek">αὕτη δέ ἐστιν ἡ κρίσις</div>
+                       <div class="context-ru">Суд же состоит в том</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">15</td>
+              <td class="col-greek">
+                <span class="greek-word">σκότος</span>
+                
+              </td>
+              <td class="col-pron">ско́тос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:19</span>
+              </td>
+              <td class="col-trans">тьма, темнота</td>
+              <td class="col-context">
+                <div class="context-greek">ἠγάπησαν οἱ ἄνθρωποι μᾶλλον τὸ σκότος</div>
+                       <div class="context-ru">Люди возлюбили больше тьму</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">16</td>
+              <td class="col-greek">
+                <span class="greek-word">μισέω</span>
+                <span class="greek-form-diff">форма: μισεῖ</span>
+              </td>
+              <td class="col-pron">мисэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:20</span>
+              </td>
+              <td class="col-trans">ненавижу</td>
+              <td class="col-context">
+                <div class="context-greek">μισεῖ τὸ φῶς</div>
+                       <div class="context-ru">Ненавидит свет</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">17</td>
+              <td class="col-greek">
+                <span class="greek-word">πράσσω</span>
+                <span class="greek-form-diff">форма: πράσσων</span>
+              </td>
+              <td class="col-pron">пра́ссо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:20</span>
+              </td>
+              <td class="col-trans">делаю, совершаю</td>
+              <td class="col-context">
+                <div class="context-greek">πᾶς γὰρ ὁ φαῦλα πράσσων</div>
+                       <div class="context-ru">Ибо всякий, делающий злое</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">18</td>
+              <td class="col-greek">
+                <span class="greek-word">φαῦλος</span>
+                <span class="greek-form-diff">форма: φαῦλα</span>
+              </td>
+              <td class="col-pron">фа́улос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:20</span>
+              </td>
+              <td class="col-trans">дурной, злой, ничтожный</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ φαῦλα πράσσων</div>
+                       <div class="context-ru">Делающий злое</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">19</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐλέγχω</span>
+                <span class="greek-form-diff">форма: ἐλεγχθῇ</span>
+              </td>
+              <td class="col-pron">элэ́нхо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:20</span>
+              </td>
+              <td class="col-trans">обличаю, выявляю</td>
+              <td class="col-context">
+                <div class="context-greek">ἵνα μὴ ἐλεγχθῇ τὰ ἔργα αὐτοῦ</div>
+                       <div class="context-ru">Чтобы не обличились дела его</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">20</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐργάζομαι</span>
+                <span class="greek-form-diff">форма: εἰργασμένα</span>
+              </td>
+              <td class="col-pron">эрга́здомай</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:21</span>
+              </td>
+              <td class="col-trans">работаю, делаю, совершаю</td>
+              <td class="col-context">
+                <div class="context-greek">ὅτι ἐν θεῷ ἐστιν εἰργασμένα</div>
+                       <div class="context-ru">Потому что в Боге они соделаны</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">21</td>
+              <td class="col-greek">
+                <span class="greek-word">διατρίβω</span>
+                <span class="greek-form-diff">форма: διέτριβεν</span>
+              </td>
+              <td class="col-pron">диатри́бо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:22</span>
+              </td>
+              <td class="col-trans">провожу время, пребываю</td>
+              <td class="col-context">
+                <div class="context-greek">ἐκεῖ διέτριβεν μετ’ αὐτῶν</div>
+                       <div class="context-ru">Там жил (провожал время) с ними</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">22</td>
+              <td class="col-greek">
+                <span class="greek-word">καθαρισμός</span>
+                <span class="greek-form-diff">форма: καθαρισμοῦ</span>
+              </td>
+              <td class="col-pron">катхарисмо́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:25</span>
+              </td>
+              <td class="col-trans">очищение</td>
+              <td class="col-context">
+                <div class="context-greek">ζήτησις μετὰ Ἰουδαίου περὶ καθαρισμοῦ</div>
+                       <div class="context-ru">Спор с иудеем об очищении</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">23</td>
+              <td class="col-greek">
+                <span class="greek-word">πέραν</span>
+                
+              </td>
+              <td class="col-pron">пэ́ран</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:26</span>
+              </td>
+              <td class="col-trans">по ту сторону, за</td>
+              <td class="col-context">
+                <div class="context-greek">ὃς ἦν μετὰ σοῦ πέραν τοῦ Ἰορδάνου</div>
+                       <div class="context-ru">Который был с тобою за Иорданом</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">24</td>
+              <td class="col-greek">
+                <span class="greek-word">νύμφη</span>
+                <span class="greek-form-diff">форма: νύμφην</span>
+              </td>
+              <td class="col-pron">ню́мфэ</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:29</span>
+              </td>
+              <td class="col-trans">невеста</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ἔχων τὴν νύμφην νυμφίος ἐστίν</div>
+                       <div class="context-ru">Имеющий невесту есть жених</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">25</td>
+              <td class="col-greek">
+                <span class="greek-word">νυμφίος</span>
+                <span class="greek-form-diff">форма: νυμφίον / νυμφίου</span>
+              </td>
+              <td class="col-pron">нюмфи́ос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:29</span>
+              </td>
+              <td class="col-trans">жених</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ δὲ φίλος τοῦ νυμφίου</div>
+                       <div class="context-ru">Друг же жениха</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">26</td>
+              <td class="col-greek">
+                <span class="greek-word">φίλος</span>
+                
+              </td>
+              <td class="col-pron">фи́лос</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:29</span>
+              </td>
+              <td class="col-trans">друг</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ δὲ φίλος τοῦ νυμφίου</div>
+                       <div class="context-ru">Друг же жениха</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">27</td>
+              <td class="col-greek">
+                <span class="greek-word">αὐξάνω</span>
+                <span class="greek-form-diff">форма: αὐξάνειν</span>
+              </td>
+              <td class="col-pron">аукса́но</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:30</span>
+              </td>
+              <td class="col-trans">возрастаю, увеличиваюсь</td>
+              <td class="col-context">
+                <div class="context-greek">ἐκεῖνον δεῖ αὐξάνειν</div>
+                       <div class="context-ru">Ему должно расти</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">28</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐλαττόω</span>
+                <span class="greek-form-diff">форма: ἐλαττοῦσθαι</span>
+              </td>
+              <td class="col-pron">элатто́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:30</span>
+              </td>
+              <td class="col-trans">умаляюсь, становлюсь меньше</td>
+              <td class="col-context">
+                <div class="context-greek">ἐμὲ δὲ ἐλαττοῦσθαι</div>
+                       <div class="context-ru">Мне же умаляться</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">29</td>
+              <td class="col-greek">
+                <span class="greek-word">ἐπάνω</span>
+                
+              </td>
+              <td class="col-pron">эпа́но</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:31</span>
+              </td>
+              <td class="col-trans">выше, над, сверху</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ ἄνωθεν ἐρχόμενος ἐπάνω πάντων ἐστίν</div>
+                       <div class="context-ru">Приходящий свыше - выше всех</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">30</td>
+              <td class="col-greek">
+                <span class="greek-word">σφραγίζω</span>
+                <span class="greek-form-diff">форма: ἐσφράγισεν</span>
+              </td>
+              <td class="col-pron">сфраги́здо</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:33</span>
+              </td>
+              <td class="col-trans">запечатлеваю, утверждаю</td>
+              <td class="col-context">
+                <div class="context-greek">ἐσφράγισεν ὅτι ὁ θεὸς ἀληθής ἐστιν</div>
+                       <div class="context-ru">Запечатлел (утвердил), что Бог истинен</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">31</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀληθής</span>
+                
+              </td>
+              <td class="col-pron">алэтхэ́с</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:33</span>
+              </td>
+              <td class="col-trans">истинный, правдивый</td>
+              <td class="col-context">
+                <div class="context-greek">ὅτι ὁ θεὸς ἀληθής ἐστιν</div>
+                       <div class="context-ru">Что Бог истинен</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">32</td>
+              <td class="col-greek">
+                <span class="greek-word">μέτρον</span>
+                <span class="greek-form-diff">форма: μέτρου</span>
+              </td>
+              <td class="col-pron">мэ́трон</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:34</span>
+              </td>
+              <td class="col-trans">мера</td>
+              <td class="col-context">
+                <div class="context-greek">οὐ γὰρ ἐκ μέτρου δίδωσιν τὸ πνεῦμα</div>
+                       <div class="context-ru">Ибо не мерою дает Бог Духа</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">33</td>
+              <td class="col-greek">
+                <span class="greek-word">ἀπειθέω</span>
+                <span class="greek-form-diff">форма: ἀπειθῶν</span>
+              </td>
+              <td class="col-pron">апэйтхэ́о</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:36</span>
+              </td>
+              <td class="col-trans">не верую, ослушиваюсь</td>
+              <td class="col-context">
+                <div class="context-greek">ὁ δὲ ἀπειθῶν τῷ υἱῷ</div>
+                       <div class="context-ru">Не верующий (не покоряющийся) в Сына</div>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="col-num">34</td>
+              <td class="col-greek">
+                <span class="greek-word">ὀργή</span>
+                <span class="greek-form-diff">форма: ὀργὴ</span>
+              </td>
+              <td class="col-pron">оргэ́</td>
+              <td class="col-verse">
+                <span class="verse-badge">Ин 3:36</span>
+              </td>
+              <td class="col-trans">гнев</td>
+              <td class="col-context">
+                <div class="context-greek">ἡ ὀργὴ τοῦ θεοῦ μένει ἐπ’ αὐτόν</div>
+                       <div class="context-ru">Гнев Божий пребывает на нем</div>
+              </td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+
+  <div class="footer-note">
+    Словарь приложения «Койне Греческий — Изучение Нового Завета» • Сгенерировано: 07.09.2026
+  </div>
+
+</body>
+</html>
