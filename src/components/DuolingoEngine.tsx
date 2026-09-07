@@ -91,6 +91,7 @@ interface DuolingoEngineProps {
   customMnemonics?: Record<string, string>;
   completedChunkRounds?: Record<string, number>;
   completedChunkTimes?: Record<string, number>;
+  isFullModule?: boolean;
   onUpdateMnemonic?: (wordId: string, mnemonic: string) => void;
   onComplete: (
     scorePercent: number, 
@@ -145,6 +146,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   customMnemonics,
   completedChunkRounds,
   completedChunkTimes,
+  isFullModule = false,
   onUpdateMnemonic,
   onComplete,
   onExit,
@@ -152,14 +154,14 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   const [currentMode, setCurrentMode] = useState<TrainingMode>(initialMode);
   const [currentDirection, setCurrentDirection] = useState<TrainingDirection>(initialDirection);
   
-  // Batching / Micro-lesson Chunking
+  // Batching / Micro-lesson Chunking (Full module overrides batch size to all words)
   const batchSizeConfig = studentSettings?.batchSize ?? 8;
-  const effectiveBatchSize = batchSizeConfig > 0 ? batchSizeConfig : words.length;
+  const effectiveBatchSize = isFullModule ? words.length : (batchSizeConfig > 0 ? batchSizeConfig : words.length);
   
-  // Total chunks for words pool
-  const totalChunks = words.length > 0 && effectiveBatchSize > 0 
-    ? Math.ceil(words.length / effectiveBatchSize) 
-    : 1;
+  // Total chunks for words pool (1 chunk if full module)
+  const totalChunks = isFullModule 
+    ? 1 
+    : (words.length > 0 && effectiveBatchSize > 0 ? Math.ceil(words.length / effectiveBatchSize) : 1);
 
   const [currentChunkIndex, setCurrentChunkIndex] = useState(initialChunkIndex);
 
@@ -364,10 +366,9 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
         const isRuToGreek = direction === 'ru_to_greek' || (direction === 'bidirectional' && idx % 2 !== 0);
 
         if (isRuToGreek) {
-          const distractors = pool
-            .filter((item) => item.id !== w.id)
-            .map((item) => item.greek)
-            .slice(0, 3);
+          const distractors = shuffleArray(pool.filter((item) => item.id !== w.id))
+            .slice(0, 3)
+            .map((item) => item.greek);
           const allOptions = [w.greek, ...distractors].sort(() => Math.random() - 0.5);
 
           generated.push({
@@ -379,10 +380,9 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
             correctAnswer: w.greek,
           });
         } else {
-          const distractors = pool
-            .filter((item) => item.id !== w.id)
-            .map((item) => item.translationRu)
-            .slice(0, 3);
+          const distractors = shuffleArray(pool.filter((item) => item.id !== w.id))
+            .slice(0, 3)
+            .map((item) => item.translationRu);
           const allOptions = [w.translationRu, ...distractors].sort(() => Math.random() - 0.5);
 
           generated.push({
@@ -402,10 +402,9 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // =========================================================================
     else if (mode === 'audio') {
       shuffleArray(pool).forEach((w, idx) => {
-        const distractors = pool
-          .filter((item) => item.id !== w.id)
-          .map((item) => item.translationRu)
-          .slice(0, 3);
+        const distractors = shuffleArray(pool.filter((item) => item.id !== w.id))
+          .slice(0, 3)
+          .map((item) => item.translationRu);
         const allOptions = [w.translationRu, ...distractors].sort(() => Math.random() - 0.5);
 
         generated.push({
@@ -1496,7 +1495,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           </button>
 
           <span className="text-[11px] font-sans uppercase tracking-[0.2em] text-[#8C7D6B] font-bold block mb-1">
-            Все порции темы пройдены! 🌿
+            {isFullModule ? `Весь модуль пройден! 🏆 (${words.length} слов)` : 'Все порции темы пройдены! 🌿'}
           </span>
           <h2 className="text-xl sm:text-3xl text-[#1A1A1A] mb-1.5 sm:mb-2 font-serif italic font-bold pr-6">
             {finalScore >= 80 ? 'Ἄριστα! (Превосходно)' : 'Качественная практика!'}
@@ -1604,7 +1603,9 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     ru_to_greek: { title: 'Русский ➔ Греческий', symbol: '🇷🇺 ➔ 🇬🇷' },
   };
 
-  const currentBatchLabel = totalChunks > 1
+  const currentBatchLabel = isFullModule
+    ? `⚡ Весь модуль (${words.length} слов)`
+    : totalChunks > 1
     ? `Порция ${currentChunkIndex + 1}/${totalChunks} (слова ${currentChunkIndex * effectiveBatchSize + 1}–${Math.min(words.length, (currentChunkIndex + 1) * effectiveBatchSize)})`
     : `Все слова (${words.length})`;
 

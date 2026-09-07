@@ -1,6 +1,6 @@
 import React from 'react';
 import { SectionProgressStats, getMasteryBadgeConfig } from '../utils/srsEngine';
-import { CheckCircle2, Clock, Sparkles } from 'lucide-react';
+import { CheckCircle2, Clock, Sparkles, Zap } from 'lucide-react';
 
 interface SectionMasteryHeaderProps {
   title: string;
@@ -8,6 +8,8 @@ interface SectionMasteryHeaderProps {
   stats: SectionProgressStats;
   onQuickPractice?: () => void;
   practiceButtonText?: string;
+  onPracticeAllModule?: () => void;
+  practiceAllButtonText?: string;
 }
 
 export const SectionMasteryHeader: React.FC<SectionMasteryHeaderProps> = ({
@@ -16,6 +18,8 @@ export const SectionMasteryHeader: React.FC<SectionMasteryHeaderProps> = ({
   stats,
   onQuickPractice,
   practiceButtonText = 'Заучивать раздел',
+  onPracticeAllModule,
+  practiceAllButtonText = 'Повторить весь модуль',
 }) => {
   const badge = getMasteryBadgeConfig(stats.averageMasteryPercent);
 
@@ -41,15 +45,28 @@ export const SectionMasteryHeader: React.FC<SectionMasteryHeaderProps> = ({
           )}
         </div>
 
-        {onQuickPractice && (
-          <button
-            type="button"
-            onClick={onQuickPractice}
-            className="px-4 py-2 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] text-xs font-sans uppercase tracking-widest transition-colors cursor-pointer whitespace-nowrap self-stretch sm:self-auto text-center"
-          >
-            {practiceButtonText}
-          </button>
-        )}
+        <div className="flex flex-col sm:flex-row gap-2 self-stretch sm:self-auto">
+          {onPracticeAllModule && (
+            <button
+              type="button"
+              onClick={onPracticeAllModule}
+              className="px-3.5 py-2 bg-white border-2 border-[#1A1A1A] hover:bg-[#FAF8F5] text-xs font-sans uppercase tracking-wider text-[#1A1A1A] font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs whitespace-nowrap"
+              title="Повторить все слова модуля в одном непрерывном задании"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+              <span>{practiceAllButtonText}</span>
+            </button>
+          )}
+          {onQuickPractice && (
+            <button
+              type="button"
+              onClick={onQuickPractice}
+              className="px-4 py-2 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] text-xs font-sans uppercase tracking-widest transition-colors cursor-pointer whitespace-nowrap text-center"
+            >
+              {practiceButtonText}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main Multi-color or Segmented Progress Bar */}

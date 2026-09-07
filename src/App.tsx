@@ -246,6 +246,7 @@ export default function App() {
     initialChunkIndex?: number;
     unmasteredWords?: GreekWord[];
     initialStageIndex?: number;
+    isFullModule?: boolean;
   } | null>(null);
 
   // Active Exam Session State (Exam Mode)
@@ -757,7 +758,8 @@ export default function App() {
     sectionId?: string,
     initialChunkIndex?: number,
     unmasteredWords?: GreekWord[],
-    initialStageIndex?: number
+    initialStageIndex?: number,
+    isFullModule?: boolean
   ) => {
     setActiveSession({
       isOpen: true,
@@ -770,6 +772,7 @@ export default function App() {
       initialChunkIndex,
       unmasteredWords,
       initialStageIndex,
+      isFullModule,
     });
   };
 
@@ -2327,6 +2330,7 @@ export default function App() {
               customMnemonics={currentStudent.customMnemonics}
               completedChunkRounds={currentStudent.completedChunkRounds}
               completedChunkTimes={currentStudent.completedChunkTimes}
+              isFullModule={activeSession.isFullModule}
               onUpdateMnemonic={handleUpdateStudentMnemonic}
               onComplete={handleCompletePractice}
               onExit={() => setActiveSession(null)}

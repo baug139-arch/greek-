@@ -43,6 +43,7 @@ import { ALL_FREQUENCY_TIERS, FREQUENCY_ALL_WORDS, getWordsByTierId } from '../d
 import { JOHN_GOSPEL_CHAPTERS, getJohnChapterWords } from '../data/johnGospelVocabulary';
 import { getWordsForCourse, getWordsForAssignment, sampleRandomWords } from '../utils/courseUtils';
 import { ExamReviewModal } from './ExamReviewModal';
+import { FullModuleModal } from './FullModuleModal';
 import { speakErasmian, speakRussian } from '../utils/audio';
 import { getMnemonicForWord } from '../utils/mnemonics';
 import { WordMasteryBar } from './WordMasteryBar';
@@ -64,7 +65,8 @@ interface StudentHubProps {
     sectionId?: string,
     initialChunkIndex?: number,
     unmasteredWords?: GreekWord[],
-    initialStageIndex?: number
+    initialStageIndex?: number,
+    isFullModule?: boolean
   ) => void;
   onStartExam?: (assignment: HomeworkAssignment, words: GreekWord[]) => void;
   onStartComposition?: (assignment: HomeworkAssignment) => void;
@@ -112,6 +114,15 @@ export const StudentHub: React.FC<StudentHubProps> = ({
 
   // Search in dictionary
   const [dictSearch, setDictSearch] = useState<string>('');
+
+  // Full Module Review Modal state
+  const [fullModuleModal, setFullModuleModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    words: GreekWord[];
+    phrases?: typeof BIBLICAL_PHRASES;
+    sectionKey: string;
+  } | null>(null);
 
   // Live timer tick for real-time countdown updates on portion chips
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
@@ -1114,6 +1125,16 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     );
                   }}
                   practiceButtonText={ctaText}
+                  onPracticeAllModule={() => {
+                    setFullModuleModal({
+                      isOpen: true,
+                      title: currentJohnBlock.chapterTitleRu,
+                      words: johnChapterWords,
+                      phrases: BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
+                      sectionKey,
+                    });
+                  }}
+                  practiceAllButtonText={`⚡ Весь модуль (${johnChapterWords.length})`}
                 />
 
                 {/* Portions / Chunks Interactive Strip */}
@@ -1133,7 +1154,24 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1.5 items-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFullModuleModal({
+                            isOpen: true,
+                            title: currentJohnBlock.chapterTitleRu,
+                            words: johnChapterWords,
+                            phrases: BIBLICAL_PHRASES.filter((p) => p.chapter === currentJohnBlock.chapterId),
+                            sectionKey,
+                          });
+                        }}
+                        className="px-3 py-1.5 text-xs font-sans border-2 border-[#1A1A1A] bg-white hover:bg-[#FAF8F5] text-[#1A1A1A] font-bold transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs"
+                        title={`Повторить все ${johnChapterWords.length} слов главы в одном задании`}
+                      >
+                        <Zap className="w-3 h-3 text-amber-600 fill-amber-500" />
+                        <span>Все {johnChapterWords.length} слов</span>
+                      </button>
                       {Array.from({ length: totalChapterChunks }).map((_, cIdx) => {
                         const isDone = completedChunkList.includes(cIdx);
                         const isNext = cIdx === nextChunkIndex && !isDone;
@@ -1484,6 +1522,16 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     );
                   }}
                   practiceButtonText={ctaText}
+                  onPracticeAllModule={() => {
+                    setFullModuleModal({
+                      isOpen: true,
+                      title: currentTier.titleRu,
+                      words: tierWords,
+                      phrases: BIBLICAL_PHRASES,
+                      sectionKey,
+                    });
+                  }}
+                  practiceAllButtonText={`⚡ Весь модуль (${tierWords.length})`}
                 />
 
                 {/* Portions Strip */}
@@ -1503,7 +1551,24 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1.5 items-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFullModuleModal({
+                            isOpen: true,
+                            title: currentTier.titleRu,
+                            words: tierWords,
+                            phrases: BIBLICAL_PHRASES,
+                            sectionKey,
+                          });
+                        }}
+                        className="px-3 py-1.5 text-xs font-sans border-2 border-[#1A1A1A] bg-white hover:bg-[#FAF8F5] text-[#1A1A1A] font-bold transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs"
+                        title={`Повторить все ${tierWords.length} слов раздела в одном задании`}
+                      >
+                        <Zap className="w-3 h-3 text-amber-600 fill-amber-500" />
+                        <span>Все {tierWords.length} слов</span>
+                      </button>
                       {Array.from({ length: totalTierChunks }).map((_, cIdx) => {
                         const isDone = completedChunkList.includes(cIdx);
                         const isNext = cIdx === nextChunkIndex && !isDone;
@@ -1804,6 +1869,16 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                     );
                   }}
                   practiceButtonText={ctaText}
+                  onPracticeAllModule={() => {
+                    setFullModuleModal({
+                      isOpen: true,
+                      title: `Тема: ${currentThematicInfo.nameRu}`,
+                      words: themWords,
+                      phrases: BIBLICAL_PHRASES,
+                      sectionKey,
+                    });
+                  }}
+                  practiceAllButtonText={`⚡ Весь модуль (${themWords.length})`}
                 />
 
                 {/* Portions Strip */}
@@ -1823,7 +1898,24 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1.5 items-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFullModuleModal({
+                            isOpen: true,
+                            title: `Тема: ${currentThematicInfo.nameRu}`,
+                            words: themWords,
+                            phrases: BIBLICAL_PHRASES,
+                            sectionKey,
+                          });
+                        }}
+                        className="px-3 py-1.5 text-xs font-sans border-2 border-[#1A1A1A] bg-white hover:bg-[#FAF8F5] text-[#1A1A1A] font-bold transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs"
+                        title={`Повторить все ${themWords.length} слов темы в одном задании`}
+                      >
+                        <Zap className="w-3 h-3 text-amber-600 fill-amber-500" />
+                        <span>Все {themWords.length} слов</span>
+                      </button>
                       {Array.from({ length: totalThemeChunks }).map((_, cIdx) => {
                         const isDone = completedChunkList.includes(cIdx);
                         const isNext = cIdx === nextChunkIndex && !isDone;
@@ -2105,6 +2197,34 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             })}
           </div>
         </div>
+      )}
+
+      {/* Modal for student to choose training mode and direction for full module practice */}
+      {fullModuleModal && fullModuleModal.isOpen && (
+        <FullModuleModal
+          isOpen={fullModuleModal.isOpen}
+          title={fullModuleModal.title}
+          wordsCount={fullModuleModal.words.length}
+          initialMode={selectedTrainingMode}
+          initialDirection={selectedDirection}
+          onClose={() => setFullModuleModal(null)}
+          onStart={(chosenMode, chosenDirection) => {
+            const modalData = fullModuleModal;
+            setFullModuleModal(null);
+            onStartPractice(
+              `Повторение модуля: ${modalData.title} (все ${modalData.words.length} слов)`,
+              modalData.words,
+              modalData.phrases,
+              chosenMode,
+              chosenDirection,
+              modalData.sectionKey,
+              0,
+              [],
+              chosenMode === 'all' ? 2 : 0,
+              true
+            );
+          }}
+        />
       )}
 
       {/* Modal for student to view graded exam with marks (+, +-, -) and teacher comments */}
