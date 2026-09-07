@@ -291,28 +291,6 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               <Volume2 className="w-4 h-4 text-[#8C7D6B]" />
               <span>Правила Эразма</span>
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                // Launch John 1 practice using canonical chapter vocabulary
-                const wordsToPractice = getJohnChapterWords(1);
-                const phrases = BIBLICAL_PHRASES.filter((p) => p.chapter === 'john_1');
-                onStartPractice(
-                  'Евангелие от Иоанна: Глава 1', 
-                  wordsToPractice, 
-                  phrases,
-                  selectedTrainingMode,
-                  selectedDirection,
-                  'john_1',
-                  0,
-                  []
-                );
-              }}
-              className="px-6 py-3 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] text-xs font-sans uppercase tracking-widest transition-colors flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Быстрый старт: Ин 1</span>
-            </button>
           </div>
         </div>
 
