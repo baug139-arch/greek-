@@ -34,7 +34,7 @@ export const JOHN_CHAPTER_1_WORDS_RAW = [
   { lemma: 'περιστερά', translation: 'голубь', frequency: 10, verseRef: 'Ин 1:32', contextPhrase: 'ὡσεὶ περιστερὰν ἐξ οὐρανοῦ', contextRu: 'Как голубя с неба' },
   { lemma: 'ῥαββί', translation: 'учитель, равви', frequency: 16, verseRef: 'Ин 1:38', contextPhrase: 'Ῥαββί, ὃ λέγεται Διδάσκαλε', contextRu: 'Равви (что значит «Учитель»)' },
   { lemma: 'ἑρμηνεύω', translation: 'перевожу, истолковываю', frequency: 3, verseRef: 'Ин 1:38', contextPhrase: 'ὃ λέγεται ἑρμηνευόμενον Διδάσκαλε', contextRu: 'Переводится как «Учитель»' },
-  { lemma: 'μεθερμηνεύω', translation: 'переводится как', frequency: 8, verseRef: 'Ин 1:41', contextPhrase: 'ὅ ἐστιν μεθερμηνευόμενον Χριστός', contextRu: 'Переводится как «Христос»' },
+  { lemma: 'μεθερμηνεύω', translation: 'перевожу как, истолковываю', additionalMeanings: ['переводится как', 'перевожу как', 'истолковываю'], frequency: 8, verseRef: 'Ин 1:41', contextPhrase: 'ὅ ἐστιν μεθερμηνευόμενον Χριστός', contextRu: 'Переводится как «Христос»' },
   { lemma: 'δόλος', translation: 'лукавство, хитрость', frequency: 11, verseRef: 'Ин 1:47', contextPhrase: 'ἐν ᾧ δόλος οὐκ ἔστιν', contextRu: 'В котором нет лукавства' },
   { lemma: 'συκή', translation: 'смоковница', frequency: 16, verseRef: 'Ин 1:48', contextPhrase: 'ὄντα ὑπὸ τὴν συκῆν', contextRu: 'Бывшего под смоковницей' },
 ];
@@ -1053,7 +1053,7 @@ function convertRawToWord(item: typeof JOHN_CHAPTER_1_WORDS_RAW[0], index: numbe
     erasmianIpa: phonetics,
     partOfSpeech: 'noun',
     translationRu: item.translation,
-    additionalMeaningsRu: [item.translation],
+    additionalMeaningsRu: (item as any).additionalMeanings || [item.translation],
     ntFrequency: item.frequency,
     frequencyCategory: item.frequency >= 50 ? '50-100' : item.frequency >= 20 ? '20-50' : item.frequency >= 10 ? '10-20' : '<10',
     thematicGroup: 'theology_church',

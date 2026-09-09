@@ -1888,11 +1888,16 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                       <h3 className="text-xl sm:text-2xl font-serif text-[#1A1A1A] font-bold">
                         {currentEx.word.translationRu}
                       </h3>
-                      {currentEx.word.additionalMeaningsRu && currentEx.word.additionalMeaningsRu.length > 0 && (
-                        <p className="text-[11px] sm:text-xs font-sans text-[#6B655C] mt-0.5">
-                          Другие значения: {currentEx.word.additionalMeaningsRu.join(', ')}
-                        </p>
-                      )}
+                      {(() => {
+                        const otherMeanings = (currentEx.word.additionalMeaningsRu || [])
+                          .filter(m => m && m.trim().toLowerCase() !== currentEx.word.translationRu?.trim().toLowerCase());
+                        if (otherMeanings.length === 0) return null;
+                        return (
+                          <p className="text-[11px] sm:text-xs font-sans text-[#6B655C] mt-0.5">
+                            Другие значения: {otherMeanings.join(', ')}
+                          </p>
+                        );
+                      })()}
                     </div>
 
                     {/* Biblical Context Snippet */}
@@ -1983,11 +1988,16 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                           <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                       </div>
-                      {currentEx.word.additionalMeaningsRu && currentEx.word.additionalMeaningsRu.length > 0 && (
-                        <p className="text-[11px] sm:text-xs font-sans text-[#6B655C]">
-                          Другие значения: {currentEx.word.additionalMeaningsRu.join(', ')}
-                        </p>
-                      )}
+                      {(() => {
+                        const otherMeanings = (currentEx.word.additionalMeaningsRu || [])
+                          .filter(m => m && m.trim().toLowerCase() !== currentEx.word.translationRu?.trim().toLowerCase());
+                        if (otherMeanings.length === 0) return null;
+                        return (
+                          <p className="text-[11px] sm:text-xs font-sans text-[#6B655C]">
+                            Другие значения: {otherMeanings.join(', ')}
+                          </p>
+                        );
+                      })()}
 
                       {/* Mnemonic hint in Russian card view */}
                       {currentEx.word && (

@@ -52,9 +52,10 @@ export function checkAnswerFlexible(input: string, currentEx: any): { isCorrect:
     }
   }
 
-  // Clean up lists (split comma-separated meanings into individual acceptable answers)
+  // Clean up lists: preserve the full original phrases AND add individual comma-separated meanings
   if (currentEx.direction === 'greek_to_ru') {
-    validAnswers = validAnswers.flatMap(ans => ans.split(',').map(s => s.trim()));
+    const splitParts = validAnswers.flatMap(ans => ans.split(/[,;\/]/).map(s => s.trim()));
+    validAnswers = [...validAnswers, ...splitParts];
   }
 
   // Filter out empty and normalize valid answers
@@ -81,6 +82,27 @@ export function checkAnswerFlexible(input: string, currentEx: any): { isCorrect:
         isCorrect: true,
         typoWarning: `Опечатка! Правильно: ${ans}`
       };
+    }
+  }
+
+  // Also check if student entered multiple terms (e.g. separated by commas) that are all valid sub-meanings
+  if (currentEx.direction === 'greek_to_ru') {
+    const inputParts = input.split(/[,;\/]/).map(p => normalize(p)).filter(Boolean);
+    if (inputParts.length > 1) {
+      const normalizedAcceptableParts = new Set(
+        validAnswers.flatMap(ans => ans.split(/[,;\/]/).map(s => normalize(s)).filter(Boolean))
+      );
+      const allPartsValid = inputParts.every(part => {
+        if (normalizedAcceptableParts.has(part)) return true;
+        return Array.from(normalizedAcceptableParts).some(target => {
+          const d = levenshteinDistance(part, target);
+          const allowed = target.length >= 8 ? 2 : target.length >= 5 ? 1 : 0;
+          return d <= allowed;
+        });
+      });
+      if (allPartsValid) {
+        return { isCorrect: true };
+      }
     }
   }
 
