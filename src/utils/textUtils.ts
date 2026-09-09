@@ -56,26 +56,45 @@ export function checkAnswerFlexible(input: string, currentEx: any): { isCorrect:
   if (currentEx.direction === 'greek_to_ru') {
     const splitParts = validAnswers.flatMap(ans => ans.split(/[,;\/]/).map(s => s.trim()));
     validAnswers = [...validAnswers, ...splitParts];
+
+    // Expand verb forms with/without pronoun 'я' (e.g., 'я ухожу' <-> 'ухожу')
+    const pronounVariants: string[] = [];
+    for (const ans of validAnswers) {
+      const trimmed = ans.trim();
+      if (/^я\s+/i.test(trimmed)) {
+        pronounVariants.push(trimmed.replace(/^я\s+/i, ''));
+      } else if (trimmed && !trimmed.includes(' ')) {
+        pronounVariants.push(`я ${trimmed}`);
+      }
+    }
+    validAnswers = [...validAnswers, ...pronounVariants];
   }
 
   // Filter out empty and normalize valid answers
   validAnswers = validAnswers.filter(ans => Boolean(ans));
 
+  const stripPronoun = (s: string) => s.replace(/^я\s+/, '').trim();
+  const cleanInputNoPronoun = stripPronoun(cleanInput);
+
   for (const ans of validAnswers) {
     const cleanAns = normalize(ans);
     if (!cleanAns) continue;
+    const cleanAnsNoPronoun = stripPronoun(cleanAns);
 
-    // Exact match after normalization
-    if (cleanInput === cleanAns) {
+    // Exact match after normalization (or with/without 'я')
+    if (cleanInput === cleanAns || cleanInputNoPronoun === cleanAnsNoPronoun) {
       return { isCorrect: true };
     }
 
     // Fuzzy match for Typos (Levenshtein distance)
-    // Only apply typo forgiveness for words/phrases of sufficient length
-    const distance = levenshteinDistance(cleanInput, cleanAns);
+    // Compare both raw cleaned and without pronoun
+    const distanceRaw = levenshteinDistance(cleanInput, cleanAns);
+    const distanceNoPronoun = levenshteinDistance(cleanInputNoPronoun, cleanAnsNoPronoun);
+    const distance = Math.min(distanceRaw, distanceNoPronoun);
     
     // Max typos allowed based on length
-    const allowedTypos = cleanAns.length >= 8 ? 2 : cleanAns.length >= 5 ? 1 : 0;
+    const effectiveTarget = cleanInputNoPronoun.length < cleanAnsNoPronoun.length ? cleanAnsNoPronoun : cleanAns;
+    const allowedTypos = effectiveTarget.length >= 8 ? 2 : effectiveTarget.length >= 5 ? 1 : 0;
 
     if (distance <= allowedTypos) {
       return {
@@ -93,10 +112,15 @@ export function checkAnswerFlexible(input: string, currentEx: any): { isCorrect:
         validAnswers.flatMap(ans => ans.split(/[,;\/]/).map(s => normalize(s)).filter(Boolean))
       );
       const allPartsValid = inputParts.every(part => {
-        if (normalizedAcceptableParts.has(part)) return true;
+        const partNoPronoun = stripPronoun(part);
+        if (normalizedAcceptableParts.has(part) || normalizedAcceptableParts.has(partNoPronoun)) return true;
         return Array.from(normalizedAcceptableParts).some(target => {
-          const d = levenshteinDistance(part, target);
-          const allowed = target.length >= 8 ? 2 : target.length >= 5 ? 1 : 0;
+          const targetNoPronoun = stripPronoun(target);
+          const d = Math.min(
+            levenshteinDistance(part, target),
+            levenshteinDistance(partNoPronoun, targetNoPronoun)
+          );
+          const allowed = targetNoPronoun.length >= 8 ? 2 : targetNoPronoun.length >= 5 ? 1 : 0;
           return d <= allowed;
         });
       });

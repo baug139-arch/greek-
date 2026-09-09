@@ -1,5 +1,5 @@
-// Service Worker for Koine Greek PWA - v5 (Fix heurísko, exo harmonization, clean mnemonic badges)
-const CACHE_NAME = 'koine-greek-v5';
+// Service Worker for Koine Greek PWA - v6 (Normalize Luke verbs & flexible pronoun matching)
+const CACHE_NAME = 'koine-greek-v6';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
