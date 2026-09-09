@@ -2001,7 +2001,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
 
                       {/* Mnemonic hint in Russian card view */}
                       {currentEx.word && (
-                        <EditableMnemonic word={currentEx.word} customMnemonics={customMnemonics} onUpdateMnemonic={onUpdateMnemonic} className="!mt-2 sm:!mt-4" />
+                        <EditableMnemonic word={currentEx.word} customMnemonics={customMnemonics} onUpdateMnemonic={onUpdateMnemonic} isEngine={true} className="!mt-2 sm:!mt-4" />
                       )}
                     </div>
                   )}

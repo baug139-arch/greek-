@@ -1,5 +1,5 @@
-// Service Worker for Koine Greek PWA - v4 (Cache Busting & Fix Typing Evaluation)
-const CACHE_NAME = 'koine-greek-v4-fix-eval';
+// Service Worker for Koine Greek PWA - v5 (Fix heurísko, exo harmonization, clean mnemonic badges)
+const CACHE_NAME = 'koine-greek-v5';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
