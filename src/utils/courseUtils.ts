@@ -21,7 +21,7 @@ export function getAllAvailableCourses(customLists: TeacherCustomList[] = []): C
   JOHN_GOSPEL_CHAPTERS.forEach((ch) => {
     courses.push({
       id: `john_${ch.chapterNumber}`,
-      title: `Иоанна ${ch.chapterNumber}: ${ch.chapterTitleRu}`,
+      title: `Иоанна ${ch.chapterLabel || ch.chapterNumber}: ${ch.chapterTitleRu}`,
       category: 'john_gospel',
       categoryTitle: 'Евангелие от Иоанна (Главы 1–21)',
       mode: 'contextual_reader',

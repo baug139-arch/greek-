@@ -164,7 +164,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
       )
     : tierWords;
 
-  const currentJohnBlock = JOHN_GOSPEL_CHAPTERS.find((ch) => ch.chapterNumber === selectedJohnChapter) || JOHN_GOSPEL_CHAPTERS[0];
+  const currentJohnBlock = JOHN_GOSPEL_CHAPTERS.find((ch) => ch.chapterNumber === selectedJohnChapter || (selectedJohnChapter === 17 && ch.chapterNumber === 16)) || JOHN_GOSPEL_CHAPTERS[0];
   const johnChapterWords = getJohnChapterWords(selectedJohnChapter);
   const filteredJohnWords = johnSearch
     ? johnChapterWords.filter(
@@ -1070,9 +1070,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-7 sm:grid-cols-11 md:grid-cols-21 gap-1.5 overflow-x-auto pb-1">
+            <div className="grid grid-cols-7 sm:grid-cols-10 md:grid-cols-20 gap-1.5 overflow-x-auto pb-1">
               {JOHN_GOSPEL_CHAPTERS.map((block) => {
-                const isSelected = selectedJohnChapter === block.chapterNumber;
+                const isSelected = selectedJohnChapter === block.chapterNumber || (selectedJohnChapter === 17 && block.chapterNumber === 16);
                 const hasWords = block.words.length > 0;
                 const chapterWordIds = block.words.map((w) => w.id);
                 const stats = calculateSectionMasteryStats(chapterWordIds, currentStudent.wordMastery);
@@ -1101,7 +1101,7 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       />
                     )}
                     <div className="text-[9px] font-sans opacity-70">Ин</div>
-                    <div className="text-sm font-serif font-bold">{block.chapterNumber}</div>
+                    <div className="text-sm font-serif font-bold whitespace-nowrap">{block.chapterLabel || block.chapterNumber}</div>
                     <div className="text-[8px] font-sans opacity-75">
                       {hasWords ? `${stats.averageMasteryPercent}%` : '—'}
                     </div>

@@ -5,6 +5,7 @@ import { getMnemonicForWord } from '../utils/mnemonics';
 export interface ChapterVocabularyBlock {
   chapterId: string;
   chapterNumber: number;
+  chapterLabel?: string;
   bookTitleRu: string;
   chapterTitleRu: string;
   descriptionRu: string;
@@ -496,12 +497,12 @@ export const JOHN_CHAPTER_16_WORDS_RAW = [
   { lemma: 'θλῖψις', textForm: 'θλῖψιν', translation: 'скорбь, давление, беда', frequency: 45, verseRef: 'Ин 16:21', contextPhrase: 'οὐκέτι μνημονεύει τῆς θλίψεως', contextRu: 'Уже не помнит скорби' },
   { lemma: 'θαρσέω', textForm: 'θαρσεῖτε', translation: 'мужайтесь, дерзайте', frequency: 7, verseRef: 'Ин 16:33', contextPhrase: 'ἀλλὰ θαρσεῖτε', contextRu: 'Но мужайтесь' },
   { lemma: 'νικάω', textForm: 'νενίκηκα', translation: 'побеждаю', frequency: 28, verseRef: 'Ин 16:33', contextPhrase: 'ἐγὼ νενίκηκα τὸν κόσμον', contextRu: 'Я победил мир' },
-];
-
-export const JOHN_CHAPTER_17_WORDS_RAW = [
+  // Слова из 17 главы:
   { lemma: 'ἀπώλεια', textForm: 'ἀπωλείας', translation: 'погибель, разрушение', frequency: 18, verseRef: 'Ин 17:12', contextPhrase: 'ὁ υἱὸς τῆς ἀπωλείας', contextRu: 'Сын погибели' },
   { lemma: 'καταβολή', textForm: 'καταβολῆς', translation: 'основание, создание (мира)', frequency: 11, verseRef: 'Ин 17:24', contextPhrase: 'πρὸ καταβολῆς κόσμου', contextRu: 'Прежде создания мира' },
 ];
+
+export const JOHN_CHAPTER_17_WORDS_RAW = JOHN_CHAPTER_16_WORDS_RAW;
 
 export const JOHN_CHAPTER_18_WORDS_RAW = [
   { lemma: 'χειμάρρους', textForm: 'χειμάρρου', translation: 'поток (пересыхающий ручей)', frequency: 1, verseRef: 'Ин 18:1', contextPhrase: 'πέραν τοῦ χειμάρρου τῶν Κέδρων', contextRu: 'за поток Кедрон' },
@@ -860,18 +861,11 @@ export const JOHN_GOSPEL_CHAPTERS: ChapterVocabularyBlock[] = [
   {
     chapterId: 'john_16',
     chapterNumber: 16,
+    chapterLabel: '16–17',
     bookTitleRu: 'Евангелие от Иоанна',
-    chapterTitleRu: 'Слова для Иоанна 16',
-    descriptionRu: '11 ключевых слов для чтения шестнадцатой главы Евангелия от Иоанна.',
+    chapterTitleRu: 'Слова для Иоанна 16–17',
+    descriptionRu: '13 ключевых слов для чтения 16 и 17 глав Евангелия от Иоанна.',
     words: JOHN_CHAPTER_16_WORDS_RAW.map(convertRawToWord),
-  },
-  {
-    chapterId: 'john_17',
-    chapterNumber: 17,
-    bookTitleRu: 'Евангелие от Иоанна',
-    chapterTitleRu: 'Слова для Иоанна 17',
-    descriptionRu: '2 ключевых слова для чтения семнадцатой главы Евангелия от Иоанна.',
-    words: JOHN_CHAPTER_17_WORDS_RAW.map(convertRawToWord),
   },
   {
     chapterId: 'john_18',
@@ -908,6 +902,10 @@ export const JOHN_GOSPEL_CHAPTERS: ChapterVocabularyBlock[] = [
 ];
 
 export function getJohnChapterWords(chapterNumber: number): GreekWord[] {
+  if (chapterNumber === 17) {
+    const block = JOHN_GOSPEL_CHAPTERS.find((ch) => ch.chapterNumber === 16);
+    return block ? block.words : [];
+  }
   const block = JOHN_GOSPEL_CHAPTERS.find((ch) => ch.chapterNumber === chapterNumber);
   return block ? block.words : [];
 }
