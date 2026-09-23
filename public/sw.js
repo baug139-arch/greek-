@@ -1,5 +1,5 @@
-// Service Worker for Koine Greek PWA - v6 (Normalize Luke verbs & flexible pronoun matching)
-const CACHE_NAME = 'koine-greek-v6';
+// Service Worker for Koine Greek PWA - v7 (Deduplicate John Gospel vocabulary)
+const CACHE_NAME = 'koine-greek-v7';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
