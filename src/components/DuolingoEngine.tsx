@@ -231,10 +231,12 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   // Active subset of words: strictly current chunk words
   const currentChunkWords = useMemo(() => {
     if (!words || words.length === 0) return [];
-    if (effectiveBatchSize <= 0) return words;
+    if (effectiveBatchSize <= 0) return isFullModule ? shuffleArray(words) : words;
     
-    // Words belonging strictly to this chunk
-    const chunkWords = words.slice(currentChunkIndex * effectiveBatchSize, (currentChunkIndex + 1) * effectiveBatchSize);
+    // Words belonging strictly to this chunk (shuffled for full module so words aren't sequential)
+    const chunkWords = isFullModule
+      ? shuffleArray(words)
+      : words.slice(currentChunkIndex * effectiveBatchSize, (currentChunkIndex + 1) * effectiveBatchSize);
     
     // Any carried over mistake/review words from PREVIOUS chunks (not future words)
     const combined = [...chunkWords];
@@ -247,7 +249,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       });
     }
     return combined;
-  }, [words, currentChunkIndex, effectiveBatchSize]);
+  }, [words, currentChunkIndex, effectiveBatchSize, isFullModule]);
 
   const [exercises, setExercises] = useState<ExerciseItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -317,7 +319,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 1: FLASHCARDS (Флеш-карточки)
     // =========================================================================
     if (mode === 'flashcards') {
-      pool.forEach((w, idx) => {
+      shuffleArray(pool).forEach((w, idx) => {
         let side: 'greek_first' | 'ru_first' = 'greek_first';
         if (direction === 'ru_to_greek') {
           side = 'ru_first';
@@ -449,7 +451,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
         });
       } else {
         // Fallback to flashcards if not enough words for matching
-        pool.forEach((w, idx) => {
+        shuffleArray(pool).forEach((w, idx) => {
           generated.push({
             id: `fc_fallback_${idx}_${w.id}`,
             type: 'flashcard',
@@ -471,8 +473,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Карточки -> Тест -> Конструктор -> Письмо -> Аудио -> Матчинг
       // -----------------------------------------------------------------------
       if (round === 0) {
-        // 1. Flashcards for all (по порядку, для первого структурированного знакомства)
-        pool.forEach((w, idx) => {
+        // 1. Flashcards for all (перемешанный порядок)
+        shuffleArray(pool).forEach((w, idx) => {
           generated.push({
             id: `all_r0_fc_${idx}_${w.id}`,
             type: 'flashcard',

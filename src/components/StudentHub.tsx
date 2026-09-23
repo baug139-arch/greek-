@@ -46,6 +46,7 @@ import { getWordsForCourse, getWordsForAssignment, sampleRandomWords } from '../
 import { ExamReviewModal } from './ExamReviewModal';
 import { FullModuleModal } from './FullModuleModal';
 import { ChunkCooldownModal } from './ChunkCooldownModal';
+import { shuffleArray } from './DuolingoEngine';
 import { speakErasmian, speakRussian } from '../utils/audio';
 import { getMnemonicForWord } from '../utils/mnemonics';
 import { WordMasteryBar } from './WordMasteryBar';
@@ -2952,9 +2953,10 @@ export const StudentHub: React.FC<StudentHubProps> = ({
           onStart={(chosenMode, chosenDirection) => {
             const modalData = fullModuleModal;
             setFullModuleModal(null);
+            const randomizedWords = shuffleArray(modalData.words);
             onStartPractice(
               `Повторение модуля: ${modalData.title} (все ${modalData.words.length} слов)`,
-              modalData.words,
+              randomizedWords,
               modalData.phrases,
               chosenMode,
               chosenDirection,
