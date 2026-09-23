@@ -71,9 +71,9 @@ export const JOHN_CHAPTER_1_WORDS_RAW = [
 export const JOHN_CHAPTER_2_WORDS_RAW = [
   { lemma: "γάμος", textForm: "γάμος", translation: "брак, свадьба", frequency: 16, verseRef: "Ин 2:1", contextPhrase: "γάμος ἐγένετο ἐν Κανᾷ", contextRu: "Был брак в Кане" },
   { lemma: "ὑστερέω", textForm: "ὑστερήσαντος", translation: "нуждаюсь, терплю недостаток, кончаюсь", frequency: 16, verseRef: "Ин 2:3", contextPhrase: "ὑστερήσαντος οἴνου", contextRu: "Когда недоставало вина" },
-  { lemma: "οἶνος", textForm: "οἴνου", translation: "вино", frequency: 34, verseRef: "Ин 2:3", contextPhrase: "καὶ ὑστερήσαντος οἴνου λέγει ἡ μήτηρ", contextRu: "когда не стало вина»" },
+  { lemma: "οἶνος", textForm: "οἴνου", translation: "вино", frequency: 34, verseRef: "Ин 2:3", contextPhrase: "καὶ ὑστερήσαντος οἴνου λέγει ἡ μήτηρ", contextRu: "когда не стало вина" },
   { lemma: "οὔπω", textForm: "οὔπω", translation: "ещё не", frequency: 26, verseRef: "Ин 2:4", contextPhrase: "οὔπω ἥκει ἡ ὥρα μου", contextRu: "Еще не пришел час Мой" },
-  { lemma: "ἥκω", textForm: "ἥκει", translation: "пришел, настал", frequency: 27, verseRef: "Ин 2:4", contextPhrase: "οὔπω ἥκει ἡ ὥρα μου", contextRu: "Еще не пришел час Мой" },
+  { lemma: "ἥκω", textForm: "ἥκει", translation: "прихожу, настал", additionalMeanings: ["прихожу", "пришел", "настал", "приходить"], frequency: 27, verseRef: "Ин 2:4", contextPhrase: "οὔπω ἥκει ἡ ὥρα μου", contextRu: "Еще не пришел час Мой" },
   { lemma: "διάκονος", textForm: "διακόνοις", translation: "слуга, служитель", frequency: 29, verseRef: "Ин 2:5", contextPhrase: "λέγει τοῖς διακόνοις", contextRu: "Говорит слугам" },
   { lemma: "λίθινος", textForm: "λίθιναι", translation: "каменный", frequency: 3, verseRef: "Ин 2:6", contextPhrase: "ὑδρίαι λίθιναι ἕξ", contextRu: "Шесть каменных водоносов" },
   { lemma: "ὑδρία", textForm: "ὑδρίαι", translation: "сосуд для воды, водонос", frequency: 3, verseRef: "Ин 2:6", contextPhrase: "ὑδρίαι λίθιναι ἕξ", contextRu: "Шесть каменных водоносов" },
