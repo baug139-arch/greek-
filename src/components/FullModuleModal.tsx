@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TrainingMode, TrainingDirection } from '../types';
-import { X, Zap, CheckCircle2, ArrowRight } from 'lucide-react';
+import { TrainingMode, TrainingDirection, WordOrder } from '../types';
+import { X, Zap, CheckCircle2, ArrowRight, Shuffle, ListOrdered } from 'lucide-react';
 
 interface FullModuleModalProps {
   isOpen: boolean;
@@ -8,8 +8,9 @@ interface FullModuleModalProps {
   wordsCount: number;
   initialMode?: TrainingMode;
   initialDirection?: TrainingDirection;
+  initialOrder?: WordOrder;
   onClose: () => void;
-  onStart: (mode: TrainingMode, direction: TrainingDirection) => void;
+  onStart: (mode: TrainingMode, direction: TrainingDirection, order: WordOrder) => void;
 }
 
 interface ModeOption {
@@ -66,11 +67,13 @@ export const FullModuleModal: React.FC<FullModuleModalProps> = ({
   wordsCount,
   initialMode = 'quiz',
   initialDirection = 'bidirectional',
+  initialOrder = 'shuffle',
   onClose,
   onStart,
 }) => {
   const [selectedMode, setSelectedMode] = useState<TrainingMode>(initialMode);
   const [selectedDirection, setSelectedDirection] = useState<TrainingDirection>(initialDirection);
+  const [selectedOrder, setSelectedOrder] = useState<WordOrder>(initialOrder);
 
   if (!isOpen) return null;
 
@@ -204,6 +207,68 @@ export const FullModuleModal: React.FC<FullModuleModalProps> = ({
               </button>
             </div>
           </div>
+
+          {/* 3. Word Order Selection */}
+          <div className="space-y-2 pt-2 border-t border-[#E5E1DA]">
+            <label className="text-xs font-sans uppercase tracking-wider font-bold text-[#1A1A1A] block">
+              3. Порядок слов:
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedOrder('shuffle')}
+                className={`p-3 text-left border transition-all cursor-pointer rounded-xs flex items-center justify-between ${
+                  selectedOrder === 'shuffle'
+                    ? 'border-[#1A1A1A] bg-[#FAF8F5] ring-2 ring-[#1A1A1A]'
+                    : 'border-[#E5E1DA] bg-white hover:border-[#8C7D6B] hover:bg-[#FAF8F5]/50'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className={`p-1.5 rounded-xs ${selectedOrder === 'shuffle' ? 'bg-[#1A1A1A] text-white' : 'bg-[#FAF8F5] text-[#1A1A1A]'}`}>
+                    <Shuffle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-sans font-bold text-[#1A1A1A] block">
+                      Перемешать (Вразброс)
+                    </span>
+                    <span className="text-[10px] font-sans text-[#6B655C]">
+                      Случайный порядок для лучшего закрепления
+                    </span>
+                  </div>
+                </div>
+                {selectedOrder === 'shuffle' && (
+                  <CheckCircle2 className="w-4 h-4 text-[#2D4A32] shrink-0" />
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedOrder('sequential')}
+                className={`p-3 text-left border transition-all cursor-pointer rounded-xs flex items-center justify-between ${
+                  selectedOrder === 'sequential'
+                    ? 'border-[#1A1A1A] bg-[#FAF8F5] ring-2 ring-[#1A1A1A]'
+                    : 'border-[#E5E1DA] bg-white hover:border-[#8C7D6B] hover:bg-[#FAF8F5]/50'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className={`p-1.5 rounded-xs ${selectedOrder === 'sequential' ? 'bg-[#1A1A1A] text-white' : 'bg-[#FAF8F5] text-[#1A1A1A]'}`}>
+                    <ListOrdered className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-sans font-bold text-[#1A1A1A] block">
+                      По порядку (По стихам)
+                    </span>
+                    <span className="text-[10px] font-sans text-[#6B655C]">
+                      Последовательно от начала главы к концу
+                    </span>
+                  </div>
+                </div>
+                {selectedOrder === 'sequential' && (
+                  <CheckCircle2 className="w-4 h-4 text-[#2D4A32] shrink-0" />
+                )}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
@@ -217,7 +282,7 @@ export const FullModuleModal: React.FC<FullModuleModalProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => onStart(selectedMode, selectedDirection)}
+            onClick={() => onStart(selectedMode, selectedDirection, selectedOrder)}
             className="px-5 py-2.5 bg-[#1A1A1A] text-white hover:bg-[#2C3E50] text-xs font-sans uppercase tracking-widest font-bold transition-colors cursor-pointer flex items-center justify-center gap-2 shadow-sm"
           >
             <span>Начать тренировку ({wordsCount} слов)</span>

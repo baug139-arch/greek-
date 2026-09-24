@@ -93,6 +93,10 @@ export type TrainingDirection =
   | 'greek_to_ru' 
   | 'ru_to_greek';
 
+export type WordOrder = 
+  | 'shuffle' 
+  | 'sequential';
+
 export type ExerciseType = 
   | 'flashcard' 
   | 'multiple_choice' 

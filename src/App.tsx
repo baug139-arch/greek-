@@ -31,7 +31,7 @@ import {
   Wifi,
   WifiOff
 } from 'lucide-react';
-import { Student, GreekWord, HomeworkAssignment, TeacherCustomList, LearningSessionAttempt, StudentSettings, TrainingMode, TrainingDirection, ExamAnswer, UserProfile, MorphologyMistakeItem, StudentManualMorphologyAnswer } from './types';
+import { Student, GreekWord, HomeworkAssignment, TeacherCustomList, LearningSessionAttempt, StudentSettings, TrainingMode, TrainingDirection, WordOrder, ExamAnswer, UserProfile, MorphologyMistakeItem, StudentManualMorphologyAnswer } from './types';
 import { formatMorphologyGrammar } from './utils/morphologyFormat';
 import { INITIAL_STUDENTS, GREEK_VOCABULARY, BIBLICAL_PHRASES } from './data/greekVocabulary';
 import { DuolingoEngine } from './components/DuolingoEngine';
@@ -247,6 +247,7 @@ export default function App() {
     unmasteredWords?: GreekWord[];
     initialStageIndex?: number;
     isFullModule?: boolean;
+    wordOrder?: WordOrder;
   } | null>(null);
 
   // Active Exam Session State (Exam Mode)
@@ -759,7 +760,8 @@ export default function App() {
     initialChunkIndex?: number,
     unmasteredWords?: GreekWord[],
     initialStageIndex?: number,
-    isFullModule?: boolean
+    isFullModule?: boolean,
+    wordOrder?: WordOrder
   ) => {
     setActiveSession({
       isOpen: true,
@@ -773,6 +775,7 @@ export default function App() {
       unmasteredWords,
       initialStageIndex,
       isFullModule,
+      wordOrder: wordOrder || 'shuffle',
     });
   };
 
@@ -2338,6 +2341,7 @@ export default function App() {
               completedChunkRounds={currentStudent.completedChunkRounds}
               completedChunkTimes={currentStudent.completedChunkTimes}
               isFullModule={activeSession.isFullModule}
+              wordOrder={activeSession.wordOrder}
               onUpdateMnemonic={handleUpdateStudentMnemonic}
               onComplete={handleCompletePractice}
               onExit={() => setActiveSession(null)}

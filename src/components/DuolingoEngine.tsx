@@ -29,9 +29,10 @@ import {
   Play,
   X,
   AlertTriangle,
-  Lock
+  Lock,
+  ListOrdered
 } from 'lucide-react';
-import { GreekWord, ExerciseItem, ExerciseType, BiblicalPhrase, StudentSettings, TrainingMode, TrainingDirection } from '../types';
+import { GreekWord, ExerciseItem, ExerciseType, BiblicalPhrase, StudentSettings, TrainingMode, TrainingDirection, WordOrder } from '../types';
 import { speakErasmian, speakRussian, playSuccessChime, playErrorBuzz, playFanfare } from '../utils/audio';
 import { matchGreekInput, matchRussianInput } from '../utils/greekUtils';
 import { getMnemonicForWord } from '../utils/mnemonics';
@@ -94,6 +95,7 @@ interface DuolingoEngineProps {
   completedChunkRounds?: Record<string, number>;
   completedChunkTimes?: Record<string, number>;
   isFullModule?: boolean;
+  wordOrder?: WordOrder;
   onUpdateMnemonic?: (wordId: string, mnemonic: string) => void;
   onComplete: (
     scorePercent: number, 
@@ -149,12 +151,14 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   completedChunkRounds,
   completedChunkTimes,
   isFullModule = false,
+  wordOrder = 'shuffle',
   onUpdateMnemonic,
   onComplete,
   onExit,
 }) => {
   const [currentMode, setCurrentMode] = useState<TrainingMode>(initialMode);
   const [currentDirection, setCurrentDirection] = useState<TrainingDirection>(initialDirection);
+  const [currentOrder, setCurrentOrder] = useState<WordOrder>(wordOrder);
   
   // Batching / Micro-lesson Chunking (Full module overrides batch size to all words)
   const batchSizeConfig = studentSettings?.batchSize ?? 8;
@@ -231,12 +235,13 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   // Active subset of words: strictly current chunk words
   const currentChunkWords = useMemo(() => {
     if (!words || words.length === 0) return [];
-    if (effectiveBatchSize <= 0) return isFullModule ? shuffleArray(words) : words;
+    if (effectiveBatchSize <= 0) return currentOrder === 'sequential' ? words : shuffleArray(words);
     
-    // Words belonging strictly to this chunk (shuffled for full module so words aren't sequential)
+    // Words belonging strictly to this chunk (shuffled or in verse order based on currentOrder)
+    const rawChunk = words.slice(currentChunkIndex * effectiveBatchSize, (currentChunkIndex + 1) * effectiveBatchSize);
     const chunkWords = isFullModule
-      ? shuffleArray(words)
-      : words.slice(currentChunkIndex * effectiveBatchSize, (currentChunkIndex + 1) * effectiveBatchSize);
+      ? (currentOrder === 'sequential' ? words : shuffleArray(words))
+      : (currentOrder === 'sequential' ? rawChunk : shuffleArray(rawChunk));
     
     // Any carried over mistake/review words from PREVIOUS chunks (not future words)
     const combined = [...chunkWords];
@@ -249,7 +254,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       });
     }
     return combined;
-  }, [words, currentChunkIndex, effectiveBatchSize, isFullModule]);
+  }, [words, currentChunkIndex, effectiveBatchSize, isFullModule, currentOrder]);
 
   const [exercises, setExercises] = useState<ExerciseItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -303,23 +308,25 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     fontSize === 'large' ? 'text-4xl sm:text-5xl' :
     'text-3xl sm:text-4xl';
 
-  // Helper to generate exercises based on mode, direction, word pool, and repetition round
+  // Helper to generate exercises based on mode, direction, word pool, repetition round, and word order
   const generateExercisesForPool = (
     targetPool: GreekWord[], 
     mode: TrainingMode, 
     direction: TrainingDirection, 
-    round: number = 0
+    round: number = 0,
+    order: WordOrder = currentOrder
   ): ExerciseItem[] => {
     if (!targetPool || targetPool.length === 0) return [];
 
     const generated: ExerciseItem[] = [];
     const pool = [...targetPool];
+    const orderedPool = order === 'sequential' ? pool : shuffleArray(pool);
 
     // =========================================================================
     // MODE 1: FLASHCARDS (Флеш-карточки)
     // =========================================================================
     if (mode === 'flashcards') {
-      shuffleArray(pool).forEach((w, idx) => {
+      orderedPool.forEach((w, idx) => {
         let side: 'greek_first' | 'ru_first' = 'greek_first';
         if (direction === 'ru_to_greek') {
           side = 'ru_first';
@@ -344,7 +351,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 2: CONSTRUCTOR / BUILDER (Конструктор слова из греческих букв: РУС ➔ ГРЕК)
     // =========================================================================
     else if (mode === 'builder') {
-      shuffleArray(pool).forEach((w, idx) => {
+      orderedPool.forEach((w, idx) => {
         generated.push({
           id: `word_builder_${idx}_${w.id}`,
           type: 'word_builder',
@@ -361,7 +368,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 3: TYPING / SPELLING (Письмо: ГРЕК ➔ РУС)
     // =========================================================================
     else if (mode === 'typing') {
-      shuffleArray(pool).forEach((w, idx) => {
+      orderedPool.forEach((w, idx) => {
         generated.push({
           id: `typing_gr_ru_${idx}_${w.id}`,
           type: 'typing_input',
@@ -378,7 +385,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 4: QUIZ / MULTIPLE CHOICE (Тест и выбор ответа)
     // =========================================================================
     else if (mode === 'quiz') {
-      shuffleArray(pool).forEach((w, idx) => {
+      orderedPool.forEach((w, idx) => {
         const isRuToGreek = direction === 'ru_to_greek' || (direction === 'bidirectional' && idx % 2 !== 0);
 
         if (isRuToGreek) {
@@ -417,7 +424,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     // MODE 5: AUDIO / LISTENING (Аудирование: ГРЕК ➔ РУС)
     // =========================================================================
     else if (mode === 'audio') {
-      shuffleArray(pool).forEach((w, idx) => {
+      orderedPool.forEach((w, idx) => {
         const distractors = shuffleArray(pool.filter((item) => item.id !== w.id))
           .slice(0, 3)
           .map((item) => item.translationRu);
@@ -451,7 +458,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
         });
       } else {
         // Fallback to flashcards if not enough words for matching
-        shuffleArray(pool).forEach((w, idx) => {
+        orderedPool.forEach((w, idx) => {
           generated.push({
             id: `fc_fallback_${idx}_${w.id}`,
             type: 'flashcard',
@@ -473,8 +480,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Карточки -> Тест -> Конструктор -> Письмо -> Аудио -> Матчинг
       // -----------------------------------------------------------------------
       if (round === 0) {
-        // 1. Flashcards for all (перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 1. Flashcards for all
+        orderedPool.forEach((w, idx) => {
           generated.push({
             id: `all_r0_fc_${idx}_${w.id}`,
             type: 'flashcard',
@@ -485,8 +492,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 2. Multiple choice for all (Тест - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 2. Multiple choice for all (Тест)
+        orderedPool.forEach((w, idx) => {
           if (direction === 'greek_to_ru' || (direction === 'bidirectional' && idx % 2 === 0)) {
             const distractors = pool
               .filter((item) => item.id !== w.id)
@@ -520,8 +527,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           }
         });
 
-        // 3. Word Letter Builder for all (Greek) (Конструктор - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 3. Word Letter Builder for all (Greek) (Конструктор)
+        orderedPool.forEach((w, idx) => {
           generated.push({
             id: `all_r0_word_builder_${idx}_${w.id}`,
             type: 'word_builder',
@@ -533,8 +540,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 4. Typing Input for all (Russian) (Письмо - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 4. Typing Input for all (Russian) (Письмо)
+        orderedPool.forEach((w, idx) => {
           generated.push({
             id: `all_r0_typing_${idx}_${w.id}`,
             type: 'typing_input',
@@ -546,8 +553,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 5. Audio listening for all (Аудио - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 5. Audio listening for all (Аудио)
+        orderedPool.forEach((w, idx) => {
           const audioDistractors = pool
             .filter((item) => item.id !== w.id)
             .map((item) => item.translationRu)
@@ -568,8 +575,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Тест -> Аудио -> Письмо -> Финальный матчинг
       // -----------------------------------------------------------------------
       else if (round === 1) {
-        // 1. Multiple choice / Reverse choice (Тест - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 1. Multiple choice / Reverse choice (Тест)
+        orderedPool.forEach((w, idx) => {
           const isReverse = idx % 2 !== 0;
           if (isReverse) {
             const distractors = pool
@@ -604,8 +611,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           }
         });
 
-        // 2. Audio listening for all (Аудио - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 2. Audio listening for all (Аудио)
+        orderedPool.forEach((w, idx) => {
           const audioDistractors = pool
             .filter((item) => item.id !== w.id)
             .map((item) => item.translationRu)
@@ -620,8 +627,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           });
         });
 
-        // 3. Typing Input for all (Письмо - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 3. Typing Input for all (Письмо)
+        orderedPool.forEach((w, idx) => {
           generated.push({
             id: `all_r1_typing_${idx}_${w.id}`,
             type: 'typing_input',
@@ -639,8 +646,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
       // Быстрый тест -> Письмо -> Финальный матчинг
       // -----------------------------------------------------------------------
       else {
-        // 1. Quick Quiz (50% грек->рус, 50% рус->грек - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 1. Quick Quiz (50% грек->рус, 50% рус->грек)
+        orderedPool.forEach((w, idx) => {
           const isReverse = idx % 2 !== 0;
           if (isReverse) {
             const distractors = pool
@@ -675,8 +682,8 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
           }
         });
 
-        // 2. Typing Input for all (Активное извлечение из памяти - перемешанный порядок)
-        shuffleArray(pool).forEach((w, idx) => {
+        // 2. Typing Input for all (Активное извлечение из памяти)
+        orderedPool.forEach((w, idx) => {
           generated.push({
             id: `all_r2_typing_${idx}_${w.id}`,
             type: 'typing_input',
@@ -712,7 +719,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   useEffect(() => {
     if (isChunkFinished || isFinished) return;
 
-    const generated = generateExercisesForPool(currentChunkWords, currentMode, currentDirection, currentChunkRound);
+    const generated = generateExercisesForPool(currentChunkWords, currentMode, currentDirection, currentChunkRound, currentOrder);
     setExercises(generated);
     setCurrentIndex(0);
     setIsFinished(false);
@@ -732,7 +739,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     setMatchedPairs([]);
     setSelectedGreek(null);
     setSelectedRussian(null);
-  }, [currentChunkIndex, currentMode, currentDirection, currentChunkRound, words, effectiveBatchSize, isChunkFinished, isFinished]);
+  }, [currentChunkIndex, currentMode, currentDirection, currentChunkRound, words, effectiveBatchSize, isChunkFinished, isFinished, currentOrder]);
 
   useEffect(() => {
     if (!currentEx) return;
@@ -908,7 +915,7 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
   };
 
   const handleRestartCurrentStage = () => {
-    const generated = generateExercisesForPool(currentChunkWords, currentMode, currentDirection, currentChunkRound);
+    const generated = generateExercisesForPool(currentChunkWords, currentMode, currentDirection, currentChunkRound, currentOrder);
     setExercises(generated);
     setCurrentIndex(0);
     setIsFinished(false);
@@ -938,6 +945,10 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
     }
     setCurrentMode(m);
     setCurrentDirection(targetDir);
+  };
+
+  const handleSwitchOrder = (o: WordOrder) => {
+    setCurrentOrder(o);
   };
 
   const handleGreekSelect = (greek: string) => {
@@ -1822,6 +1833,36 @@ export const DuolingoEngine: React.FC<DuolingoEngineProps> = ({
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Order Selector (Shuffle vs Sequential) */}
+              <div className="flex items-center border border-[#E5E1DA] bg-white text-[10px] sm:text-[11px] p-0.5 rounded shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => handleSwitchOrder('shuffle')}
+                  className={`px-1.5 sm:px-2 py-0.5 sm:py-1 flex items-center gap-1 rounded transition-colors cursor-pointer ${
+                    currentOrder === 'shuffle'
+                      ? 'bg-[#1A1A1A] text-white font-bold'
+                      : 'text-[#6B655C] hover:text-[#1A1A1A]'
+                  }`}
+                  title="В случайном порядке (Перемешать)"
+                >
+                  <Shuffle className="w-3 h-3" />
+                  <span className="hidden lg:inline">Вразброс</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSwitchOrder('sequential')}
+                  className={`px-1.5 sm:px-2 py-0.5 sm:py-1 flex items-center gap-1 rounded transition-colors cursor-pointer ${
+                    currentOrder === 'sequential'
+                      ? 'bg-[#1A1A1A] text-white font-bold'
+                      : 'text-[#6B655C] hover:text-[#1A1A1A]'
+                  }`}
+                  title="По порядку стихов / текста"
+                >
+                  <ListOrdered className="w-3 h-3" />
+                  <span className="hidden lg:inline">По тексту</span>
+                </button>
               </div>
             </div>
           </div>

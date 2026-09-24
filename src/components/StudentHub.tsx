@@ -25,7 +25,8 @@ import {
   Check,
   RotateCcw,
   Bell,
-  Archive
+  Archive,
+  ListOrdered
 } from 'lucide-react';
 import { 
   Student, 
@@ -35,6 +36,7 @@ import {
   HomeworkAssignment, 
   TrainingMode, 
   TrainingDirection, 
+  WordOrder,
   WordMasteryProgress,
   TeacherCustomList
 } from '../types';
@@ -69,7 +71,8 @@ interface StudentHubProps {
     initialChunkIndex?: number,
     unmasteredWords?: GreekWord[],
     initialStageIndex?: number,
-    isFullModule?: boolean
+    isFullModule?: boolean,
+    wordOrder?: WordOrder
   ) => void;
   onStartExam?: (assignment: HomeworkAssignment, words: GreekWord[]) => void;
   onStartComposition?: (assignment: HomeworkAssignment) => void;
@@ -100,9 +103,10 @@ export const StudentHub: React.FC<StudentHubProps> = ({
   const [selectedExamToReview, setSelectedExamToReview] = useState<HomeworkAssignment | null>(null);
   const [showArchive, setShowArchive] = useState<boolean>(false);
   
-  // Active Training Mode & Direction Selected by Student
+  // Active Training Mode, Direction & Word Order Selected by Student
   const [selectedTrainingMode, setSelectedTrainingMode] = useState<TrainingMode>('all');
   const [selectedDirection, setSelectedDirection] = useState<TrainingDirection>('bidirectional');
+  const [selectedOrder, setSelectedOrder] = useState<WordOrder>('shuffle');
 
   // Mode: Reading by Gospel Books & Chapters
   const [selectedGospelBook, setSelectedGospelBook] = useState<'john' | 'luke'>('john');
@@ -964,6 +968,36 @@ export const StudentHub: React.FC<StudentHubProps> = ({
             })}
           </div>
         </div>
+
+        {/* Word Order Selector */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <span className="text-[10px] font-sans uppercase tracking-widest text-[#8C7D6B] font-bold shrink-0">
+            Порядок:
+          </span>
+          <div className="flex gap-1.5">
+            {[
+              { id: 'shuffle' as WordOrder, label: '🔀 Вразброс', title: 'Случайный порядок слов' },
+              { id: 'sequential' as WordOrder, label: '📜 По тексту', title: 'По порядку появления в стихах/главе' },
+            ].map((ord) => {
+              const isSelected = selectedOrder === ord.id;
+              return (
+                <button
+                  key={ord.id}
+                  type="button"
+                  onClick={() => setSelectedOrder(ord.id)}
+                  className={`px-2.5 py-1.5 text-xs font-sans transition-all border cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold shadow-xs'
+                      : 'bg-white text-[#4A443D] border-[#E5E1DA] hover:border-[#1A1A1A]'
+                  }`}
+                  title={ord.title}
+                >
+                  {ord.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Mode Selector Navigation Tabs */}
@@ -1192,7 +1226,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       sectionKey,
                       activeActionChunk,
                       weakWordsFromPreviousChunks,
-                      nextStage
+                      nextStage,
+                      false,
+                      selectedOrder
                     );
                   }}
                   practiceButtonText={ctaText}
@@ -1381,7 +1417,10 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                       selectedDirection,
                       `john_${currentJohnBlock.chapterNumber}`,
                       0,
-                      []
+                      [],
+                      0,
+                      false,
+                      selectedOrder
                     );
                   }}
                   className={`px-5 py-2.5 text-xs font-sans uppercase tracking-widest transition-colors flex items-center justify-center gap-2 whitespace-nowrap ${
@@ -1610,7 +1649,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                           sectionKey,
                           activeActionChunk,
                           weakWordsFromPreviousChunks,
-                          nextStage
+                          nextStage,
+                          false,
+                          selectedOrder
                         );
                       }}
                       practiceButtonText={ctaText}
@@ -1799,7 +1840,10 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                           selectedDirection,
                           `luke_${currentLukeBlock.chapterNumber}`,
                           0,
-                          []
+                          [],
+                          0,
+                          false,
+                          selectedOrder
                         );
                       }}
                       className={`px-5 py-2.5 text-xs font-sans uppercase tracking-widest transition-colors flex items-center justify-center gap-2 whitespace-nowrap ${
@@ -2949,14 +2993,17 @@ export const StudentHub: React.FC<StudentHubProps> = ({
           wordsCount={fullModuleModal.words.length}
           initialMode={selectedTrainingMode}
           initialDirection={selectedDirection}
+          initialOrder={selectedOrder}
           onClose={() => setFullModuleModal(null)}
-          onStart={(chosenMode, chosenDirection) => {
+          onStart={(chosenMode, chosenDirection, chosenOrder) => {
             const modalData = fullModuleModal;
             setFullModuleModal(null);
-            const randomizedWords = shuffleArray(modalData.words);
+            const wordsToLearn = chosenOrder === 'shuffle'
+              ? shuffleArray(modalData.words)
+              : modalData.words;
             onStartPractice(
               `Повторение модуля: ${modalData.title} (все ${modalData.words.length} слов)`,
-              randomizedWords,
+              wordsToLearn,
               modalData.phrases,
               chosenMode,
               chosenDirection,
@@ -2964,7 +3011,8 @@ export const StudentHub: React.FC<StudentHubProps> = ({
               0,
               [],
               chosenMode === 'all' ? 2 : 0,
-              true
+              true,
+              chosenOrder
             );
           }}
         />
