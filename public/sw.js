@@ -1,5 +1,5 @@
-// Service Worker for Koine Greek PWA - v7 (Deduplicate John Gospel vocabulary)
-const CACHE_NAME = 'koine-greek-v7';
+// Service Worker for Koine Greek PWA - v8 (Shuffle vs Sequential word order support)
+const CACHE_NAME = 'koine-greek-v8';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
