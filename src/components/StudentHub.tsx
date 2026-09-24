@@ -1300,7 +1300,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                     sectionKey,
                                     cIdx,
                                     weakPrior,
-                                    srsStatus.currentUnlockedStage
+                                    srsStatus.currentUnlockedStage,
+                                    false,
+                                    selectedOrder
                                   );
                                 },
                                 onLearnNextChunk: hasNextChunk ? () => {
@@ -1320,7 +1322,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                     sectionKey,
                                     nextIdx,
                                     nextWeakPrior,
-                                    0
+                                    0,
+                                    false,
+                                    selectedOrder
                                   );
                                 } : undefined,
                               });
@@ -1337,7 +1341,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                               sectionKey,
                               cIdx,
                               weakPrior,
-                              targetStage
+                              targetStage,
+                              false,
+                              selectedOrder
                             );
                           }}
                           className={`px-3 py-1.5 text-xs font-sans border transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs ${srsStatus.buttonClass}`}
@@ -1723,7 +1729,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                         sectionKey,
                                         cIdx,
                                         weakPrior,
-                                        srsStatus.currentUnlockedStage
+                                        srsStatus.currentUnlockedStage,
+                                        false,
+                                        selectedOrder
                                       );
                                     },
                                     onLearnNextChunk: hasNextChunk ? () => {
@@ -1743,7 +1751,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                         sectionKey,
                                         nextIdx,
                                         nextWeakPrior,
-                                        0
+                                        0,
+                                        false,
+                                        selectedOrder
                                       );
                                     } : undefined,
                                   });
@@ -1760,7 +1770,9 @@ export const StudentHub: React.FC<StudentHubProps> = ({
                                   sectionKey,
                                   cIdx,
                                   weakPrior,
-                                  targetStage
+                                  targetStage,
+                                  false,
+                                  selectedOrder
                                 );
                               }}
                               className={`px-3 py-1.5 text-xs font-sans border transition-all cursor-pointer flex items-center gap-1.5 rounded-xs shadow-2xs ${srsStatus.buttonClass}`}
